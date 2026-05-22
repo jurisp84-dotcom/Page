@@ -1738,7 +1738,7 @@ input, select, textarea {
 			border-top: solid 1.5px;
 			content: '';
 			height: 7px;
-			opacity: 0.1;
+			opacity: 1;
 			position: absolute;
 			top: 1.75em;
 			width: 43%;
@@ -1824,24 +1824,24 @@ input, select, textarea {
 
 	::-webkit-input-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: 1;
 		position: relative;
 		top: 3px;
 	}
 
 	:-moz-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: 1;
 	}
 
 	::-moz-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: 1;
 	}
 
 	:-ms-input-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: 1;
 	}
 
 /* Image */
@@ -1983,7 +1983,7 @@ input, select, textarea {
 			cursor: default;
 			display: block;
 			margin: 0 0 1.5em 0;
-			opacity: 0.35;
+			opacity: 1;
 			text-align: center;
 		}
 
@@ -2039,7 +2039,7 @@ input, select, textarea {
 	ul.featured-icons {
 		cursor: default;
 		margin: -0.75em 0 0 0;
-		opacity: 0.35;
+		opacity: 1;
 		overflow: hidden;
 		position: relative;
 		list-style: none;
@@ -2486,7 +2486,7 @@ input, select, textarea {
 
 	@-moz-keyframes reveal-banner {
 		0% {
-			opacity: 0;
+			opacity: 1;
 		}
 
 		100% {
@@ -2496,7 +2496,7 @@ input, select, textarea {
 
 	@-webkit-keyframes reveal-banner {
 		0% {
-			opacity: 0;
+			opacity: 1;
 		}
 
 		100% {
@@ -2506,7 +2506,7 @@ input, select, textarea {
 
 	@-ms-keyframes reveal-banner {
 		0% {
-			opacity: 0;
+			opacity: 1;
 		}
 
 		100% {
@@ -2516,7 +2516,7 @@ input, select, textarea {
 
 	@keyframes reveal-banner {
 		0% {
-			opacity: 0;
+			opacity: 1;
 		}
 
 		100% {
