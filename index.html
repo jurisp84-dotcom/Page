@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BusinessPage.ie</title>
 
 <style>
@@ -13,45 +13,75 @@
   font-family: Arial, sans-serif;
 }
 
-body {
+html {
   scroll-behavior: smooth;
 }
 
-/* TOP NAV */
+/* TOP BAR */
 header {
   position: fixed;
-  top: 0;
   width: 100%;
-  background: rgba(0,0,0,0.8);
-  color: white;
+  top: 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 15px 20px;
+  background: rgba(0,0,0,0.6);
+  color: white;
   z-index: 1000;
 }
 
 .logo {
-  font-size: 18px;
+  color: white;
+  text-decoration: none;
   font-weight: bold;
 }
 
-/* HAMBURGER */
 .menu-btn {
-  font-size: 26px;
+  font-size: 24px;
   cursor: pointer;
+}
+
+/* HERO BACKGROUND */
+.hero {
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+  url("your-image.jpg") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+.hero h1 {
+  font-size: 40px;
+}
+
+.hero p {
+  margin-top: 10px;
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: white;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
 }
 
 /* SIDE MENU */
 .side-menu {
   position: fixed;
-  right: -250px;
   top: 0;
-  width: 250px;
+  right: -260px;
+  width: 260px;
   height: 100%;
   background: #111;
-  color: white;
-  padding-top: 60px;
+  padding-top: 70px;
   transition: 0.3s;
   z-index: 2000;
 }
@@ -67,50 +97,27 @@ header {
   background: #333;
 }
 
-/* HERO */
-.hero {
-  height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-  url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d") center/cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-align: center;
-  padding: 20px;
-}
-
-.hero h1 {
-  font-size: 40px;
-}
-
 /* SECTIONS */
 section {
   padding: 80px 20px;
+  text-align: center;
 }
 
-h2 {
-  margin-bottom: 20px;
-}
-
-/* SLIDER */
-.slider {
-  position: relative;
-  max-width: 800px;
+/* IMAGE GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  max-width: 1000px;
   margin: auto;
 }
 
-.slide {
-  display: none;
+.grid img {
   width: 100%;
   border-radius: 10px;
 }
 
-.active {
-  display: block;
-}
-
-/* CONTACT FORM */
+/* FORM */
 form {
   max-width: 500px;
   margin: auto;
@@ -134,10 +141,10 @@ button {
 
 /* FOOTER */
 footer {
-  text-align: center;
-  padding: 30px;
   background: #111;
   color: white;
+  text-align: center;
+  padding: 30px;
 }
 </style>
 </head>
@@ -145,68 +152,64 @@ footer {
 <body>
 
 <header>
-  <div class="logo">BusinessPage.ie</div>
+  <a href="#top" class="logo">BusinessPage.ie</a>
   <div class="menu-btn" onclick="toggleMenu()">☰</div>
 </header>
 
+<!-- SIDE MENU -->
 <div id="menu" class="side-menu">
+  <a href="#about">What We Do</a>
+  <a href="#gallery">Our Work</a>
   <a href="#contact">Contact</a>
-  <a href="#appointment">Book Appointment</a>
+  <a href="#book">Book Appointment</a>
 </div>
 
 <!-- HERO -->
-<div class="hero">
+<div id="top" class="hero">
   <div>
-    <h1>We Design Modern Websites</h1>
-    <p>High quality, fast and professional web design services</p>
+    <h1>We Build Modern Websites</h1>
+    <p>Fast, clean and professional web design</p>
+    <a href="#book" class="btn">Book Now</a>
   </div>
 </div>
 
-<!-- WHAT WE DO -->
-<section>
+<!-- ABOUT -->
+<section id="about">
   <h2>What We Do</h2>
   <p>
-    We create modern, responsive and high quality websites for businesses.
-    From landing pages to full business platforms, we help you grow online.
+    We design modern websites for businesses, portfolios and brands.
+    Simple, fast and mobile-friendly.
   </p>
 </section>
 
-<!-- SLIDER -->
-<section>
+<!-- GALLERY -->
+<section id="gallery">
   <h2>Our Work</h2>
 
-  <div class="slider">
-    <img class="slide active" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800" />
-<img class="slide" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800" />
-<img class="slide" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800" />
+  <div class="grid">
+    <img src="your-image.jpg" />
+    <img src="your-image.jpg" />
+    <img src="your-image.jpg" />
+    <img src="your-image.jpg" />
   </div>
-</section>
-
-<!-- INFO -->
-<section>
-  <h2>Information</h2>
-  <p>
-    We specialize in clean design, fast performance and mobile-friendly websites.
-    Everything is built to look good on all devices.
-  </p>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
   <h2>Contact</h2>
-  <p>Phone: 087 183 2938</p>
   <p>Email: businesspage.ie@gmail.com</p>
+  <p>Phone: 087 183 2938</p>
 </section>
 
-<!-- APPOINTMENT -->
-<section id="appointment">
+<!-- BOOKING -->
+<section id="book">
   <h2>Book Appointment</h2>
 
   <form>
-    <input type="text" placeholder="Your Name" required />
-    <input type="email" placeholder="Your Email" required />
-    <input type="tel" placeholder="Your Phone" required />
-    <textarea rows="5" placeholder="Your Request"></textarea>
+    <input type="text" placeholder="Name" required>
+    <input type="email" placeholder="Email" required>
+    <input type="tel" placeholder="Phone" required>
+    <textarea placeholder="Your request"></textarea>
     <button type="submit">Send</button>
   </form>
 </section>
@@ -216,21 +219,10 @@ footer {
 </footer>
 
 <script>
-// MENU
 function toggleMenu() {
   const menu = document.getElementById("menu");
-  menu.style.right = menu.style.right === "0px" ? "-250px" : "0px";
+  menu.style.right = menu.style.right === "0px" ? "-260px" : "0px";
 }
-
-// SIMPLE SLIDER
-let index = 0;
-const slides = document.querySelectorAll(".slide");
-
-setInterval(() => {
-  slides[index].classList.remove("active");
-  index = (index + 1) % slides.length;
-  slides[index].classList.add("active");
-}, 3000);
 </script>
 
 </body>
