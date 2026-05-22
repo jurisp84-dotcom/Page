@@ -9,7 +9,6 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
@@ -24,48 +23,51 @@ header {
   top: 0;
   display: flex;
   justify-content: space-between;
-  padding: 15px 20px;
+  padding: 15px 25px;
   background: rgba(0,0,0,0.6);
   color: white;
   z-index: 1000;
 }
 
 .logo {
-  color: white;
-  text-decoration: none;
   font-weight: bold;
+  font-size: 18px;
 }
 
 .menu-btn {
-  font-size: 24px;
   cursor: pointer;
+  font-size: 24px;
 }
 
-/* HERO BACKGROUND */
+/* FULL BACKGROUND HERO */
 .hero {
   height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-  url("your-image.jpg") center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+  url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d") center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
   color: white;
+  text-align: center;
   padding: 20px;
 }
 
 .hero h1 {
-  font-size: 40px;
+  font-size: 45px;
 }
 
 .hero p {
   margin-top: 10px;
 }
 
-/* BUTTONS */
-.btn {
+/* BUTTONS IN HERO */
+.hero-buttons {
+  margin-top: 20px;
+}
+
+.hero-buttons a {
   display: inline-block;
-  margin-top: 15px;
+  margin: 5px;
   padding: 10px 20px;
   background: white;
   color: black;
@@ -76,12 +78,12 @@ header {
 /* SIDE MENU */
 .side-menu {
   position: fixed;
-  top: 0;
   right: -260px;
+  top: 0;
   width: 260px;
   height: 100%;
   background: #111;
-  padding-top: 70px;
+  padding-top: 80px;
   transition: 0.3s;
   z-index: 2000;
 }
@@ -97,7 +99,7 @@ header {
   background: #333;
 }
 
-/* SECTIONS */
+/* SECTION LAYOUT */
 section {
   padding: 80px 20px;
   text-align: center;
@@ -106,8 +108,8 @@ section {
 /* IMAGE GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
   max-width: 1000px;
   margin: auto;
 }
@@ -117,7 +119,7 @@ section {
   border-radius: 10px;
 }
 
-/* FORM */
+/* CONTACT FORM */
 form {
   max-width: 500px;
   margin: auto;
@@ -128,7 +130,6 @@ form {
 input, textarea {
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #ccc;
 }
 
 button {
@@ -143,8 +144,8 @@ button {
 footer {
   background: #111;
   color: white;
-  text-align: center;
   padding: 30px;
+  text-align: center;
 }
 </style>
 </head>
@@ -152,53 +153,53 @@ footer {
 <body>
 
 <header>
-  <a href="#top" class="logo">BusinessPage.ie</a>
+  <div class="logo">BusinessPage.ie</div>
   <div class="menu-btn" onclick="toggleMenu()">☰</div>
 </header>
 
 <!-- SIDE MENU -->
 <div id="menu" class="side-menu">
-  <a href="#about">What We Do</a>
+  <a href="#what">What We Do</a>
   <a href="#gallery">Our Work</a>
   <a href="#contact">Contact</a>
   <a href="#book">Book Appointment</a>
 </div>
 
-<!-- HERO -->
-<div id="top" class="hero">
+<!-- HERO (FULL BACKGROUND) -->
+<div class="hero">
   <div>
-    <h1>We Build Modern Websites</h1>
-    <p>Fast, clean and professional web design</p>
-    <a href="#book" class="btn">Book Now</a>
+    <h1>We Design Modern Websites</h1>
+    <p>High quality, clean and fast business websites</p>
+
+    <div class="hero-buttons">
+      <a href="#what">Explore</a>
+      <a href="#book">Book Now</a>
+    </div>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
+<!-- WHAT WE DO -->
+<section id="what">
   <h2>What We Do</h2>
-  <p>
-    We design modern websites for businesses, portfolios and brands.
-    Simple, fast and mobile-friendly.
-  </p>
+  <p>We design professional websites for businesses, portfolios and online brands.</p>
 </section>
 
-<!-- GALLERY -->
+<!-- IMAGE SECTION -->
 <section id="gallery">
   <h2>Our Work</h2>
 
   <div class="grid">
-    <img src="your-image.jpg" />
-    <img src="your-image.jpg" />
-    <img src="your-image.jpg" />
-    <img src="your-image.jpg" />
+    <img class="slide active" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800" />
+<img class="slide" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800" />
+<img class="slide" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800" />
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
   <h2>Contact</h2>
-  <p>Email: businesspage.ie@gmail.com</p>
-  <p>Phone: 087 183 2938</p>
+  <p>Phone: 087 183 2939 </p>
+  <p>Email: BusinessPage@gmail.com</p>
 </section>
 
 <!-- BOOKING -->
@@ -215,7 +216,7 @@ footer {
 </section>
 
 <footer>
-  Thank you for your time — see you soon
+  Thank you for your time — see you soon!
 </footer>
 
 <script>
