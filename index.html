@@ -1,266 +1,237 @@
-<!DOCTYPE HTML>
-<!--
-	BusinessPage.ie
-	 | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (/license)
--->
-<html>
-	<head>
-		<title>BusinessPage.ie</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="index is-preload">
-		<div id="page-wrapper">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BusinessPage.ie</title>
 
-			<!-- Header -->
-				<header id="header" class="alt">
-					<h1 id="logo"><a href="index.html">BusinessPage.ie<span></span></a></h1>
-					<nav id="nav">
-						<ul>
-							<li class="current"><a href="index.html">Welcome</a></li>
-							
-								<a href="#">Layouts</a>
-								<ul>
-									
-									<li><a href="contact.html">Contact</a></li>
-									
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li><a href="#" class="button primary">Sign Up</a></li>
-						</ul>
-					</nav>
-				</header>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-			<!-- Banner -->
-				<section id="banner">
+body {
+  scroll-behavior: smooth;
+}
 
-					<!--
-						".inner" is set up as an inline-block so it automatically expands
-						in both directions to fit whatever's inside it. This means it won't
-						automatically wrap lines, so be sure to use line breaks where
-						appropriate (<br />).
-					-->
-					<div class="inner">
+/* TOP NAV */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  z-index: 1000;
+}
 
-						<header>
-							<h2>BusinessPage.ie</h2>
-						</header>
-						<p>This is <strong>BusinessPage.ie</strong>, We design
-						<br />
-						and help create your business page 
-						<br />
-						by <a href="http://">Jay</a>.</p>
-						<footer>
-							<ul class="buttons stacked">
-								<li><a href="#main" class="button fit scrolly">Tell Me More</a></li>
-							</ul>
-						</footer>
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+}
 
-					</div>
+/* HAMBURGER */
+.menu-btn {
+  font-size: 26px;
+  cursor: pointer;
+}
 
-				</section>
+/* SIDE MENU */
+.side-menu {
+  position: fixed;
+  right: -250px;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background: #111;
+  color: white;
+  padding-top: 60px;
+  transition: 0.3s;
+  z-index: 2000;
+}
 
-			<!-- Main -->
-				<article id="main">
+.side-menu a {
+  display: block;
+  padding: 15px;
+  color: white;
+  text-decoration: none;
+}
 
-					<header class="special container">
-						<span class="icon solid fa-chart-bar"></span>
-						<h2>As this is my <strong>twentieth</strong> freebie for Jay
-						<br />
-						I decided to give it a really creative name.</h2>
-						<p>Turns out <strong>BusinessPage.ie</strong> was the best I could come up with. Anyway, lame name aside,
-						<br />
-						it's minimally designed, fully responsive, built on HTML5/CSS3,
-						and, like all my stuff,
-						<br />
-						released for free under the <a href="http:///license">Creative Commons Attribution 3.0</a> license. Have fun!</p>
-					</header>
+.side-menu a:hover {
+  background: #333;
+}
 
-					<!-- One -->
-						<section class="wrapper style2 container special-alt">
-							<div class="row gtr-50">
-								<div class="col-8 col-12-narrower">
+/* HERO */
+.hero {
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+  url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d") center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
 
-									<header>
-										<h2>Behold the <strong>icons</strong> that visualize what you’re all about. or just take up space. your call bro.</h2>
-									</header>
-									<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu comteger ut fermentum lorem. Lorem ipsum dolor sit amet. Sed tristique purus vitae volutpat ultrices. eu elit eget commodo. Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo.</p>
-									<footer>
-										<ul class="buttons">
-											<li><a href="#" class="button">Find Out More</a></li>
-										</ul>
-									</footer>
+.hero h1 {
+  font-size: 40px;
+}
 
-								</div>
-								<div class="col-4 col-12-narrower imp-narrower">
+/* SECTIONS */
+section {
+  padding: 80px 20px;
+}
 
-									<ul class="featured-icons">
-										<li><span class="icon fa-clock"><span class="label">Feature 1</span></span></li>
-										<li><span class="icon solid fa-volume-up"><span class="label">Feature 2</span></span></li>
-										<li><span class="icon solid fa-laptop"><span class="label">Feature 3</span></span></li>
-										<li><span class="icon solid fa-inbox"><span class="label">Feature 4</span></span></li>
-										<li><span class="icon solid fa-lock"><span class="label">Feature 5</span></span></li>
-										<li><span class="icon solid fa-cog"><span class="label">Feature 6</span></span></li>
-									</ul>
+h2 {
+  margin-bottom: 20px;
+}
 
-								</div>
-							</div>
-						</section>
+/* SLIDER */
+.slider {
+  position: relative;
+  max-width: 800px;
+  margin: auto;
+}
 
-					<!-- Two -->
-						<section class="wrapper style1 container special">
-							<div class="row">
-								<div class="col-4 col-12-narrower">
+.slide {
+  display: none;
+  width: 100%;
+  border-radius: 10px;
+}
 
-									<section>
-										<span class="icon solid featured fa-check"></span>
-										<header>
-											<h3>This is Something</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-									</section>
+.active {
+  display: block;
+}
 
-								</div>
-								<div class="col-4 col-12-narrower">
+/* CONTACT FORM */
+form {
+  max-width: 500px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
 
-									<section>
-										<span class="icon solid featured fa-check"></span>
-										<header>
-											<h3>Also Something</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-									</section>
+input, textarea {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
 
-								</div>
-								<div class="col-4 col-12-narrower">
+button {
+  padding: 10px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
 
-									<section>
-										<span class="icon solid featured fa-check"></span>
-										<header>
-											<h3>Probably Something</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-									</section>
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 30px;
+  background: #111;
+  color: white;
+}
+</style>
+</head>
 
-								</div>
-							</div>
-						</section>
+<body>
 
-					<!-- Three -->
-						<section class="wrapper style3 container special">
+<header>
+  <div class="logo">BusinessPage.ie</div>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+</header>
 
-							<header class="major">
-								<h2>Next look at this <strong>cool stuff</strong></h2>
-							</header>
+<div id="menu" class="side-menu">
+  <a href="#contact">Contact</a>
+  <a href="#appointment">Book Appointment</a>
+</div>
 
-							<div class="row">
-								<div class="col-6 col-12-narrower">
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <h1>We Design Modern Websites</h1>
+    <p>High quality, fast and professional web design services</p>
+  </div>
+</div>
 
-									<section>
-										<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
-										<header>
-											<h3>A Really Fast Train</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat commodo suscipit amet sed nibh. Proin a ullamcorper sed blandit. Sed tristique purus vitae volutpat commodo suscipit ullamcorper sed blandit lorem ipsum dolore.</p>
-									</section>
+<!-- WHAT WE DO -->
+<section>
+  <h2>What We Do</h2>
+  <p>
+    We create modern, responsive and high quality websites for businesses.
+    From landing pages to full business platforms, we help you grow online.
+  </p>
+</section>
 
-								</div>
-								<div class="col-6 col-12-narrower">
+<!-- SLIDER -->
+<section>
+  <h2>Our Work</h2>
 
-									<section>
-										<a href="#" class="image featured"><img src="images/pic02.jpg" alt="" /></a>
-										<header>
-											<h3>An Airport Terminal</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat commodo suscipit amet sed nibh. Proin a ullamcorper sed blandit. Sed tristique purus vitae volutpat commodo suscipit ullamcorper sed blandit lorem ipsum dolore.</p>
-									</section>
+  <div class="slider">
+    <img class="slide active" src="https://source.unsplash.com/800x400/?website" />
+    <img class="slide" src="https://source.unsplash.com/800x400/?design" />
+    <img class="slide" src="https://source.unsplash.com/800x400/?business" />
+  </div>
+</section>
 
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-6 col-12-narrower">
+<!-- INFO -->
+<section>
+  <h2>Information</h2>
+  <p>
+    We specialize in clean design, fast performance and mobile-friendly websites.
+    Everything is built to look good on all devices.
+  </p>
+</section>
 
-									<section>
-										<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
-										<header>
-											<h3>Hyperspace Travel</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat commodo suscipit amet sed nibh. Proin a ullamcorper sed blandit. Sed tristique purus vitae volutpat commodo suscipit ullamcorper sed blandit lorem ipsum dolore.</p>
-									</section>
+<!-- CONTACT -->
+<section id="contact">
+  <h2>Contact</h2>
+  <p>Phone: +00 123 456 789</p>
+  <p>Email: info@businesspage.ie</p>
+</section>
 
-								</div>
-								<div class="col-6 col-12-narrower">
+<!-- APPOINTMENT -->
+<section id="appointment">
+  <h2>Book Appointment</h2>
 
-									<section>
-										<a href="#" class="image featured"><img src="images/pic04.jpg" alt="" /></a>
-										<header>
-											<h3>And Another Train</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat commodo suscipit amet sed nibh. Proin a ullamcorper sed blandit. Sed tristique purus vitae volutpat commodo suscipit ullamcorper sed blandit lorem ipsum dolore.</p>
-									</section>
+  <form>
+    <input type="text" placeholder="Your Name" required />
+    <input type="email" placeholder="Your Email" required />
+    <input type="tel" placeholder="Your Phone" required />
+    <textarea rows="5" placeholder="Your Request"></textarea>
+    <button type="submit">Send</button>
+  </form>
+</section>
 
-								</div>
-							</div>
+<footer>
+  Thank you for your time — see you soon
+</footer>
 
-							<footer class="major">
-								<ul class="buttons">
-									<li><a href="#" class="button">See More</a></li>
-								</ul>
-							</footer>
+<script>
+// MENU
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  menu.style.right = menu.style.right === "0px" ? "-250px" : "0px";
+}
 
-						</section>
+// SIMPLE SLIDER
+let index = 0;
+const slides = document.querySelectorAll(".slide");
 
-				</article>
+setInterval(() => {
+  slides[index].classList.remove("active");
+  index = (index + 1) % slides.length;
+  slides[index].classList.add("active");
+}, 3000);
+</script>
 
-			<!-- CTA -->
-				<section id="cta">
-
-					<header>
-						<h2>Ready to do <strong>something</strong>?</h2>
-						<p>Proin a ullamcorper elit, et sagittis turpis integer ut fermentum.</p>
-					</header>
-					<footer>
-						<ul class="buttons">
-							<li><a href="#" class="button primary">Take My Money</a></li>
-							<li><a href="#" class="button">LOL Wut</a></li>
-						</ul>
-					</footer>
-
-				</section>
-
-			<!-- Footer -->
-				<footer id="footer">
-
-					<ul class="icons">
-						<li><a href="#" class="icon brands circle fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands circle fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon brands circle fa-google-plus-g"><span class="label">Google+</span></a></li>
-						<li><a href="#" class="icon brands circle fa-github"><span class="label">Github</span></a></li>
-						<li><a href="#" class="icon brands circle fa-dribbble"><span class="label">Dribbble</span></a></li>
-					</ul>
-
-					<ul class="copyright">
-						<li>&copy; Untitled</li><li>Design: <a href="http://">Jay</a></li>
-					</ul>
-
-				</footer>
-
-		</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.dropotron.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-	</body>
+</body>
 </html>
