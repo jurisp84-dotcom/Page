@@ -61,7 +61,7 @@ header{
 
     padding:0 18px;
 
-    background:rgba(9,9,13,.95);
+    background:rgba(9,9,13,.96);
     backdrop-filter:blur(15px);
 
     border-bottom:1px solid #20202a;
@@ -80,9 +80,7 @@ header{
 .header-button{
     background:var(--card2);
     color:white;
-
     border:1px solid var(--border);
-
     padding:9px 13px;
     border-radius:10px;
 }
@@ -91,10 +89,6 @@ main{
     max-width:760px;
     margin:auto;
     padding:88px 18px 30px;
-}
-
-h1{
-    letter-spacing:-1px;
 }
 
 .hero{
@@ -122,18 +116,13 @@ h1{
 
 .badge{
     display:inline-block;
-
     background:#241b35;
     color:var(--purple2);
-
     border:1px solid #3c2c58;
-
     padding:7px 11px;
     border-radius:30px;
-
     font-size:12px;
     font-weight:bold;
-
     margin-bottom:20px;
 }
 
@@ -146,9 +135,7 @@ h1{
 .btn{
     min-height:50px;
     padding:13px 18px;
-
     border-radius:12px;
-
     font-weight:bold;
 }
 
@@ -164,7 +151,6 @@ h1{
 .secondary{
     background:var(--card2);
     color:white;
-
     border:1px solid var(--border);
 }
 
@@ -189,11 +175,8 @@ h1{
 
 .card{
     background:var(--card);
-
     border:1px solid var(--border);
-
     border-radius:17px;
-
     padding:17px;
 }
 
@@ -213,26 +196,18 @@ h1{
 
 .scene{
     background:var(--card);
-
     border:1px solid var(--border);
-
     border-radius:18px;
-
     padding:18px;
-
     margin-bottom:13px;
 }
 
 .tag{
     display:inline-block;
-
     background:#241b35;
     color:var(--purple2);
-
     padding:5px 9px;
-
     border-radius:30px;
-
     font-size:12px;
     font-weight:bold;
 }
@@ -243,45 +218,29 @@ h1{
 
 .line{
     background:#08080b;
-
     border-left:4px solid var(--purple);
-
     border-radius:10px;
-
     padding:18px;
-
     margin:20px 0;
-
     font-size:21px;
-
     line-height:1.45;
 }
 
 .info{
     background:#111118;
-
     border:1px solid var(--border);
-
     padding:15px;
-
     border-radius:12px;
-
     color:#c7c7d0;
-
     line-height:1.5;
-
     margin:12px 0;
 }
 
 .status{
     background:#191921;
-
     border:1px solid var(--border);
-
     padding:14px;
-
     border-radius:12px;
-
     margin:14px 0;
 }
 
@@ -290,175 +249,121 @@ h1{
     color:#8ff0b3;
 }
 
-.warning{
-    background:#292313;
-    color:#f1d279;
-}
-
 .camera{
     background:#000;
-
     border-radius:20px;
-
     overflow:hidden;
-
     margin:18px 0;
 }
 
 .camera video{
     width:100%;
-
     display:block;
-
     aspect-ratio:9/16;
-
     object-fit:cover;
 }
 
 .feed-video{
     width:100%;
-
     border-radius:14px;
-
     background:#000;
 }
 
 .response{
     background:#101016;
-
     border:1px solid var(--border);
-
     border-radius:15px;
-
     padding:15px;
-
     margin-bottom:12px;
 }
 
 .user-row{
     display:flex;
-
     align-items:center;
-
     margin-bottom:12px;
 }
 
 .avatar{
     width:40px;
     height:40px;
-
     border-radius:50%;
-
     background:linear-gradient(
         135deg,
         #8b5cf6,
         #ec4899
     );
-
     display:flex;
-
     align-items:center;
     justify-content:center;
-
     font-weight:bold;
-
     margin-right:10px;
 }
 
 input{
     width:100%;
-
     background:#0d0d12;
-
     color:white;
-
     border:1px solid #34343f;
-
     padding:14px;
-
     border-radius:10px;
-
     margin:7px 0 14px;
 }
 
 label{
     color:#c6c6d0;
-
     font-size:13px;
 }
 
 .modal{
     position:fixed;
-
     inset:0;
-
     z-index:500;
-
     background:rgba(0,0,0,.8);
-
     display:flex;
-
     align-items:center;
     justify-content:center;
-
     padding:18px;
 }
 
 .modal-box{
     width:min(480px,100%);
-
+    max-height:90vh;
+    overflow:auto;
     background:#17171f;
-
     border:1px solid var(--border);
-
     border-radius:20px;
-
     padding:22px;
 }
 
 .bottom-nav{
     position:fixed;
-
     bottom:0;
     left:0;
     right:0;
-
     height:70px;
-
     z-index:200;
-
     background:rgba(15,15,21,.96);
-
     backdrop-filter:blur(15px);
-
     border-top:1px solid #292933;
 }
 
 .nav{
     max-width:600px;
-
     margin:auto;
-
     height:100%;
-
     display:flex;
 }
 
 .nav button{
     flex:1;
-
     background:none;
-
     color:#858592;
-
     font-size:11px;
 }
 
 .nav button strong{
     display:block;
-
     font-size:21px;
-
     margin-bottom:3px;
 }
 
@@ -490,15 +395,18 @@ label{
 
 <header>
 
-    <div class="logo">
-        Scene<span>Play</span>
-    </div>
+<div class="logo">
+    Scene<span>Play</span>
+</div>
 
-    <button id="accountButton"
-            class="header-button"
-            onclick="accountAction()">
-        Log in
-    </button>
+<button
+    id="accountButton"
+    class="header-button"
+    onclick="accountAction()">
+
+    Log in
+
+</button>
 
 </header>
 
@@ -540,10 +448,11 @@ Profile
 </nav>
 
 
-<!-- AUTH MODAL -->
+<!-- AUTH -->
 
-<div id="authModal"
-     class="modal hidden">
+<div
+    id="authModal"
+    class="modal hidden">
 
 <div class="modal-box">
 
@@ -552,53 +461,76 @@ Create account
 </h2>
 
 <p class="muted">
-You can watch without an account.
-You need one to play.
+Watch scenes without an account.
+Create an account when you want to play.
 </p>
+
+
+<div id="usernameContainer">
 
 <label>
 Username
 </label>
 
-<input id="authUsername"
-       placeholder="Choose username">
+<input
+    id="authUsername"
+    placeholder="Choose username"
+    autocomplete="username">
+
+</div>
+
 
 <label>
 Email
 </label>
 
-<input id="authEmail"
-       type="email"
-       placeholder="you@example.com">
+<input
+    id="authEmail"
+    type="email"
+    placeholder="you@example.com"
+    autocomplete="email">
+
 
 <label>
 Password
 </label>
 
-<input id="authPassword"
-       type="password"
-       placeholder="Password">
+<input
+    id="authPassword"
+    type="password"
+    placeholder="Password"
+    autocomplete="current-password">
 
-<button class="btn primary full"
-        onclick="submitAuth()">
+
+<button
+    id="authSubmitButton"
+    class="btn primary full"
+    onclick="submitAuth()">
 
 Create account
 
 </button>
 
+
 <br><br>
 
-<button class="btn secondary full"
-        onclick="switchAuth()">
+
+<button
+    id="authSwitchButton"
+    class="btn secondary full"
+    onclick="switchAuth()">
 
 Already have an account? Log in
 
 </button>
 
+
 <br><br>
 
-<button class="btn secondary full"
-        onclick="closeAuth()">
+
+<button
+    class="btn secondary full"
+    onclick="closeAuth()">
 
 Cancel
 
@@ -611,33 +543,33 @@ Cancel
 
 <script type="module">
 
-/* =====================================================
-   SUPABASE
-   ===================================================== */
-
 import {
     createClient
-} from
+}
+from
 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 
-/*
-    YOUR PROJECT URL
-*/
+/* =====================================================
+   SUPABASE CONNECTION
+   ===================================================== */
 
 const SUPABASE_URL =
 'https://rktwvhenqumebbgrtxol.supabase.co';
 
 
 /*
-    PASTE YOUR NEW PUBLISHABLE KEY BELOW.
+=========================================================
+PASTE YOUR NEW PUBLISHABLE KEY HERE
+=========================================================
 
-    Example:
+Example:
 
-    const SUPABASE_KEY =
-    'sb_publishable_xxxxxxxxx';
+const SUPABASE_KEY =
+'sb_publishable_xxxxxxxxxxxxx';
 
-    NEVER put sb_secret_... here.
+DO NOT USE sb_secret_...
+=========================================================
 */
 
 const SUPABASE_KEY =
@@ -649,6 +581,27 @@ createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
+
+
+/* =====================================================
+   STATE
+   ===================================================== */
+
+let currentUser = null;
+let currentProfile = null;
+let currentScene = null;
+
+let authMode = "signup";
+
+let cameraStream = null;
+let mediaRecorder = null;
+let chunks = [];
+let recordingTimer = null;
+let recordingSeconds = 0;
+
+let pendingVideoBlob = null;
+let pendingResponseBlob = null;
+let currentResponseSceneId = null;
 
 
 /* =====================================================
@@ -811,25 +764,10 @@ nextB:
 
 
 /* =====================================================
-   STATE
+   AUTH UI
    ===================================================== */
 
-let currentUser=null;
-let currentProfile=null;
-let currentScene=null;
-
-let cameraStream=null;
-let mediaRecorder=null;
-let chunks=[];
-let recordingTimer=null;
-let recordingSeconds=0;
-
-
-/* =====================================================
-   AUTH
-   ===================================================== */
-
-window.accountAction=function(){
+window.accountAction = function(){
 
     if(currentUser){
 
@@ -844,25 +782,20 @@ window.accountAction=function(){
 };
 
 
-let authMode="signup";
+window.openAuth = function(){
 
-
-window.openAuth=function(){
-
-    authMode="signup";
+    authMode = "signup";
 
     document
     .getElementById("authModal")
     .classList.remove("hidden");
 
-    document
-    .getElementById("authTitle")
-    .textContent="Create account";
+    updateAuthForm();
 
 };
 
 
-window.closeAuth=function(){
+window.closeAuth = function(){
 
     document
     .getElementById("authModal")
@@ -871,47 +804,109 @@ window.closeAuth=function(){
 };
 
 
-window.switchAuth=function(){
+window.switchAuth = function(){
 
     authMode =
-        authMode==="signup"
+        authMode === "signup"
         ? "login"
         : "signup";
 
-    document
-    .getElementById("authTitle")
-    .textContent =
-        authMode==="signup"
-        ? "Create account"
-        : "Log in";
+    updateAuthForm();
 
 };
 
 
-window.submitAuth=async function(){
+function updateAuthForm(){
+
+    const title =
+        document.getElementById(
+            "authTitle"
+        );
+
+    const usernameContainer =
+        document.getElementById(
+            "usernameContainer"
+        );
+
+    const submitButton =
+        document.getElementById(
+            "authSubmitButton"
+        );
+
+    const switchButton =
+        document.getElementById(
+            "authSwitchButton"
+        );
+
+
+    if(authMode === "login"){
+
+        title.textContent = "Log in";
+
+        usernameContainer
+        .classList
+        .add("hidden");
+
+        submitButton.textContent =
+            "Log in";
+
+        switchButton.textContent =
+            "Don't have an account? Create one";
+
+    }else{
+
+        title.textContent =
+            "Create account";
+
+        usernameContainer
+        .classList
+        .remove("hidden");
+
+        submitButton.textContent =
+            "Create account";
+
+        switchButton.textContent =
+            "Already have an account? Log in";
+
+    }
+
+}
+
+
+/* =====================================================
+   SUBMIT AUTH
+   ===================================================== */
+
+window.submitAuth = async function(){
 
     const username =
         document
-        .getElementById("authUsername")
+        .getElementById(
+            "authUsername"
+        )
         .value
         .trim();
 
     const email =
         document
-        .getElementById("authEmail")
+        .getElementById(
+            "authEmail"
+        )
         .value
         .trim();
 
     const password =
         document
-        .getElementById("authPassword")
+        .getElementById(
+            "authPassword"
+        )
         .value;
 
 
-    if(!email || !password){
+    if(!email){
 
         alert(
-            "Please enter email and password."
+            "Please enter your email."
         );
 
         return;
@@ -919,7 +914,18 @@ window.submitAuth=async function(){
     }
 
 
-    if(authMode==="signup"){
+    if(!password){
+
+        alert(
+            "Please enter your password."
+        );
+
+        return;
+
+    }
+
+
+    if(authMode === "signup"){
 
         if(!username){
 
@@ -943,8 +949,11 @@ window.submitAuth=async function(){
 
             options:{
                 data:{
-                    username
-                }
+                    username:username
+                },
+
+                emailRedirectTo:
+                    "https://businesspage.ie"
             }
 
         });
@@ -961,13 +970,10 @@ window.submitAuth=async function(){
 
         if(data.user){
 
-            /*
-                The database trigger creates
-                the profile automatically.
-            */
+            closeAuth();
 
             alert(
-                "Account created! Check your email if Supabase requires email confirmation."
+                "Account created. Check your email and confirm your account."
             );
 
         }
@@ -994,20 +1000,20 @@ window.submitAuth=async function(){
 
         }
 
+
+        closeAuth();
+
+        await loadUser();
+
+        home();
+
     }
-
-
-    closeAuth();
-
-    await loadUser();
-
-    home();
 
 };
 
 
 /* =====================================================
-   USER
+   LOAD USER
    ===================================================== */
 
 async function loadUser(){
@@ -1017,6 +1023,7 @@ async function loadUser(){
     } =
     await supabase.auth
     .getUser();
+
 
     currentUser =
         data.user || null;
@@ -1040,11 +1047,13 @@ async function loadUser(){
 
         .maybeSingle();
 
-        currentProfile=profile;
+
+        currentProfile =
+            profile || null;
 
     }else{
 
-        currentProfile=null;
+        currentProfile = null;
 
     }
 
@@ -1057,8 +1066,7 @@ async function loadUser(){
 function updateAccountButton(){
 
     const button =
-        document
-        .getElementById(
+        document.getElementById(
             "accountButton"
         );
 
@@ -1066,23 +1074,31 @@ function updateAccountButton(){
     if(currentProfile){
 
         button.textContent =
-            "@"+currentProfile.username;
+            "@"
+            +
+            currentProfile.username;
 
     }else{
 
-        button.textContent="Log in";
+        button.textContent =
+            "Log in";
 
     }
 
 }
 
 
-window.logout=async function(){
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+window.logout = async function(){
 
     await supabase.auth.signOut();
 
-    currentUser=null;
-    currentProfile=null;
+    currentUser = null;
+
+    currentProfile = null;
 
     updateAccountButton();
 
@@ -1095,9 +1111,9 @@ window.logout=async function(){
    HOME
    ===================================================== */
 
-window.home=function(){
+window.home = function(){
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <section class="hero">
 
@@ -1149,9 +1165,7 @@ window.home=function(){
 
         <div class="card">
 
-            <div class="emoji">
-                🎬
-            </div>
+            <div class="emoji">🎬</div>
 
             <h3>
                 Get a scene
@@ -1167,9 +1181,7 @@ window.home=function(){
 
         <div class="card">
 
-            <div class="emoji">
-                📱
-            </div>
+            <div class="emoji">📱</div>
 
             <h3>
                 Record alone
@@ -1185,9 +1197,7 @@ window.home=function(){
 
         <div class="card">
 
-            <div class="emoji">
-                👥
-            </div>
+            <div class="emoji">👥</div>
 
             <h3>
                 People respond
@@ -1203,9 +1213,7 @@ window.home=function(){
 
         <div class="card">
 
-            <div class="emoji">
-                🌎
-            </div>
+            <div class="emoji">🌎</div>
 
             <h3>
                 Finish together
@@ -1229,7 +1237,7 @@ window.home=function(){
    CREATE SCENE
    ===================================================== */
 
-window.createScene=function(){
+window.createScene = function(){
 
     if(!currentUser){
 
@@ -1240,7 +1248,7 @@ window.createScene=function(){
     }
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         🎬 Choose a scene
@@ -1251,7 +1259,6 @@ window.createScene=function(){
         You become Character A.
     </p>
 
-    <div>
 
     ${
         SCENES.map(
@@ -1264,11 +1271,13 @@ window.createScene=function(){
                 </span>
 
                 <h2>
-                    ${scene.title}
+                    ${escapeHtml(scene.title)}
                 </h2>
 
                 <p class="muted">
-                    ${scene.situation}
+                    ${escapeHtml(
+                        scene.situation
+                    )}
                 </p>
 
                 <button
@@ -1285,56 +1294,72 @@ window.createScene=function(){
         ).join("")
     }
 
-    </div>
-
     `;
 
 };
 
 
 /* =====================================================
-   PREVIEW
+   PREVIEW SCENE
    ===================================================== */
 
-window.previewScene=function(index){
+window.previewScene = function(index){
 
-    currentScene=SCENES[index];
+    currentScene =
+        SCENES[index];
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <div class="scene">
 
         <span class="tag">
-            ${currentScene.category}
+            ${escapeHtml(
+                currentScene.category
+            )}
         </span>
 
         <h1>
-            ${currentScene.title}
+            ${escapeHtml(
+                currentScene.title
+            )}
         </h1>
 
         <p class="muted">
-            ${currentScene.situation}
-        </p>
-
-        <hr>
-
-        <strong>
-            Your character
-        </strong>
-
-        <p class="muted">
-            ${currentScene.A}
+            ${escapeHtml(
+                currentScene.situation
+            )}
         </p>
 
 
-        <strong>
-            Other character
-        </strong>
+        <div class="info">
 
-        <p class="muted">
-            ${currentScene.B}
-        </p>
+            <strong>
+                Your character
+            </strong>
+
+            <br>
+
+            ${escapeHtml(
+                currentScene.A
+            )}
+
+        </div>
+
+
+        <div class="info">
+
+            <strong>
+                Other character
+            </strong>
+
+            <br>
+
+            ${escapeHtml(
+                currentScene.B
+            )}
+
+        </div>
 
 
         <div class="info">
@@ -1345,14 +1370,18 @@ window.previewScene=function(index){
 
             <br>
 
-            ${currentScene.objectiveA}
+            ${escapeHtml(
+                currentScene.objectiveA
+            )}
 
         </div>
 
 
         <div class="line">
 
-            "${currentScene.lineA}"
+            "${escapeHtml(
+                currentScene.lineA
+            )}"
 
         </div>
 
@@ -1376,13 +1405,14 @@ window.previewScene=function(index){
    CAMERA
    ===================================================== */
 
-window.openCamera=async function(){
+window.openCamera = async function(){
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         🎥 Record your part
     </h1>
+
 
     <div class="info">
 
@@ -1392,14 +1422,18 @@ window.openCamera=async function(){
 
         <br>
 
-        ${currentScene.objectiveA}
+        ${escapeHtml(
+            currentScene.objectiveA
+        )}
 
     </div>
 
 
     <div class="line">
 
-        "${currentScene.lineA}"
+        "${escapeHtml(
+            currentScene.lineA
+        )}"
 
     </div>
 
@@ -1416,8 +1450,9 @@ window.openCamera=async function(){
     </div>
 
 
-    <div id="recordStatus"
-         class="status">
+    <div
+        id="recordStatus"
+        class="status">
 
         Ready to record
 
@@ -1435,6 +1470,7 @@ window.openCamera=async function(){
 
         </button>
 
+
         <button
             class="btn secondary"
             onclick="stopCamera()">
@@ -1451,7 +1487,8 @@ window.openCamera=async function(){
     try{
 
         cameraStream =
-            await navigator.mediaDevices
+            await navigator
+            .mediaDevices
             .getUserMedia({
 
                 video:{
@@ -1464,14 +1501,17 @@ window.openCamera=async function(){
 
 
         document
-        .getElementById("cameraVideo")
-        .srcObject=cameraStream;
+        .getElementById(
+            "cameraVideo"
+        )
+        .srcObject =
+            cameraStream;
 
 
     }catch(error){
 
         alert(
-            "Camera access was denied. Please allow camera and microphone access."
+            "Camera or microphone access was denied."
         );
 
         home();
@@ -1481,11 +1521,15 @@ window.openCamera=async function(){
 };
 
 
-window.toggleRecording=function(){
+/* =====================================================
+   RECORD OPENING
+   ===================================================== */
+
+window.toggleRecording = function(){
 
     if(
         !mediaRecorder ||
-        mediaRecorder.state==="inactive"
+        mediaRecorder.state === "inactive"
     ){
 
         startRecording();
@@ -1501,19 +1545,21 @@ window.toggleRecording=function(){
 
 function startRecording(){
 
-    chunks=[];
+    chunks = [];
 
 
-    let options={};
+    let options = {};
 
 
     if(
-        MediaRecorder.isTypeSupported(
+        MediaRecorder
+        .isTypeSupported(
             "video/webm"
         )
     ){
 
-        options.mimeType="video/webm";
+        options.mimeType =
+            "video/webm";
 
     }
 
@@ -1526,7 +1572,7 @@ function startRecording(){
 
 
     mediaRecorder.ondataavailable =
-        event=>{
+        event => {
 
             if(event.data.size){
 
@@ -1546,7 +1592,7 @@ function startRecording(){
     mediaRecorder.start();
 
 
-    recordingSeconds=0;
+    recordingSeconds = 0;
 
 
     recordingTimer =
@@ -1555,18 +1601,27 @@ function startRecording(){
             recordingSeconds++;
 
 
-            document
-            .getElementById("recordStatus")
-            .textContent =
-                "🔴 Recording "
-                +
-                recordingSeconds
-                +
-                " / 30 seconds";
+            const status =
+                document
+                .getElementById(
+                    "recordStatus"
+                );
+
+
+            if(status){
+
+                status.textContent =
+                    "🔴 Recording "
+                    +
+                    recordingSeconds
+                    +
+                    " / 30 seconds";
+
+            }
 
 
             if(
-                recordingSeconds>=30
+                recordingSeconds >= 30
             ){
 
                 stopRecording();
@@ -1577,20 +1632,20 @@ function startRecording(){
 
 
     document
-    .getElementById("recordButton")
-    .textContent="⏹ Stop";
+    .getElementById(
+        "recordButton"
+    )
+    .textContent =
+        "⏹ Stop";
 
 }
 
 
 function stopRecording(){
 
-    if(!mediaRecorder)
-        return;
-
-
     if(
-        mediaRecorder.state==="recording"
+        mediaRecorder &&
+        mediaRecorder.state === "recording"
     ){
 
         mediaRecorder.stop();
@@ -1605,7 +1660,7 @@ function stopRecording(){
 }
 
 
-window.stopCamera=function(){
+window.stopCamera = function(){
 
     stopCameraTracks();
 
@@ -1621,10 +1676,10 @@ function stopCameraTracks(){
         cameraStream
         .getTracks()
         .forEach(
-            track=>track.stop()
+            track => track.stop()
         );
 
-        cameraStream=null;
+        cameraStream = null;
 
     }
 
@@ -1632,7 +1687,7 @@ function stopCameraTracks(){
 
 
 /* =====================================================
-   REVIEW
+   REVIEW OPENING
    ===================================================== */
 
 function reviewRecording(){
@@ -1640,7 +1695,7 @@ function reviewRecording(){
     stopCameraTracks();
 
 
-    const blob =
+    pendingVideoBlob =
         new Blob(
             chunks,
             {
@@ -1650,20 +1705,19 @@ function reviewRecording(){
 
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            pendingVideoBlob
+        );
 
 
-    window.pendingVideoBlob=blob;
-
-
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         Review your video
     </h1>
 
     <p class="muted">
-        Make sure you're happy with it.
+        Happy with it?
     </p>
 
 
@@ -1708,11 +1762,13 @@ function reviewRecording(){
    UPLOAD OPENING
    ===================================================== */
 
-window.uploadOpening=async function(){
+window.uploadOpening = async function(){
 
-    if(!window.pendingVideoBlob){
+    if(!pendingVideoBlob){
 
-        alert("Video missing.");
+        alert(
+            "No video available."
+        );
 
         return;
 
@@ -1748,7 +1804,7 @@ window.uploadOpening=async function(){
         .from("scene-videos")
         .upload(
             path,
-            window.pendingVideoBlob,
+            pendingVideoBlob,
             {
                 contentType:
                     "video/webm",
@@ -1840,10 +1896,12 @@ window.uploadOpening=async function(){
             throw turnError;
 
 
-        window.pendingVideoBlob=null;
+        pendingVideoBlob = null;
 
 
-        showSceneCreated(sceneId);
+        showSceneCreated(
+            sceneId
+        );
 
 
     }catch(error){
@@ -1869,7 +1927,7 @@ window.uploadOpening=async function(){
 
 function showSceneCreated(sceneId){
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <div class="scene">
 
@@ -1879,9 +1937,13 @@ function showSceneCreated(sceneId){
 
         </div>
 
+
         <h1>
-            ${currentScene.title}
+            ${escapeHtml(
+                currentScene.title
+            )}
         </h1>
+
 
         <p class="muted">
 
@@ -1922,7 +1984,7 @@ function showSceneCreated(sceneId){
    DISCOVER
    ===================================================== */
 
-window.discover=async function(){
+window.discover = async function(){
 
     showLoading(
         "Loading scenes..."
@@ -1934,14 +1996,11 @@ window.discover=async function(){
         error
     } =
     await supabase
-
     .from("scenes")
-
     .select(`
         *,
         profiles(username)
     `)
-
     .in(
         "status",
         [
@@ -1950,7 +2009,6 @@ window.discover=async function(){
             "finished"
         ]
     )
-
     .order(
         "created_at",
         {
@@ -1970,7 +2028,7 @@ window.discover=async function(){
     }
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         🔥 Discover
@@ -1985,7 +2043,7 @@ window.discover=async function(){
 
     if(!data.length){
 
-        app.innerHTML+=`
+        app.innerHTML += `
 
         <div class="info">
 
@@ -2004,27 +2062,45 @@ window.discover=async function(){
 
     data.forEach(scene=>{
 
-        app.innerHTML+=`
+        app.innerHTML += `
 
         <div class="scene">
 
             <span class="tag">
-                ${scene.category}
+
+                ${escapeHtml(
+                    scene.category
+                )}
+
             </span>
 
+
             <h2>
-                ${escapeHtml(scene.title)}
+
+                ${escapeHtml(
+                    scene.title
+                )}
+
             </h2>
 
+
             <p class="muted">
-                ${escapeHtml(scene.situation)}
+
+                ${escapeHtml(
+                    scene.situation
+                )}
+
             </p>
+
 
             <div class="line">
 
-                "${escapeHtml(scene.opening_line)}"
+                "${escapeHtml(
+                    scene.opening_line
+                )}"
 
             </div>
+
 
             <p class="muted">
 
@@ -2058,7 +2134,8 @@ window.discover=async function(){
    RESPOND
    ===================================================== */
 
-window.respondToScene=async function(sceneId){
+window.respondToScene =
+async function(sceneId){
 
     if(!currentUser){
 
@@ -2074,16 +2151,12 @@ window.respondToScene=async function(sceneId){
         error
     } =
     await supabase
-
     .from("scenes")
-
     .select("*")
-
     .eq(
         "id",
         sceneId
     )
-
     .single();
 
 
@@ -2096,10 +2169,10 @@ window.respondToScene=async function(sceneId){
     }
 
 
-    currentScene=scene;
+    currentScene = scene;
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <div class="scene">
 
@@ -2107,13 +2180,22 @@ window.respondToScene=async function(sceneId){
             CHARACTER B
         </span>
 
+
         <h1>
-            ${escapeHtml(scene.title)}
+            ${escapeHtml(
+                scene.title
+            )}
         </h1>
 
+
         <p class="muted">
-            ${escapeHtml(scene.situation)}
+
+            ${escapeHtml(
+                scene.situation
+            )}
+
         </p>
+
 
         <div class="info">
 
@@ -2123,9 +2205,12 @@ window.respondToScene=async function(sceneId){
 
             <br>
 
-            ${escapeHtml(scene.character_b)}
+            ${escapeHtml(
+                scene.character_b
+            )}
 
         </div>
+
 
         <div class="info">
 
@@ -2142,18 +2227,14 @@ window.respondToScene=async function(sceneId){
 
         </div>
 
+
         <div class="line">
 
-            "${escapeHtml(scene.opening_line)}"
+            "${escapeHtml(
+                scene.opening_line
+            )}"
 
         </div>
-
-        <p class="muted">
-
-            Your response should continue
-            naturally from the opening.
-
-        </p>
 
 
         <button
@@ -2175,16 +2256,19 @@ window.respondToScene=async function(sceneId){
    RECORD RESPONSE
    ===================================================== */
 
-window.recordResponse=async function(sceneId){
+window.recordResponse =
+async function(sceneId){
 
-    currentResponseSceneId=sceneId;
+    currentResponseSceneId =
+        sceneId;
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         🎥 Your response
     </h1>
+
 
     <div class="camera">
 
@@ -2218,6 +2302,7 @@ window.recordResponse=async function(sceneId){
 
         </button>
 
+
         <button
             class="btn secondary"
             onclick="stopCamera()">
@@ -2234,7 +2319,8 @@ window.recordResponse=async function(sceneId){
     try{
 
         cameraStream =
-            await navigator.mediaDevices
+            await navigator
+            .mediaDevices
             .getUserMedia({
 
                 video:{
@@ -2250,13 +2336,14 @@ window.recordResponse=async function(sceneId){
         .getElementById(
             "responseCamera"
         )
-        .srcObject=cameraStream;
+        .srcObject =
+            cameraStream;
 
 
     }catch(error){
 
         alert(
-            "Camera access denied."
+            "Camera or microphone access was denied."
         );
 
         home();
@@ -2266,14 +2353,12 @@ window.recordResponse=async function(sceneId){
 };
 
 
-let currentResponseSceneId=null;
-
-
-window.toggleResponseRecording=function(){
+window.toggleResponseRecording =
+function(){
 
     if(
         !mediaRecorder ||
-        mediaRecorder.state==="inactive"
+        mediaRecorder.state === "inactive"
     ){
 
         startResponseRecording();
@@ -2289,19 +2374,21 @@ window.toggleResponseRecording=function(){
 
 function startResponseRecording(){
 
-    chunks=[];
+    chunks = [];
 
 
-    let options={};
+    let options = {};
 
 
     if(
-        MediaRecorder.isTypeSupported(
+        MediaRecorder
+        .isTypeSupported(
             "video/webm"
         )
     ){
 
-        options.mimeType="video/webm";
+        options.mimeType =
+            "video/webm";
 
     }
 
@@ -2314,10 +2401,15 @@ function startResponseRecording(){
 
 
     mediaRecorder.ondataavailable =
-        e=>{
+        event => {
 
-            if(e.data.size)
-                chunks.push(e.data);
+            if(event.data.size){
+
+                chunks.push(
+                    event.data
+                );
+
+            }
 
         };
 
@@ -2329,7 +2421,7 @@ function startResponseRecording(){
     mediaRecorder.start();
 
 
-    recordingSeconds=0;
+    recordingSeconds = 0;
 
 
     recordingTimer =
@@ -2338,20 +2430,27 @@ function startResponseRecording(){
             recordingSeconds++;
 
 
-            document
-            .getElementById(
-                "responseStatus"
-            )
-            .textContent =
-                "🔴 Recording "
-                +
-                recordingSeconds
-                +
-                " / 30 seconds";
+            const status =
+                document
+                .getElementById(
+                    "responseStatus"
+                );
+
+
+            if(status){
+
+                status.textContent =
+                    "🔴 Recording "
+                    +
+                    recordingSeconds
+                    +
+                    " / 30 seconds";
+
+            }
 
 
             if(
-                recordingSeconds>=30
+                recordingSeconds >= 30
             ){
 
                 stopResponseRecording();
@@ -2365,19 +2464,17 @@ function startResponseRecording(){
     .getElementById(
         "responseRecordButton"
     )
-    .textContent="⏹ Stop";
+    .textContent =
+        "⏹ Stop";
 
 }
 
 
 function stopResponseRecording(){
 
-    if(!mediaRecorder)
-        return;
-
-
     if(
-        mediaRecorder.state==="recording"
+        mediaRecorder &&
+        mediaRecorder.state === "recording"
     ){
 
         mediaRecorder.stop();
@@ -2397,7 +2494,7 @@ function reviewResponse(){
     stopCameraTracks();
 
 
-    const blob =
+    pendingResponseBlob =
         new Blob(
             chunks,
             {
@@ -2407,13 +2504,12 @@ function reviewResponse(){
 
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            pendingResponseBlob
+        );
 
 
-    window.pendingResponseBlob=blob;
-
-
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         Review response
@@ -2461,11 +2557,14 @@ function reviewResponse(){
    UPLOAD RESPONSE
    ===================================================== */
 
-window.uploadResponse=async function(){
+window.uploadResponse =
+async function(){
 
-    if(!window.pendingResponseBlob){
+    if(!pendingResponseBlob){
 
-        alert("Video missing.");
+        alert(
+            "No response video."
+        );
 
         return;
 
@@ -2501,7 +2600,7 @@ window.uploadResponse=async function(){
         .from("scene-videos")
         .upload(
             path,
-            window.pendingResponseBlob,
+            pendingResponseBlob,
             {
                 contentType:
                     "video/webm",
@@ -2527,13 +2626,10 @@ window.uploadResponse=async function(){
             error
         } =
         await supabase
-
         .from("scene_responses")
-
         .insert({
 
-            id:
-                responseId,
+            id:responseId,
 
             scene_id:
                 currentResponseSceneId,
@@ -2553,10 +2649,10 @@ window.uploadResponse=async function(){
             throw error;
 
 
-        window.pendingResponseBlob=null;
+        pendingResponseBlob = null;
 
 
-        app.innerHTML=`
+        app.innerHTML = `
 
         <div class="scene">
 
@@ -2566,16 +2662,16 @@ window.uploadResponse=async function(){
 
             </div>
 
+
             <h1>
                 Now you wait.
             </h1>
+
 
             <p class="muted">
 
                 The creator can watch your
                 response and choose you.
-
-                You don't need to stay online.
 
             </p>
 
@@ -2614,7 +2710,8 @@ window.uploadResponse=async function(){
    VIEW RESPONSES
    ===================================================== */
 
-window.viewResponses=async function(sceneId){
+window.viewResponses =
+async function(sceneId){
 
     if(!currentUser){
 
@@ -2630,19 +2727,15 @@ window.viewResponses=async function(sceneId){
         error
     } =
     await supabase
-
     .from("scene_responses")
-
     .select(`
         *,
         profiles(username)
     `)
-
     .eq(
         "scene_id",
         sceneId
     )
-
     .order(
         "created_at",
         {
@@ -2660,15 +2753,18 @@ window.viewResponses=async function(sceneId){
     }
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         👥 Responses
     </h1>
 
+
     <p class="muted">
-        Only you can see these responses
-        until you choose someone.
+
+        Choose who you want to continue
+        the scene with.
+
     </p>
 
     `;
@@ -2676,13 +2772,13 @@ window.viewResponses=async function(sceneId){
 
     if(!data.length){
 
-        app.innerHTML+=`
+        app.innerHTML += `
 
         <div class="info">
 
             No responses yet.
 
-            Check back later.
+            Check again later.
 
         </div>
 
@@ -2695,7 +2791,7 @@ window.viewResponses=async function(sceneId){
 
     data.forEach(response=>{
 
-        app.innerHTML+=`
+        app.innerHTML += `
 
         <div class="response">
 
@@ -2705,7 +2801,8 @@ window.viewResponses=async function(sceneId){
 
                     ${
                         (
-                            response.profiles
+                            response
+                            .profiles
                             ?.username
                             || "P"
                         )[0]
@@ -2714,10 +2811,12 @@ window.viewResponses=async function(sceneId){
 
                 </div>
 
+
                 <strong>
 
                     @${escapeHtml(
-                        response.profiles
+                        response
+                        .profiles
                         ?.username
                         || "player"
                     )}
@@ -2740,7 +2839,10 @@ window.viewResponses=async function(sceneId){
 
             <button
                 class="btn primary full"
-                onclick="chooseResponse('${response.id}','${sceneId}')">
+                onclick="chooseResponse(
+                    '${response.id}',
+                    '${sceneId}'
+                )">
 
                 ✓ Choose this player
 
@@ -2752,7 +2854,9 @@ window.viewResponses=async function(sceneId){
 
             <button
                 class="btn danger full"
-                onclick="rejectResponse('${response.id}')">
+                onclick="rejectResponse(
+                    '${response.id}'
+                )">
 
                 Pass
 
@@ -2771,7 +2875,8 @@ window.viewResponses=async function(sceneId){
    CHOOSE RESPONSE
    ===================================================== */
 
-window.chooseResponse=async function(
+window.chooseResponse =
+async function(
     responseId,
     sceneId
 ){
@@ -2780,13 +2885,10 @@ window.chooseResponse=async function(
         error
     } =
     await supabase
-
     .from("scene_responses")
-
     .update({
         status:"accepted"
     })
-
     .eq(
         "id",
         responseId
@@ -2803,13 +2905,10 @@ window.chooseResponse=async function(
 
 
     await supabase
-
     .from("scene_responses")
-
     .update({
         status:"rejected"
     })
-
     .eq(
         "scene_id",
         sceneId
@@ -2821,13 +2920,10 @@ window.chooseResponse=async function(
 
 
     await supabase
-
     .from("scenes")
-
     .update({
         status:"in_progress"
     })
-
     .eq(
         "id",
         sceneId
@@ -2835,7 +2931,7 @@ window.chooseResponse=async function(
 
 
     alert(
-        "Player selected! The scene can now continue."
+        "Player selected!"
     );
 
 
@@ -2844,22 +2940,30 @@ window.chooseResponse=async function(
 };
 
 
-window.rejectResponse=async function(
-    responseId
-){
+window.rejectResponse =
+async function(responseId){
 
+    const {
+        error
+    } =
     await supabase
-
     .from("scene_responses")
-
     .update({
         status:"rejected"
     })
-
     .eq(
         "id",
         responseId
     );
+
+
+    if(error){
+
+        alert(error.message);
+
+        return;
+
+    }
 
 
     alert(
@@ -2873,7 +2977,8 @@ window.rejectResponse=async function(
    MY SCENES
    ===================================================== */
 
-window.myScenes=async function(){
+window.myScenes =
+async function(){
 
     if(!currentUser){
 
@@ -2889,16 +2994,12 @@ window.myScenes=async function(){
         error
     } =
     await supabase
-
     .from("scenes")
-
     .select("*")
-
     .eq(
         "creator_id",
         currentUser.id
     )
-
     .order(
         "created_at",
         {
@@ -2916,7 +3017,7 @@ window.myScenes=async function(){
     }
 
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <h1>
         🎬 My Scenes
@@ -2927,13 +3028,14 @@ window.myScenes=async function(){
 
     if(!data.length){
 
-        app.innerHTML+=`
+        app.innerHTML += `
 
         <div class="info">
 
             You haven't created a scene yet.
 
         </div>
+
 
         <button
             class="btn primary full"
@@ -2952,40 +3054,60 @@ window.myScenes=async function(){
 
     data.forEach(scene=>{
 
-        app.innerHTML+=`
+        app.innerHTML += `
 
         <div class="scene">
 
             <span class="tag">
-                ${scene.category}
+
+                ${escapeHtml(
+                    scene.category
+                )}
+
             </span>
 
+
             <h2>
-                ${escapeHtml(scene.title)}
+
+                ${escapeHtml(
+                    scene.title
+                )}
+
             </h2>
+
 
             <div class="status">
 
                 Status:
-                ${scene.status}
+                ${escapeHtml(
+                    scene.status
+                )}
 
             </div>
 
 
             ${
-                scene.status==="open"
-                ? `
+                scene.status === "open"
+                ?
+
+                `
 
                 <button
                     class="btn primary full"
-                    onclick="viewResponses('${scene.id}')">
+                    onclick="viewResponses(
+                        '${scene.id}'
+                    )">
 
                     👥 View responses
 
                 </button>
 
                 `
-                : ""
+
+                :
+
+                ""
+
             }
 
         </div>
@@ -3001,7 +3123,7 @@ window.myScenes=async function(){
    PROFILE
    ===================================================== */
 
-window.profile=function(){
+window.profile = function(){
 
     if(!currentUser){
 
@@ -3012,20 +3134,22 @@ window.profile=function(){
     }
 
 
-    app.innerHTML=`
+    const username =
+        currentProfile
+        ?.username
+        || "player";
+
+
+    app.innerHTML = `
 
     <div class="scene">
 
         <div class="avatar">
 
-            ${
-                (
-                    currentProfile
-                    ?.username
-                    || "P"
-                )[0]
+            ${escapeHtml(
+                username[0]
                 .toUpperCase()
-            }
+            )}
 
         </div>
 
@@ -3033,9 +3157,7 @@ window.profile=function(){
         <h1>
 
             @${escapeHtml(
-                currentProfile
-                ?.username
-                || "player"
+                username
             )}
 
         </h1>
@@ -3072,12 +3194,12 @@ window.profile=function(){
 
 function showLoading(text){
 
-    app.innerHTML=`
+    app.innerHTML = `
 
     <div class="scene">
 
         <h2>
-            ${text}
+            ${escapeHtml(text)}
         </h2>
 
         <div class="status">
@@ -3097,15 +3219,40 @@ function showLoading(text){
 
 function escapeHtml(text){
 
-    if(!text)
+    if(text === null ||
+       text === undefined){
+
         return "";
 
+    }
+
+
     return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
