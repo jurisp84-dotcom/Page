@@ -2,384 +2,480 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ScenePlay</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#09090d">
+<title>ScenePlay — Act. Respond. Play.</title>
 
 <style>
-* {
-    box-sizing: border-box;
+:root{
+  --bg:#09090d;
+  --card:#15151d;
+  --card2:#1d1d27;
+  --border:#2b2b37;
+  --text:#fff;
+  --muted:#9999a8;
+  --purple:#8b5cf6;
+  --purple2:#a78bfa;
+  --green:#35d07f;
+  --red:#ff5263;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #0b0b0f;
-    color: white;
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  min-height:100%;
 }
 
-button {
-    border: 0;
-    cursor: pointer;
-    font: inherit;
+body{
+  padding-bottom:80px;
 }
 
-.hidden {
-    display: none !important;
+button{
+  font:inherit;
+  cursor:pointer;
+  border:0;
 }
 
-/* ---------- HEADER ---------- */
+.hidden{display:none!important}
 
-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    height: 64px;
-    background: rgba(11,11,15,.96);
-    border-bottom: 1px solid #24242d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 18px;
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:64px;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  background:rgba(9,9,13,.94);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #20202a;
 }
 
-.logo {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -.5px;
+.logo{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.7px;
 }
 
-.logo span {
-    color: #8b5cf6;
+.logo span{color:var(--purple2)}
+
+.header-btn{
+  background:var(--card2);
+  color:white;
+  border:1px solid var(--border);
+  padding:9px 13px;
+  border-radius:10px;
 }
 
-.header-actions {
-    display: flex;
-    gap: 8px;
+main{
+  width:100%;
+  max-width:760px;
+  margin:auto;
+  padding:88px 18px 30px;
 }
 
-.small-btn {
-    background: #202027;
-    color: white;
-    padding: 9px 13px;
-    border-radius: 9px;
+.hero{
+  padding:35px 0 30px;
 }
 
-.small-btn:hover {
-    background: #2c2c35;
+.hero-badge{
+  display:inline-block;
+  background:#211936;
+  color:var(--purple2);
+  border:1px solid #3d2d5d;
+  padding:7px 11px;
+  border-radius:30px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:20px;
 }
 
-/* ---------- MAIN ---------- */
-
-main {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+.hero h1{
+  font-size:clamp(44px,12vw,76px);
+  line-height:.91;
+  letter-spacing:-4px;
+  margin:0;
 }
 
-.hero {
-    padding: 35px 0 25px;
+.hero h1 span{
+  color:var(--purple2);
 }
 
-.hero h1 {
-    font-size: clamp(34px, 8vw, 60px);
-    margin: 0 0 12px;
-    line-height: 1;
+.hero p{
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.55;
+  max-width:600px;
+  margin:22px 0;
 }
 
-.hero p {
-    color: #a5a5b2;
-    font-size: 18px;
-    max-width: 620px;
-    line-height: 1.5;
+.btn{
+  min-height:50px;
+  padding:13px 19px;
+  border-radius:12px;
+  font-weight:800;
+  transition:.15s;
 }
 
-/* ---------- BUTTONS ---------- */
+.btn:active{transform:scale(.97)}
 
-.primary {
-    background: #8b5cf6;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 12px;
-    font-weight: 700;
+.primary{
+  background:var(--purple);
+  color:white;
 }
 
-.primary:hover {
-    background: #7c4de0;
+.primary:hover{background:#7c4de0}
+
+.secondary{
+  background:var(--card2);
+  color:white;
+  border:1px solid var(--border);
 }
 
-.secondary {
-    background: #24242c;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 12px;
-    font-weight: 700;
+.green{
+  background:#1b3b2a;
+  color:#8ff0b6;
+  border:1px solid #285a3e;
 }
 
-.secondary:hover {
-    background: #30303a;
+.danger{
+  background:#361820;
+  color:#ff9da8;
 }
 
-.danger {
-    background: #3a171c;
-    color: #ff9ca5;
-    padding: 12px 16px;
-    border-radius: 10px;
+.full{width:100%}
+
+.button-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-.button-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 18px;
+.section-title{
+  margin:32px 0 14px;
+  font-size:22px;
 }
 
-/* ---------- CARDS ---------- */
-
-.section-title {
-    margin-top: 35px;
-    margin-bottom: 15px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
 }
 
-.scene-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:17px;
 }
 
-.card {
-    background: #15151b;
-    border: 1px solid #282831;
-    border-radius: 16px;
-    padding: 18px;
+.card h3{
+  margin:0 0 8px;
+  font-size:17px;
 }
 
-.card:hover {
-    border-color: #494955;
+.card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
 }
 
-.card h3 {
-    margin: 0 0 8px;
+.emoji{
+  font-size:30px;
+  margin-bottom:12px;
 }
 
-.muted {
-    color: #9c9ca8;
+.scene-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:12px;
 }
 
-.tag {
-    display: inline-block;
-    background: #25202f;
-    color: #c4adff;
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 12px;
-    margin-bottom: 10px;
+.scene-card h2{
+  margin:5px 0 8px;
 }
 
-/* ---------- SCENE ---------- */
-
-.scene-box {
-    background: #15151b;
-    border: 1px solid #292932;
-    border-radius: 18px;
-    padding: 24px;
-    margin-top: 20px;
+.tag{
+  display:inline-block;
+  background:#241b35;
+  color:var(--purple2);
+  border-radius:30px;
+  padding:5px 9px;
+  font-size:12px;
+  font-weight:700;
 }
 
-.scene-box h1 {
-    margin-top: 0;
+.muted{color:var(--muted)}
+
+.line{
+  background:#08080b;
+  border-left:4px solid var(--purple);
+  border-radius:10px;
+  padding:18px;
+  margin:20px 0;
+  font-size:22px;
+  line-height:1.45;
 }
 
-.line-box {
-    background: #09090c;
-    border-left: 4px solid #8b5cf6;
-    padding: 18px;
-    border-radius: 10px;
-    margin: 20px 0;
-    font-size: 22px;
-    line-height: 1.4;
+.info{
+  background:#111118;
+  border:1px solid var(--border);
+  padding:15px;
+  border-radius:12px;
+  color:#c7c7d0;
+  line-height:1.5;
 }
 
-.objective {
-    color: #b8b8c4;
-    line-height: 1.6;
+.camera{
+  position:relative;
+  background:#000;
+  border-radius:20px;
+  overflow:hidden;
+  margin:18px 0;
+  min-height:300px;
 }
 
-/* ---------- CAMERA ---------- */
-
-.camera-container {
-    background: black;
-    border-radius: 18px;
-    overflow: hidden;
-    position: relative;
-    margin-top: 20px;
+.camera video{
+  width:100%;
+  display:block;
+  background:#000;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  max-height:70vh;
 }
 
-video {
-    width: 100%;
-    display: block;
-    max-height: 70vh;
-    object-fit: cover;
-    background: black;
+.camera-text{
+  position:absolute;
+  left:15px;
+  right:15px;
+  bottom:15px;
+  padding:12px;
+  background:rgba(0,0,0,.65);
+  border-radius:12px;
+  font-size:16px;
 }
 
-.camera-overlay {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
-    background: rgba(0,0,0,.65);
-    padding: 12px;
-    border-radius: 10px;
+.record-dot{
+  color:#ff4053;
+  font-weight:900;
 }
 
-.recording {
-    color: #ff5555;
-    font-weight: bold;
+.timer{
+  font-size:20px;
+  margin-top:5px;
 }
 
-.timer {
-    font-size: 20px;
+.feed-item{
+  background:#101016;
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  margin-bottom:18px;
 }
 
-/* ---------- FEED ---------- */
-
-.feed-video {
-    width: 100%;
-    border-radius: 14px;
-    background: black;
-    margin-top: 10px;
+.fake-video{
+  aspect-ratio:9/14;
+  background:linear-gradient(145deg,#191420,#09090d);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:30px;
 }
 
-.feed-card {
-    background: #15151b;
-    border: 1px solid #292932;
-    border-radius: 18px;
-    padding: 15px;
-    margin-bottom: 20px;
+.fake-video .play{
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  margin:auto auto 15px;
 }
 
-.feed-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
+.feed-info{
+  padding:15px;
 }
 
-.icon-btn {
-    background: #24242c;
-    color: white;
-    padding: 9px 13px;
-    border-radius: 9px;
+.feed-actions{
+  display:flex;
+  gap:8px;
+  margin-top:13px;
 }
 
-/* ---------- MODAL ---------- */
-
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.75);
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.icon-btn{
+  background:var(--card2);
+  color:white;
+  border:1px solid var(--border);
+  padding:9px 12px;
+  border-radius:10px;
 }
 
-.modal-content {
-    background: #17171e;
-    width: min(500px, 100%);
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 18px;
-    padding: 22px;
-    border: 1px solid #30303a;
+.response{
+  background:#101016;
+  border:1px solid var(--border);
+  padding:15px;
+  border-radius:15px;
+  margin-bottom:12px;
 }
 
-.modal-content h2 {
-    margin-top: 0;
+.response.selected{
+  border-color:var(--purple);
+  background:#171323;
 }
 
-input, select {
-    width: 100%;
-    background: #0e0e13;
-    border: 1px solid #353540;
-    color: white;
-    padding: 13px;
-    border-radius: 9px;
-    margin: 7px 0 14px;
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#8b5cf6,#ec4899);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  margin-right:10px;
 }
 
-label {
-    color: #c6c6d0;
-    font-size: 14px;
+.user-row{
+  display:flex;
+  align-items:center;
+  margin-bottom:12px;
 }
 
-/* ---------- RESPONSE ---------- */
-
-.response {
-    background: #101015;
-    border: 1px solid #292932;
-    border-radius: 13px;
-    padding: 14px;
-    margin-bottom: 12px;
+.status{
+  padding:13px;
+  border-radius:11px;
+  background:#181820;
+  color:#c9c9d3;
+  margin:14px 0;
 }
 
-.response video {
-    border-radius: 10px;
-    max-height: 400px;
+.success{
+  background:#11291c;
+  color:#8ef0b3;
+  border:1px solid #214c32;
 }
 
-/* ---------- STATUS ---------- */
-
-.status {
-    padding: 13px;
-    border-radius: 10px;
-    background: #1c1c24;
-    color: #cfcfd9;
-    margin-top: 15px;
+.warning{
+  background:#292313;
+  color:#f1d279;
 }
 
-.success {
-    background: #14251b;
-    color: #8ee8aa;
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  z-index:500;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
 }
 
-.warning {
-    background: #2a2415;
-    color: #f0ce76;
+.modal-box{
+  width:min(480px,100%);
+  background:#17171f;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:22px;
 }
 
-/* ---------- MOBILE ---------- */
+.modal-box h2{
+  margin-top:0;
+}
 
-@media(max-width:600px) {
+input{
+  width:100%;
+  background:#0d0d12;
+  color:white;
+  border:1px solid #34343f;
+  padding:14px;
+  border-radius:10px;
+  margin:7px 0 14px;
+  outline:none;
+}
 
-    main {
-        padding: 14px;
-    }
+input:focus{
+  border-color:var(--purple);
+}
 
-    header {
-        padding: 0 12px;
-    }
+label{
+  color:#c6c6d0;
+  font-size:13px;
+}
 
-    .hero {
-        padding-top: 25px;
-    }
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:70px;
+  z-index:200;
+  background:rgba(15,15,21,.96);
+  backdrop-filter:blur(15px);
+  border-top:1px solid #292933;
+  display:flex;
+  justify-content:center;
+}
 
-    .scene-box {
-        padding: 18px;
-    }
+.nav-inner{
+  width:min(600px,100%);
+  display:flex;
+  justify-content:space-around;
+}
 
-    .line-box {
-        font-size: 19px;
-    }
+.nav-btn{
+  flex:1;
+  background:none;
+  color:#8e8e9b;
+  font-size:11px;
+  padding-top:8px;
+}
 
-    .primary,
-    .secondary {
-        width: 100%;
-    }
+.nav-btn strong{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
 
-    .button-row {
-        flex-direction: column;
-    }
+.nav-btn.active{
+  color:white;
+}
+
+.nav-btn.active strong{
+  color:var(--purple2);
+}
+
+hr{
+  border:0;
+  border-top:1px solid var(--border);
+  margin:22px 0;
+}
+
+@media(max-width:500px){
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .button-row .btn{
+    flex:1;
+  }
+
+  .hero h1{
+    letter-spacing:-3px;
+  }
 }
 </style>
 </head>
@@ -387,1288 +483,1306 @@ label {
 <body>
 
 <header>
+  <div class="logo">Scene<span>Play</span></div>
 
-    <div class="logo">
-        Scene<span>Play</span>
-    </div>
-
-    <div class="header-actions">
-        <button class="small-btn" onclick="showFeed()">Watch</button>
-        <button class="small-btn" onclick="openLogin()">Log in</button>
-    </div>
-
+  <button id="headerLogin"
+          class="header-btn"
+          onclick="openLogin()">
+    Log in
+  </button>
 </header>
 
 <main id="app"></main>
 
-<!-- LOGIN MODAL -->
+<nav class="bottom-nav">
+  <div class="nav-inner">
+
+    <button class="nav-btn active"
+            onclick="home()">
+      <strong>⌂</strong>
+      Home
+    </button>
+
+    <button class="nav-btn"
+            onclick="discover()">
+      <strong>🔥</strong>
+      Discover
+    </button>
+
+    <button class="nav-btn"
+            onclick="createScene()">
+      <strong>＋</strong>
+      Create
+    </button>
+
+    <button class="nav-btn"
+            onclick="myScenes()">
+      <strong>🎬</strong>
+      My Scenes
+    </button>
+
+    <button class="nav-btn"
+            onclick="profile()">
+      <strong>●</strong>
+      Profile
+    </button>
+
+  </div>
+</nav>
+
+
+<!-- LOGIN -->
 
 <div id="loginModal" class="modal hidden">
 
-    <div class="modal-content">
+  <div class="modal-box">
 
-        <h2>Join ScenePlay</h2>
+    <h2>Join ScenePlay</h2>
 
-        <p class="muted">
-            You can watch without an account.
-            You need an account to participate.
-        </p>
+    <p class="muted">
+      Watching is free without an account.
+      You need an account to play.
+    </p>
 
-        <label>Username</label>
-        <input id="usernameInput" placeholder="Your username">
+    <label>Username</label>
+    <input id="username"
+           placeholder="Choose a username"
+           maxlength="20">
 
-        <label>Email</label>
-        <input id="emailInput" type="email" placeholder="you@example.com">
+    <label>Email</label>
+    <input id="email"
+           type="email"
+           placeholder="you@example.com">
 
-        <button class="primary" onclick="login()">
-            Create Account
-        </button>
+    <div class="button-row">
 
-        <div class="button-row">
-            <button class="secondary" onclick="closeLogin()">
-                Cancel
-            </button>
-        </div>
+      <button class="btn primary"
+              onclick="login()">
+        Create account
+      </button>
+
+      <button class="btn secondary"
+              onclick="closeLogin()">
+        Cancel
+      </button>
 
     </div>
 
+  </div>
+
 </div>
+
 
 <script>
 
 /* =========================================================
-   SCENEPLAY MVP
-   ========================================================= */
+   SCENEPLAY FRONT-END MVP
+   =========================================================
 
-/*
-    IMPORTANT:
+   This version works as a GitHub Pages prototype.
 
-    This prototype uses localStorage.
+   It DOES:
+   ✓ Mobile interface
+   ✓ Scene selection
+   ✓ Camera recording
+   ✓ 30-second recording
+   ✓ Review/retake
+   ✓ Scene flow
+   ✓ Simulated multiple responses
+   ✓ Choose a responder
+   ✓ Finished scene flow
+   ✓ Local profile/state
 
-    That means:
-    - It works immediately on GitHub Pages.
-    - Camera recording works if the browser allows it.
-    - Scenes are stored locally on the current device.
-    - It is NOT yet a real multi-user application.
+   It DOES NOT yet provide:
+   ✗ Real accounts
+   ✗ Real multi-user communication
+   ✗ Server video storage
+   ✗ Push notifications
+   ✗ Real moderation backend
 
-    A real version would replace localStorage with:
-    Supabase / Firebase / custom backend
-    and video storage such as Cloudflare Stream.
+   Those require a backend.
 */
 
 
-/* ---------- DATA ---------- */
+const SCENES = [
 
-const scenes = [
+{
+ id:1,
+ title:"The Betrayal",
+ category:"Drama",
+ situation:"You discover that your best friend has been hiding something important from you.",
+ A:"The suspicious friend",
+ B:"The friend hiding the secret",
+ objectiveA:"You're angry, but you're trying to stay controlled.",
+ objectiveB:"You're nervous and want to avoid admitting the truth.",
+ lineA:"I know you've been lying to me.",
+ lineB:"What are you talking about?",
+ nextA:"Don't lie to me. I saw you.",
+ nextB:"You weren't supposed to see that."
+},
 
-    {
-        id: 1,
-        title: "The Betrayal",
-        category: "Drama",
-        situation:
-        "You discover your best friend has been hiding something important from you.",
-        characterA:
-        "You are the suspicious friend.",
-        characterB:
-        "You are the friend who has been hiding the secret.",
-        objectiveA:
-        "You are angry, but try to stay controlled.",
-        objectiveB:
-        "You are nervous and want to avoid admitting the truth.",
-        lineA:
-        "I know you've been lying to me.",
-        lineB:
-        "What are you talking about?",
-        nextA:
-        "Don't lie to me. I saw you.",
-        nextB:
-        "You weren't supposed to see that."
-    },
+{
+ id:2,
+ title:"Wrong Number",
+ category:"Comedy",
+ situation:"You accidentally call a stranger, but they seem to know exactly who you are.",
+ A:"The person who made the wrong call",
+ B:"A mysterious stranger",
+ objectiveA:"Try to understand what is happening.",
+ objectiveB:"Act as though everything is completely normal.",
+ lineA:"Sorry, I think I have the wrong number.",
+ lineB:"No. I think you finally called the right one.",
+ nextA:"Have we met before?",
+ nextB:"Not exactly."
+},
 
-    {
-        id: 2,
-        title: "Wrong Number",
-        category: "Comedy",
-        situation:
-        "You accidentally call a stranger, but they seem to know exactly who you are.",
-        characterA:
-        "You made the wrong call.",
-        characterB:
-        "A stranger who seems to know you.",
-        objectiveA:
-        "Try to understand what is happening.",
-        objectiveB:
-        "Act as though everything is completely normal.",
-        lineA:
-        "Sorry, I think I have the wrong number.",
-        lineB:
-        "No. I think you finally called the right one.",
-        nextA:
-        "Have we met before?",
-        nextB:
-        "Not exactly."
-    },
+{
+ id:3,
+ title:"The Last Train",
+ category:"Romance",
+ situation:"One person is leaving forever. The other has one last chance to stop them.",
+ A:"The person who wants them to stay",
+ B:"The person leaving",
+ objectiveA:"Don't admit how much you care.",
+ objectiveB:"Pretend you don't want to stay.",
+ lineA:"So you're really leaving?",
+ lineB:"You knew I would eventually.",
+ nextA:"I didn't think you'd actually do it.",
+ nextB:"Maybe you should have said something sooner."
+},
 
-    {
-        id: 3,
-        title: "The Last Train",
-        category: "Romance",
-        situation:
-        "One person is leaving forever. The other has one last chance to stop them.",
-        characterA:
-        "The person who wants them to stay.",
-        characterB:
-        "The person leaving.",
-        objectiveA:
-        "Don't admit how much you care.",
-        objectiveB:
-        "Pretend you don't want to stay.",
-        lineA:
-        "So you're really leaving?",
-        lineB:
-        "You knew I would eventually.",
-        nextA:
-        "I didn't think you'd actually do it.",
-        nextB:
-        "Maybe you should have said something sooner."
-    },
+{
+ id:4,
+ title:"The Interview",
+ category:"Drama",
+ situation:"A normal job interview suddenly becomes strangely personal.",
+ A:"The interviewer",
+ B:"The applicant",
+ objectiveA:"Remain professional while testing the applicant.",
+ objectiveB:"Stay calm even though something feels wrong.",
+ lineA:"Before we continue, I need to ask you something.",
+ lineB:"Of course. What is it?",
+ nextA:"Where were you last Friday night?",
+ nextB:"Why would that matter for this job?"
+},
 
-    {
-        id: 4,
-        title: "The Interview",
-        category: "Drama",
-        situation:
-        "A job interview suddenly becomes strangely personal.",
-        characterA:
-        "The interviewer.",
-        characterB:
-        "The applicant.",
-        objectiveA:
-        "Remain professional while testing the applicant.",
-        objectiveB:
-        "Stay calm even though something feels wrong.",
-        lineA:
-        "Before we continue, I need to ask you something.",
-        lineB:
-        "Of course. What is it?",
-        nextA:
-        "Where were you last Friday night?",
-        nextB:
-        "Why would that matter for this job?"
-    }
+{
+ id:5,
+ title:"The Stranger",
+ category:"Mystery",
+ situation:"A stranger approaches you and says they know something about your future.",
+ A:"The person being approached",
+ B:"The mysterious stranger",
+ objectiveA:"Don't reveal that you're frightened.",
+ objectiveB:"Make them believe you know more than you really do.",
+ lineA:"Do I know you?",
+ lineB:"Not yet.",
+ nextA:"What does that mean?",
+ nextB:"You'll understand soon."
+},
+
+{
+ id:6,
+ title:"The Apology",
+ category:"Drama",
+ situation:"Two friends meet after years without speaking.",
+ A:"The person who was hurt",
+ B:"The person who wants forgiveness",
+ objectiveA:"You want an apology but don't make it easy.",
+ objectiveB:"You genuinely want another chance.",
+ lineA:"Why are you here?",
+ lineB:"Because I owe you an apology.",
+ nextA:"That doesn't fix what happened.",
+ nextB:"I know."
+}
 
 ];
 
 
-/* ---------- STATE ---------- */
-
-let currentScene = null;
-let currentRole = null;
-let mediaRecorder = null;
-let recordedChunks = [];
-let cameraStream = null;
-let recordingSeconds = 0;
-let timerInterval = null;
-
-let appState = JSON.parse(
-    localStorage.getItem("sceneplayState") || "{}"
+let state = JSON.parse(
+ localStorage.getItem("scenePlay")
+ || '{"username":null,"myScenes":[]}'
 );
 
-if (!appState.username) {
-    appState.username = null;
-}
+let currentScene = null;
+let currentRole = "A";
+let currentPartner = null;
 
-if (!appState.myScenes) {
-    appState.myScenes = [];
-}
-
-if (!appState.responses) {
-    appState.responses = [];
-}
-
-if (!appState.completed) {
-    appState.completed = [];
-}
+let stream = null;
+let recorder = null;
+let chunks = [];
+let timer = null;
+let seconds = 0;
 
 
-/* ---------- SAVE ---------- */
+/* ---------------- STORAGE ---------------- */
 
-function saveState() {
-
-    localStorage.setItem(
-        "sceneplayState",
-        JSON.stringify(appState)
-    );
-
+function save(){
+ localStorage.setItem(
+   "scenePlay",
+   JSON.stringify(state)
+ );
 }
 
 
-/* ---------- HOME ---------- */
+/* ---------------- LOGIN ---------------- */
 
-function showHome() {
+function openLogin(){
+ document.getElementById("loginModal")
+   .classList.remove("hidden");
+}
 
-    document.getElementById("app").innerHTML = `
+function closeLogin(){
+ document.getElementById("loginModal")
+   .classList.add("hidden");
+}
 
-        <section class="hero">
+function login(){
 
-            <h1>Act.<br>Respond.<br>Create.</h1>
+ const name =
+   document.getElementById("username")
+   .value.trim();
 
-            <p>
-                Play fictional scenes with people anywhere.
-                Record your part whenever you're ready.
-                No live calls. No cameraman.
-            </p>
+ const email =
+   document.getElementById("email")
+   .value.trim();
 
-            <div class="button-row">
+ if(!name || !email){
+   alert("Please enter your username and email.");
+   return;
+ }
 
-                <button class="primary"
-                    onclick="startScene()">
-                    🎬 Start a Scene
-                </button>
+ state.username=name;
+ state.email=email;
 
-                <button class="secondary"
-                    onclick="showFeed()">
-                    👀 Watch Scenes
-                </button>
+ save();
+ closeLogin();
+ updateHeader();
+ home();
+}
 
-            </div>
+function updateHeader(){
 
-        </section>
+ const b=document.getElementById("headerLogin");
 
-        <h2 class="section-title">
-            🎬 How it works
-        </h2>
-
-        <div class="scene-grid">
-
-            <div class="card">
-                <h3>1. Get a scene</h3>
-                <p class="muted">
-                    The app gives you a situation,
-                    character and opening line.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>2. Record yourself</h3>
-                <p class="muted">
-                    Use your phone camera.
-                    Nobody else is needed.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>3. Find a partner</h3>
-                <p class="muted">
-                    Other people can privately
-                    respond to your scene.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>4. Finish together</h3>
-                <p class="muted">
-                    A → B → A → B.
-                    Publish when both agree.
-                </p>
-            </div>
-
-        </div>
-
-    `;
-
+ if(state.username){
+   b.textContent="@"+state.username;
+   b.onclick=profile;
+ }else{
+   b.textContent="Log in";
+   b.onclick=openLogin;
+ }
 }
 
 
-/* ---------- FEED ---------- */
+/* ---------------- HOME ---------------- */
 
-function showFeed() {
+function home(){
 
-    let completed = appState.completed || [];
+ updateHeader();
 
-    let sampleScenes = [
-        {
-            title: "The Secret",
-            users: "Alex & Sarah",
-            category: "Drama",
-            views: 1248
-        },
-        {
-            title: "Wrong Number",
-            users: "Mike & Emma",
-            category: "Comedy",
-            views: 842
-        }
-    ];
+ app.innerHTML=`
 
-    let html = `
+ <section class="hero">
 
-        <h1>🔥 Finished Scenes</h1>
+   <div class="hero-badge">
+     🎭 PLAY WITH ANYONE
+   </div>
 
-        <p class="muted">
-            Only completed scenes are public.
-        </p>
+   <h1>
+     Act.<br>
+     <span>Respond.</span><br>
+     Play.
+   </h1>
 
-    `;
+   <p>
+     Get a scene. Record your part.
+     Someone else responds.
+     Continue whenever you're ready.
+   </p>
 
-    sampleScenes.forEach(scene => {
+   <div class="button-row">
 
-        html += `
+     <button class="btn primary"
+             onclick="createScene()">
+       🎬 Start a Scene
+     </button>
 
-        <div class="feed-card">
+     <button class="btn secondary"
+             onclick="discover()">
+       👀 Watch Scenes
+     </button>
 
-            <span class="tag">
-                ${scene.category}
-            </span>
+   </div>
 
-            <h2>${scene.title}</h2>
-
-            <p class="muted">
-                ${scene.users}
-            </p>
-
-            <div class="status">
-                ▶ Finished scene
-                · ${scene.views} views
-            </div>
-
-            <div class="feed-actions">
-
-                <button class="icon-btn"
-                    onclick="alert('Demo like ❤️')">
-                    ❤️
-                </button>
-
-                <button class="icon-btn"
-                    onclick="alert('Comments coming in the real version.')">
-                    💬
-                </button>
-
-                <button class="icon-btn"
-                    onclick="shareScene('${scene.title}')">
-                    ↗
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
+ </section>
 
 
-    if (completed.length > 0) {
+ <h2 class="section-title">
+   How it works
+ </h2>
 
-        html += `
-            <h2>My finished scenes</h2>
-        `;
+ <div class="grid">
 
-        completed.forEach(scene => {
+   <div class="card">
+     <div class="emoji">🎬</div>
+     <h3>Get a scene</h3>
+     <p>
+       Choose a situation and
+       become a character.
+     </p>
+   </div>
 
-            html += `
+   <div class="card">
+     <div class="emoji">📱</div>
+     <h3>Record alone</h3>
+     <p>
+       Your phone is your camera.
+       No one else is needed.
+     </p>
+   </div>
 
-                <div class="feed-card">
+   <div class="card">
+     <div class="emoji">👥</div>
+     <h3>People respond</h3>
+     <p>
+       Many people can try the
+       other character.
+     </p>
+   </div>
 
-                    <span class="tag">
-                        ${scene.category}
-                    </span>
+   <div class="card">
+     <div class="emoji">🌎</div>
+     <h3>Make it public</h3>
+     <p>
+       Only finished scenes are
+       shown to everyone.
+     </p>
+   </div>
 
-                    <h2>${scene.title}</h2>
-
-                    <p>
-                        Your completed scene
-                    </p>
-
-                </div>
-
-            `;
-
-        });
-
-    }
-
-
-    html += `
-
-        <div class="button-row">
-
-            <button class="primary"
-                onclick="startScene()">
-                🎬 Start a Scene
-            </button>
-
-            <button class="secondary"
-                onclick="showHome()">
-                Home
-            </button>
-
-        </div>
-    `;
+ </div>
 
 
-    document.getElementById("app").innerHTML = html;
+ <h2 class="section-title">
+   🔥 Popular
+ </h2>
 
+ <div class="scene-card">
+
+   <span class="tag">Drama</span>
+
+   <h2>The Secret</h2>
+
+   <p class="muted">
+     "I know what you did."
+   </p>
+
+   <button class="btn secondary full"
+           onclick="alert('Demo scene — public scenes will play here.')">
+     ▶ Watch
+   </button>
+
+ </div>
+
+ `;
 }
 
 
-/* ---------- START SCENE ---------- */
+/* ---------------- DISCOVER ---------------- */
 
-function startScene() {
+function discover(){
 
-    if (!appState.username) {
+ app.innerHTML=`
 
-        openLogin();
+ <h1>🔥 Discover</h1>
 
-        return;
+ <p class="muted">
+   Only completed scenes appear here.
+ </p>
 
-    }
+ `;
 
-    document.getElementById("app").innerHTML = `
+ const examples=[
+   ["The Secret","Drama","Alex & Sarah","1.2K"],
+   ["Wrong Number","Comedy","Mike & Emma","842"],
+   ["The Last Train","Romance","Jamie & Chris","637"]
+ ];
 
-        <h1>Choose a Scene</h1>
+ examples.forEach(x=>{
 
-        <p class="muted">
-            Pick a situation and become one of
-            the characters.
-        </p>
+   app.innerHTML+=`
 
-        <div class="scene-grid">
+   <div class="feed-item">
 
-            ${scenes.map(scene => `
+     <div class="fake-video">
 
-                <div class="card">
+       <div>
 
-                    <span class="tag">
-                        ${scene.category}
-                    </span>
+         <div class="play">▶</div>
 
-                    <h3>
-                        ${scene.title}
-                    </h3>
+         <strong>${x[0]}</strong>
 
-                    <p class="muted">
-                        ${scene.situation}
-                    </p>
+         <div class="muted">
+           Finished scene
+         </div>
 
-                    <button class="primary"
-                        onclick="openScene(${scene.id})">
-                        Play this
-                    </button>
+       </div>
 
-                </div>
+     </div>
 
-            `).join("")}
+     <div class="feed-info">
 
-        </div>
+       <span class="tag">${x[1]}</span>
 
-        <div class="button-row">
+       <h2>${x[0]}</h2>
 
-            <button class="secondary"
-                onclick="showHome()">
-                Back
-            </button>
+       <div class="muted">
+         ${x[2]} · ${x[3]} views
+       </div>
 
-        </div>
+       <div class="feed-actions">
 
-    `;
+         <button class="icon-btn"
+                 onclick="like(this)">
+           ♡
+         </button>
+
+         <button class="icon-btn"
+                 onclick="alert('Comments will be available in the real version.')">
+           💬
+         </button>
+
+         <button class="icon-btn"
+                 onclick="share()">
+           ↗
+         </button>
+
+       </div>
+
+     </div>
+
+   </div>
+
+   `;
+
+ });
 
 }
 
 
-/* ---------- OPEN SCENE ---------- */
+/* ---------------- CREATE ---------------- */
 
-function openScene(id) {
+function createScene(){
 
-    currentScene = scenes.find(
-        scene => scene.id === id
-    );
+ if(!state.username){
+   openLogin();
+   return;
+ }
 
-    currentRole = "A";
+ app.innerHTML=`
 
-    document.getElementById("app").innerHTML = `
+ <h1>🎬 Start a Scene</h1>
 
-        <div class="scene-box">
+ <p class="muted">
+   Choose a situation. The app gives
+   you your character and opening line.
+ </p>
 
-            <span class="tag">
-                ${currentScene.category}
-            </span>
+ <div class="grid">
 
-            <h1>
-                ${currentScene.title}
-            </h1>
+ ${SCENES.map(s=>`
 
-            <p>
-                <strong>Situation</strong>
-            </p>
+   <div class="card">
 
-            <p class="muted">
-                ${currentScene.situation}
-            </p>
+     <div class="emoji">
+       ${categoryEmoji(s.category)}
+     </div>
 
-            <hr>
+     <span class="tag">
+       ${s.category}
+     </span>
 
-            <p>
-                <strong>You are:</strong>
-                ${currentScene.characterA}
-            </p>
+     <h3>${s.title}</h3>
 
-            <p>
-                <strong>Other character:</strong>
-                ${currentScene.characterB}
-            </p>
+     <p>${s.situation}</p>
 
-            <p class="objective">
-                <strong>Your objective:</strong><br>
-                ${currentScene.objectiveA}
-            </p>
+     <br>
 
-            <div class="line-box">
-                "${currentScene.lineA}"
-            </div>
+     <button class="btn primary full"
+             onclick="previewScene(${s.id})">
+       Play
+     </button>
 
-            <button class="primary"
-                onclick="openCamera()">
-                🎥 Record Opening
-            </button>
+   </div>
 
-            <div class="button-row">
+ `).join("")}
 
-                <button class="secondary"
-                    onclick="startScene()">
-                    Choose another
-                </button>
+ </div>
 
-            </div>
-
-        </div>
-
-    `;
+ `;
 
 }
 
 
-/* ---------- CAMERA ---------- */
+function categoryEmoji(c){
 
-async function openCamera() {
+ if(c==="Comedy")return"😂";
+ if(c==="Romance")return"❤️";
+ if(c==="Mystery")return"🕵️";
+ if(c==="Drama")return"🎭";
 
-    document.getElementById("app").innerHTML = `
-
-        <h1>Record your scene</h1>
-
-        <p class="muted">
-            Hold your phone naturally and perform
-            the line.
-        </p>
-
-        <div class="scene-box">
-
-            <div class="line-box">
-                "${currentRole === "A"
-                    ? currentScene.lineA
-                    : currentScene.lineB}"
-            </div>
-
-        </div>
-
-        <div class="camera-container">
-
-            <video
-                id="cameraPreview"
-                autoplay
-                muted
-                playsinline>
-            </video>
-
-            <div class="camera-overlay">
-
-                <div id="recordStatus">
-                    Ready
-                </div>
-
-                <div class="timer" id="timer">
-                    00:00
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="button-row">
-
-            <button id="recordButton"
-                class="primary"
-                onclick="toggleRecording()">
-                🔴 Record
-            </button>
-
-            <button class="secondary"
-                onclick="closeCamera()">
-                Cancel
-            </button>
-
-        </div>
-
-    `;
+ return"🎬";
+}
 
 
-    try {
+/* ---------------- PREVIEW ---------------- */
 
-        cameraStream =
-            await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: "user"
-                },
-                audio: true
-            });
+function previewScene(id){
 
-        document.getElementById(
-            "cameraPreview"
-        ).srcObject = cameraStream;
+ currentScene=
+   SCENES.find(x=>x.id===id);
 
-    } catch(error) {
+ currentRole="A";
 
-        alert(
-            "Camera permission was not granted. " +
-            "Please allow camera and microphone access."
-        );
+ app.innerHTML=`
 
-        showHome();
+ <div class="scene-card">
 
-    }
+   <span class="tag">
+     ${currentScene.category}
+   </span>
+
+   <h1>
+     ${currentScene.title}
+   </h1>
+
+   <hr>
+
+   <strong>Situation</strong>
+
+   <p class="muted">
+     ${currentScene.situation}
+   </p>
+
+   <br>
+
+   <strong>Your character</strong>
+
+   <p class="muted">
+     ${currentScene.A}
+   </p>
+
+   <strong>Other character</strong>
+
+   <p class="muted">
+     ${currentScene.B}
+   </p>
+
+   <div class="info">
+     <strong>Your objective</strong><br>
+     ${currentScene.objectiveA}
+   </div>
+
+   <div class="line">
+     "${currentScene.lineA}"
+   </div>
+
+   <button class="btn primary full"
+           onclick="openCamera('A')">
+     🎥 Record Opening
+   </button>
+
+ </div>
+
+ `;
 
 }
 
 
-/* ---------- RECORD ---------- */
+/* ---------------- CAMERA ---------------- */
 
-function toggleRecording() {
+async function openCamera(role){
 
-    if (!mediaRecorder) {
+ currentRole=role;
 
-        startRecording();
+ const line =
+   role==="A"
+   ? currentScene.lineA
+   : currentScene.nextB;
 
-    } else if (
-        mediaRecorder.state === "recording"
-    ) {
+ const objective =
+   role==="A"
+   ? currentScene.objectiveA
+   : currentScene.objectiveB;
 
-        stopRecording();
+ app.innerHTML=`
 
-    }
+ <h1>📱 Your turn</h1>
 
-}
+ <div class="info">
+   <strong>Your objective</strong><br>
+   ${objective}
+ </div>
 
+ <div class="line">
+   "${line}"
+ </div>
 
-function startRecording() {
+ <div class="camera">
 
-    recordedChunks = [];
+   <video id="preview"
+          autoplay
+          muted
+          playsinline></video>
 
-    mediaRecorder = new MediaRecorder(
-        cameraStream,
-        {
-            mimeType:
-            MediaRecorder.isTypeSupported(
-                "video/webm"
-            )
-            ? "video/webm"
-            : ""
-        }
-    );
+   <div class="camera-text">
 
+     <div id="recordState">
+       Ready
+     </div>
 
-    mediaRecorder.ondataavailable =
-        event => {
+     <div id="clock"
+          class="timer">
+       00:00
+     </div>
 
-            if (event.data.size > 0) {
+   </div>
 
-                recordedChunks.push(
-                    event.data
-                );
+ </div>
 
-            }
+ <div class="button-row">
 
-        };
+   <button id="recordBtn"
+           class="btn primary"
+           onclick="toggleRecord()">
+     🔴 Record
+   </button>
 
+   <button class="btn secondary"
+           onclick="stopCamera()">
+     Cancel
+   </button>
 
-    mediaRecorder.onstop =
-        showRecordedVideo;
+ </div>
 
+ <p class="muted">
+   Maximum recording length: 30 seconds.
+ </p>
 
-    mediaRecorder.start();
+ `;
 
-    recordingSeconds = 0;
+ try{
 
-    timerInterval = setInterval(() => {
+   stream=
+     await navigator.mediaDevices.getUserMedia({
+       video:{
+         facingMode:"user"
+       },
+       audio:true
+     });
 
-        recordingSeconds++;
+   document.getElementById("preview")
+     .srcObject=stream;
 
-        document.getElementById(
-            "timer"
-        ).textContent =
-            formatTime(recordingSeconds);
+ }catch(e){
 
-        if (recordingSeconds >= 30) {
+   alert(
+     "Camera or microphone access was denied. " +
+     "Please allow access in your browser."
+   );
 
-            stopRecording();
-
-        }
-
-    }, 1000);
-
-
-    document.getElementById(
-        "recordButton"
-    ).textContent = "⏹ Stop";
-
-    document.getElementById(
-        "recordStatus"
-    ).innerHTML =
-        '<span class="recording">● RECORDING</span>';
-
-}
-
-
-function stopRecording() {
-
-    if (!mediaRecorder) return;
-
-    mediaRecorder.stop();
-
-    clearInterval(timerInterval);
-
-    document.getElementById(
-        "recordButton"
-    ).disabled = true;
+   home();
+ }
 
 }
 
 
-function formatTime(seconds) {
+/* ---------------- RECORDING ---------------- */
 
-    let minutes =
-        Math.floor(seconds / 60);
+function toggleRecord(){
 
-    let secs =
-        seconds % 60;
-
-    return String(minutes).padStart(2, "0")
-        + ":"
-        + String(secs).padStart(2, "0");
+ if(!recorder){
+   startRecord();
+ }else if(recorder.state==="recording"){
+   stopRecord();
+ }
 
 }
 
 
-/* ---------- REVIEW ---------- */
+function startRecord(){
 
-function showRecordedVideo() {
+ chunks=[];
 
-    const blob = new Blob(
-        recordedChunks,
-        {
-            type: "video/webm"
-        }
-    );
+ let options={};
 
-    const url = URL.createObjectURL(blob);
+ if(MediaRecorder.isTypeSupported("video/webm")){
+   options.mimeType="video/webm";
+ }
 
-    if (cameraStream) {
+ try{
+   recorder=
+     new MediaRecorder(stream,options);
+ }catch(e){
+   recorder=
+     new MediaRecorder(stream);
+ }
 
-        cameraStream.getTracks()
-            .forEach(track => track.stop());
+ recorder.ondataavailable=e=>{
+   if(e.data.size>0)
+     chunks.push(e.data);
+ };
 
-    }
+ recorder.onstop=reviewRecording;
 
-    document.getElementById("app").innerHTML = `
+ recorder.start();
 
-        <h1>Review your video</h1>
+ seconds=0;
 
-        <p class="muted">
-            Make sure you're happy before submitting.
-        </p>
+ timer=setInterval(()=>{
 
-        <div class="camera-container">
+   seconds++;
 
-            <video
-                src="${url}"
-                controls
-                playsinline>
-            </video>
+   document.getElementById("clock")
+     .textContent=formatTime(seconds);
 
-        </div>
+   if(seconds>=30)
+     stopRecord();
 
-        <div class="button-row">
+ },1000);
 
-            <button class="secondary"
-                onclick="retakeVideo()">
-                ↻ Retake
-            </button>
+ document.getElementById("recordBtn")
+   .textContent="⏹ Stop";
 
-            <button class="primary"
-                onclick="submitVideo('${url}')">
-                ✓ Submit
-            </button>
+ document.getElementById("recordState")
+   .innerHTML=
+   '<span class="record-dot">● RECORDING</span>';
+}
 
-        </div>
 
-    `;
+function stopRecord(){
+
+ if(!recorder)return;
+
+ recorder.stop();
+
+ clearInterval(timer);
+
+ document.getElementById("recordBtn")
+   .disabled=true;
+}
+
+
+function formatTime(s){
+
+ return "00:"+
+   String(s).padStart(2,"0");
 
 }
 
 
-/* ---------- RETAKE ---------- */
+/* ---------------- REVIEW ---------------- */
 
-function retakeVideo() {
+function reviewRecording(){
 
-    mediaRecorder = null;
+ stopTracks();
 
-    openCamera();
+ const blob=
+   new Blob(chunks,{type:"video/webm"});
 
-}
+ const url=
+   URL.createObjectURL(blob);
 
+ app.innerHTML=`
 
-/* ---------- SUBMIT ---------- */
+ <h1>Review</h1>
 
-function submitVideo(videoUrl) {
+ <p class="muted">
+   Happy with your performance?
+ </p>
 
-    if (!currentScene) {
+ <div class="camera">
 
-        showHome();
+   <video src="${url}"
+          controls
+          playsinline></video>
 
-        return;
+ </div>
 
-    }
+ <div class="button-row">
 
+   <button class="btn secondary"
+           onclick="openCamera('${currentRole}')">
+     ↻ Retake
+   </button>
 
-    if (currentRole === "A") {
+   <button class="btn primary"
+           onclick="submitRecording('${url}')">
+     ✓ Use Video
+   </button>
 
-        const sceneRecord = {
+ </div>
 
-            id:
-                Date.now(),
-
-            sceneId:
-                currentScene.id,
-
-            title:
-                currentScene.title,
-
-            category:
-                currentScene.category,
-
-            videoUrl:
-                videoUrl,
-
-            status:
-                "waiting",
-
-            created:
-                new Date().toISOString()
-
-        };
-
-
-        appState.myScenes.push(
-            sceneRecord
-        );
-
-        saveState();
-
-        showWaitingScreen(
-            sceneRecord
-        );
-
-    } else {
-
-        showResponseSubmitted();
-
-    }
+ `;
 
 }
 
 
-/* ---------- WAITING ---------- */
+function stopTracks(){
 
-function showWaitingScreen(sceneRecord) {
+ if(stream){
 
-    document.getElementById("app").innerHTML = `
+   stream.getTracks()
+     .forEach(t=>t.stop());
 
-        <div class="scene-box">
+   stream=null;
+ }
 
-            <span class="tag">
-                ${sceneRecord.category}
-            </span>
+ recorder=null;
+}
 
-            <h1>
-                ${sceneRecord.title}
-            </h1>
 
-            <div class="status success">
+/* ---------------- SUBMIT ---------------- */
 
-                ✓ Your opening has been submitted.
+function submitRecording(url){
 
-            </div>
+ if(currentRole==="A"){
 
-            <p class="muted">
+   const scene={
+     id:Date.now(),
+     sceneId:currentScene.id,
+     title:currentScene.title,
+     category:currentScene.category,
+     opening:url,
+     status:"waiting",
+     created:new Date().toISOString()
+   };
 
-                Other people can now respond
-                as Character B.
+   state.myScenes.push(scene);
 
-            </p>
+   save();
 
-            <h3>
-                Your opening
-            </h3>
+   waiting(scene);
 
-            <video
-                class="feed-video"
-                src="${sceneRecord.videoUrl}"
-                controls>
-            </video>
+ }else{
 
-            <div class="status">
+   responseSent();
 
-                Waiting for responses...
-
-            </div>
-
-            <div class="button-row">
-
-                <button class="primary"
-                    onclick="showDemoResponses()">
-                    👥 View Demo Responses
-                </button>
-
-                <button class="secondary"
-                    onclick="showHome()">
-                    Home
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
+ }
 
 }
 
 
-/* ---------- DEMO RESPONSES ---------- */
+/* ---------------- WAITING ---------------- */
 
-function showDemoResponses() {
+function waiting(scene){
 
-    /*
-        This simulates other users responding.
+ app.innerHTML=`
 
-        In the real application these would
-        come from the server.
-    */
+ <div class="scene-card">
 
-    const responses = [
+   <span class="tag">
+     ${scene.category}
+   </span>
 
-        {
-            name: "Alex",
-            text:
-            "What are you talking about?"
-        },
+   <h1>${scene.title}</h1>
 
-        {
-            name: "Sarah",
-            text:
-            "You're going to have to be more specific."
-        },
+   <div class="status success">
+     ✓ Your opening is live.
+   </div>
 
-        {
-            name: "Mike",
-            text:
-            "I was hoping you wouldn't find out."
-        }
+   <p class="muted">
+     Other people can now respond
+     as the other character.
+   </p>
 
-    ];
+   <video class="feed-video"
+          src="${scene.opening}"
+          controls></video>
 
+   <div class="info">
+     👥 Waiting for people to respond.
+   </div>
 
-    document.getElementById("app").innerHTML = `
+   <div class="button-row">
 
-        <h1>Responses</h1>
+     <button class="btn primary"
+             onclick="showResponses()">
+       👥 See Responses
+     </button>
 
-        <p class="muted">
+     <button class="btn secondary"
+             onclick="share()">
+       ↗ Share
+     </button>
 
-            These responses are private.
-            Only you can see them.
+   </div>
 
-        </p>
+ </div>
 
-        ${responses.map((response, index) => `
-
-            <div class="response">
-
-                <h3>
-                    👤 ${response.name}
-                </h3>
-
-                <div class="line-box">
-
-                    "${response.text}"
-
-                </div>
-
-                <div class="button-row">
-
-                    <button class="primary"
-                        onclick="acceptResponse(
-                            '${response.name}'
-                        )">
-
-                        ✓ Continue with ${response.name}
-
-                    </button>
-
-                    <button class="danger"
-                        onclick="alert(
-                            'Response rejected.'
-                        )">
-
-                        Pass
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("")}
-
-
-        <button class="secondary"
-            onclick="showHome()">
-            Back
-        </button>
-
-    `;
+ `;
 
 }
 
 
-/* ---------- ACCEPT RESPONSE ---------- */
+/* ---------------- DEMO RESPONSES ---------------- */
 
-function acceptResponse(name) {
+function showResponses(){
 
-    appState.currentPartner = name;
+ app.innerHTML=`
 
-    saveState();
+ <h1>👥 Responses</h1>
 
-    currentRole = "A";
+ <p class="muted">
+   These responses are private.
+   Only you can see them.
+ </p>
 
-    showNextTurn();
+ ${responseCard("Alex",
+   "What are you talking about?","😂")}
 
-}
+ ${responseCard("Sarah",
+   "You're going to have to be more specific.","🎭")}
 
+ ${responseCard("Mike",
+   "I was hoping you wouldn't find out.","😈")}
 
-/* ---------- NEXT TURN ---------- */
+ <button class="btn secondary full"
+         onclick="myScenes()">
+   Back
+ </button>
 
-function showNextTurn() {
-
-    document.getElementById("app").innerHTML = `
-
-        <div class="scene-box">
-
-            <span class="tag">
-                Your turn
-            </span>
-
-            <h1>
-                ${currentScene.title}
-            </h1>
-
-            <p>
-                <strong>
-                    ${appState.currentPartner}
-                </strong>
-                responded.
-            </p>
-
-            <div class="line-box">
-
-                "${currentScene.nextA}"
-
-            </div>
-
-            <p class="objective">
-
-                Stay in character and respond
-                naturally.
-
-            </p>
-
-            <button class="primary"
-                onclick="openCamera()">
-
-                🎥 Record Your Response
-
-            </button>
-
-        </div>
-
-    `;
+ `;
 
 }
 
 
-/* ---------- RESPONSE SUBMITTED ---------- */
+function responseCard(name,line,emoji){
 
-function showResponseSubmitted() {
+ return`
 
-    document.getElementById("app").innerHTML = `
+ <div class="response">
 
-        <div class="scene-box">
+   <div class="user-row">
 
-            <div class="status success">
+     <div class="avatar">
+       ${name[0]}
+     </div>
 
-                ✓ Response submitted!
+     <strong>${name}</strong>
 
-            </div>
+   </div>
 
-            <h1>
-                Waiting for the other player.
-            </h1>
+   <div class="line">
+     "${line}"
+   </div>
 
-            <p class="muted">
+   <button class="btn primary full"
+           onclick="choosePartner('${name}')">
+     ${emoji} Continue with ${name}
+   </button>
 
-                You can leave the app.
-                We'll notify you when it is
-                your turn again.
+   <br><br>
 
-            </p>
+   <button class="btn danger full"
+           onclick="alert('This response has been passed.')">
+     Pass
+   </button>
 
-            <button class="secondary"
-                onclick="showHome()">
+ </div>
 
-                Home
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-/* ---------- LOGIN ---------- */
-
-function openLogin() {
-
-    document
-        .getElementById("loginModal")
-        .classList.remove("hidden");
+ `;
 
 }
 
 
-function closeLogin() {
+/* ---------------- CHOOSE PARTNER ---------------- */
 
-    document
-        .getElementById("loginModal")
-        .classList.add("hidden");
+function choosePartner(name){
 
-}
+ currentPartner=name;
 
+ const scene=
+   state.myScenes[state.myScenes.length-1];
 
-function login() {
+ currentScene=
+   SCENES.find(
+     x=>x.id===scene.sceneId
+   );
 
-    const username =
-        document.getElementById(
-            "usernameInput"
-        ).value.trim();
+ appStateSave();
 
-    const email =
-        document.getElementById(
-            "emailInput"
-        ).value.trim();
-
-
-    if (!username || !email) {
-
-        alert(
-            "Please enter a username and email."
-        );
-
-        return;
-
-    }
-
-
-    appState.username = username;
-
-    saveState();
-
-    closeLogin();
-
-    showHome();
+ nextTurn();
 
 }
 
 
-/* ---------- CAMERA CLOSE ---------- */
+function appStateSave(){
+ save();
+}
 
-function closeCamera() {
 
-    if (cameraStream) {
+/* ---------------- NEXT TURN ---------------- */
 
-        cameraStream.getTracks()
-            .forEach(track => track.stop());
+function nextTurn(){
 
-    }
+ currentRole="A";
 
-    mediaRecorder = null;
+ app.innerHTML=`
 
-    showHome();
+ <div class="scene-card">
+
+   <span class="tag">
+     YOUR TURN
+   </span>
+
+   <h1>${currentScene.title}</h1>
+
+   <p>
+     <strong>${currentPartner}</strong>
+     has responded.
+   </p>
+
+   <div class="info">
+     You are still playing:
+     <strong>${currentScene.A}</strong>
+   </div>
+
+   <div class="line">
+     "${currentScene.nextA}"
+   </div>
+
+   <button class="btn primary full"
+           onclick="openCamera('A')">
+     🎥 Record Response
+   </button>
+
+ </div>
+
+ `;
 
 }
 
 
-/* ---------- SHARE ---------- */
+/* ---------------- RESPONSE SENT ---------------- */
 
-async function shareScene(title) {
+function responseSent(){
 
-    const shareData = {
+ stopTracks();
 
-        title: "ScenePlay",
-        text:
-            "Check out this ScenePlay scene: "
-            + title,
-        url:
-            window.location.href
+ app.innerHTML=`
 
-    };
+ <div class="scene-card">
 
+   <div class="status success">
+     ✓ Response sent
+   </div>
 
-    if (
-        navigator.share
-    ) {
+   <h1>
+     Now you wait.
+   </h1>
 
-        try {
+   <p class="muted">
+     The other player can respond whenever
+     they're ready — even tomorrow.
+   </p>
 
-            await navigator.share(
-                shareData
-            );
+   <button class="btn secondary full"
+           onclick="home()">
+     Home
+   </button>
 
-        } catch(e) {}
+ </div>
 
-    } else {
-
-        alert(
-            "Share link copied:\n"
-            + window.location.href
-        );
-
-    }
+ `;
 
 }
 
 
-/* ---------- INITIALIZE ---------- */
+/* ---------------- MY SCENES ---------------- */
 
-showHome();
+function myScenes(){
+
+ if(!state.username){
+   openLogin();
+   return;
+ }
+
+ app.innerHTML=`
+
+ <h1>🎬 My Scenes</h1>
+
+ `;
+
+ if(!state.myScenes.length){
+
+   app.innerHTML+=`
+
+   <div class="info">
+     You haven't started any scenes yet.
+   </div>
+
+   <br>
+
+   <button class="btn primary full"
+           onclick="createScene()">
+     Start your first scene
+   </button>
+
+   `;
+
+   return;
+ }
+
+
+ state.myScenes
+ .slice()
+ .reverse()
+ .forEach(scene=>{
+
+   app.innerHTML+=`
+
+   <div class="scene-card">
+
+     <span class="tag">
+       ${scene.category}
+     </span>
+
+     <h2>${scene.title}</h2>
+
+     <div class="status warning">
+       ⏳ Waiting for responses
+     </div>
+
+     <button class="btn primary full"
+             onclick="showResponses()">
+       View Responses
+     </button>
+
+   </div>
+
+   `;
+
+ });
+
+}
+
+
+/* ---------------- PROFILE ---------------- */
+
+function profile(){
+
+ if(!state.username){
+   openLogin();
+   return;
+ }
+
+ app.innerHTML=`
+
+ <div class="scene-card">
+
+   <div class="avatar">
+     ${state.username[0].toUpperCase()}
+   </div>
+
+   <h1>@${state.username}</h1>
+
+   <p class="muted">
+     ScenePlay player
+   </p>
+
+   <hr>
+
+   <div class="grid">
+
+     <div class="card">
+       <h3>${state.myScenes.length}</h3>
+       <p>Scenes started</p>
+     </div>
+
+     <div class="card">
+       <h3>0</h3>
+       <p>Finished</p>
+     </div>
+
+   </div>
+
+   <br>
+
+   <button class="btn danger full"
+           onclick="logout()">
+     Log out
+   </button>
+
+ </div>
+
+ `;
+
+}
+
+
+function logout(){
+
+ state.username=null;
+ state.email=null;
+
+ save();
+
+ updateHeader();
+ home();
+
+}
+
+
+/* ---------------- LIKE / SHARE ---------------- */
+
+function like(btn){
+
+ btn.textContent=
+   btn.textContent==="♡"
+   ? "♥"
+   : "♡";
+
+}
+
+
+async function share(){
+
+ const data={
+   title:"ScenePlay",
+   text:"Play a scene with someone!",
+   url:location.href
+ };
+
+ if(navigator.share){
+
+   try{
+     await navigator.share(data);
+   }catch(e){}
+
+ }else{
+
+   try{
+     await navigator.clipboard
+       .writeText(location.href);
+
+     alert("Link copied!");
+
+   }catch(e){
+
+     alert(location.href);
+
+   }
+
+ }
+
+}
+
+
+/* ---------------- START ---------------- */
+
+updateHeader();
+home();
 
 </script>
 
