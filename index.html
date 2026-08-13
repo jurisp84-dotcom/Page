@@ -3,148 +3,383 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BusinessPage.ie</title>
+<title>ScenePlay</title>
 
 <style>
 * {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-/* TOP BAR */
-header {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 25px;
-  background: black;
-  color: white;
-  z-index: 1000;
-}
-
-.logo {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.menu-btn {
-  cursor: pointer;
-  font-size: 24px;
-}
-
-/* FULL BACKGROUND HERO */
-.hero {
-  height: 100vh;
-  background: url("myphoto.jpg") center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-align: center;
-  padding: 20px;
-}
-
-.hero h1 {
-  font-size: 45px;
-}
-
-.hero p {
-  margin-top: 10px;
-}
-
-/* BUTTONS IN HERO */
-.hero-buttons {
-  margin-top: 20px;
-}
-
-.hero-buttons a {
-  display: inline-block;
-  margin: 5px;
-  padding: 10px 20px;
-  background: white;
-  color: black;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-/* SIDE MENU */
-.side-menu {
-  position: fixed;
-  right: -260px;
-  top: 0;
-  width: 260px;
-  height: 100%;
-  background: #111;
-  padding-top: 80px;
-  transition: 0.3s;
-  z-index: 2000;
-}
-
-.side-menu a {
-  display: block;
-  padding: 15px;
-  color: white;
-  text-decoration: none;
-}
-
-.side-menu a:hover {
-  background: #333;
-}
-
-/* SECTION LAYOUT */
-section {
-  padding: 80px 20px;
-  text-align: center;
-}
-
-/* IMAGE GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-  max-width: 1000px;
-  margin: auto;
-}
-
-.grid img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* CONTACT FORM */
-form {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-input, textarea {
-  margin: 10px 0;
-  padding: 10px;
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0b0b0f;
+    color: white;
 }
 
 button {
-  padding: 10px;
-  background: black;
-  color: white;
-  border: none;
-  cursor: pointer;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
 }
 
-/* FOOTER */
-footer {
-  background: #111;
-  color: white;
-  padding: 30px;
-  text-align: center;
+.hidden {
+    display: none !important;
+}
+
+/* ---------- HEADER ---------- */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 64px;
+    background: rgba(11,11,15,.96);
+    border-bottom: 1px solid #24242d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.logo span {
+    color: #8b5cf6;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.small-btn {
+    background: #202027;
+    color: white;
+    padding: 9px 13px;
+    border-radius: 9px;
+}
+
+.small-btn:hover {
+    background: #2c2c35;
+}
+
+/* ---------- MAIN ---------- */
+
+main {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.hero {
+    padding: 35px 0 25px;
+}
+
+.hero h1 {
+    font-size: clamp(34px, 8vw, 60px);
+    margin: 0 0 12px;
+    line-height: 1;
+}
+
+.hero p {
+    color: #a5a5b2;
+    font-size: 18px;
+    max-width: 620px;
+    line-height: 1.5;
+}
+
+/* ---------- BUTTONS ---------- */
+
+.primary {
+    background: #8b5cf6;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.primary:hover {
+    background: #7c4de0;
+}
+
+.secondary {
+    background: #24242c;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.secondary:hover {
+    background: #30303a;
+}
+
+.danger {
+    background: #3a171c;
+    color: #ff9ca5;
+    padding: 12px 16px;
+    border-radius: 10px;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+/* ---------- CARDS ---------- */
+
+.section-title {
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+
+.scene-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.card {
+    background: #15151b;
+    border: 1px solid #282831;
+    border-radius: 16px;
+    padding: 18px;
+}
+
+.card:hover {
+    border-color: #494955;
+}
+
+.card h3 {
+    margin: 0 0 8px;
+}
+
+.muted {
+    color: #9c9ca8;
+}
+
+.tag {
+    display: inline-block;
+    background: #25202f;
+    color: #c4adff;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/* ---------- SCENE ---------- */
+
+.scene-box {
+    background: #15151b;
+    border: 1px solid #292932;
+    border-radius: 18px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.scene-box h1 {
+    margin-top: 0;
+}
+
+.line-box {
+    background: #09090c;
+    border-left: 4px solid #8b5cf6;
+    padding: 18px;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+.objective {
+    color: #b8b8c4;
+    line-height: 1.6;
+}
+
+/* ---------- CAMERA ---------- */
+
+.camera-container {
+    background: black;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 20px;
+}
+
+video {
+    width: 100%;
+    display: block;
+    max-height: 70vh;
+    object-fit: cover;
+    background: black;
+}
+
+.camera-overlay {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    background: rgba(0,0,0,.65);
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.recording {
+    color: #ff5555;
+    font-weight: bold;
+}
+
+.timer {
+    font-size: 20px;
+}
+
+/* ---------- FEED ---------- */
+
+.feed-video {
+    width: 100%;
+    border-radius: 14px;
+    background: black;
+    margin-top: 10px;
+}
+
+.feed-card {
+    background: #15151b;
+    border: 1px solid #292932;
+    border-radius: 18px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.feed-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.icon-btn {
+    background: #24242c;
+    color: white;
+    padding: 9px 13px;
+    border-radius: 9px;
+}
+
+/* ---------- MODAL ---------- */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #17171e;
+    width: min(500px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 18px;
+    padding: 22px;
+    border: 1px solid #30303a;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+input, select {
+    width: 100%;
+    background: #0e0e13;
+    border: 1px solid #353540;
+    color: white;
+    padding: 13px;
+    border-radius: 9px;
+    margin: 7px 0 14px;
+}
+
+label {
+    color: #c6c6d0;
+    font-size: 14px;
+}
+
+/* ---------- RESPONSE ---------- */
+
+.response {
+    background: #101015;
+    border: 1px solid #292932;
+    border-radius: 13px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.response video {
+    border-radius: 10px;
+    max-height: 400px;
+}
+
+/* ---------- STATUS ---------- */
+
+.status {
+    padding: 13px;
+    border-radius: 10px;
+    background: #1c1c24;
+    color: #cfcfd9;
+    margin-top: 15px;
+}
+
+.success {
+    background: #14251b;
+    color: #8ee8aa;
+}
+
+.warning {
+    background: #2a2415;
+    color: #f0ce76;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:600px) {
+
+    main {
+        padding: 14px;
+    }
+
+    header {
+        padding: 0 12px;
+    }
+
+    .hero {
+        padding-top: 25px;
+    }
+
+    .scene-box {
+        padding: 18px;
+    }
+
+    .line-box {
+        font-size: 19px;
+    }
+
+    .primary,
+    .secondary {
+        width: 100%;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
 }
 </style>
 </head>
@@ -152,77 +387,1289 @@ footer {
 <body>
 
 <header>
-  <div class="logo">BusinessPage.ie</div>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <div class="logo">
+        Scene<span>Play</span>
+    </div>
+
+    <div class="header-actions">
+        <button class="small-btn" onclick="showFeed()">Watch</button>
+        <button class="small-btn" onclick="openLogin()">Log in</button>
+    </div>
+
 </header>
 
-<!-- SIDE MENU -->
-<div id="menu" class="side-menu">
-  <a href="#what">What We Do</a>
-  <a href="#gallery">Our Work</a>
-  <a href="#contact">Contact</a>
-  <a href="#book">Book Appointment</a>
-</div>
+<main id="app"></main>
 
-<!-- HERO (FULL BACKGROUND) -->
-<div class="hero">
-  <div>
-    <h1>We Design Modern Websites</h1>
-    <p>High quality, clean and fast business websites</p>
+<!-- LOGIN MODAL -->
 
-    <div class="hero-buttons">
-      <a href="#what">Explore</a>
-      <a href="#book">Book Now</a>
+<div id="loginModal" class="modal hidden">
+
+    <div class="modal-content">
+
+        <h2>Join ScenePlay</h2>
+
+        <p class="muted">
+            You can watch without an account.
+            You need an account to participate.
+        </p>
+
+        <label>Username</label>
+        <input id="usernameInput" placeholder="Your username">
+
+        <label>Email</label>
+        <input id="emailInput" type="email" placeholder="you@example.com">
+
+        <button class="primary" onclick="login()">
+            Create Account
+        </button>
+
+        <div class="button-row">
+            <button class="secondary" onclick="closeLogin()">
+                Cancel
+            </button>
+        </div>
+
     </div>
-  </div>
+
 </div>
-
-<!-- WHAT WE DO -->
-<section id="what">
-  <h2>What We Do</h2>
-  <p>We design professional websites for businesses, portfolios and online brands.</p>
-</section>
-
-<!-- IMAGE SECTION -->
-<section id="gallery">
-  <h2>Our Work</h2>
-
-  <div class="grid">
-    <img class="slide active" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800" />
-<img class="slide" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800" />
-<img class="slide" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800" />
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Phone: 087 183 2939 </p>
-  <p>Email: BusinessPage@gmail.com</p>
-</section>
-
-<!-- BOOKING -->
-<section id="book">
-  <h2>Book Appointment</h2>
-
-  <form>
-    <input type="text" placeholder="Name" required>
-    <input type="email" placeholder="Email" required>
-    <input type="tel" placeholder="Phone" required>
-    <textarea placeholder="Your request"></textarea>
-    <button type="submit">Send</button>
-  </form>
-</section>
-
-<footer>
-  Thank you for your time — see you soon!
-</footer>
 
 <script>
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  menu.style.right = menu.style.right === "0px" ? "-260px" : "0px";
+
+/* =========================================================
+   SCENEPLAY MVP
+   ========================================================= */
+
+/*
+    IMPORTANT:
+
+    This prototype uses localStorage.
+
+    That means:
+    - It works immediately on GitHub Pages.
+    - Camera recording works if the browser allows it.
+    - Scenes are stored locally on the current device.
+    - It is NOT yet a real multi-user application.
+
+    A real version would replace localStorage with:
+    Supabase / Firebase / custom backend
+    and video storage such as Cloudflare Stream.
+*/
+
+
+/* ---------- DATA ---------- */
+
+const scenes = [
+
+    {
+        id: 1,
+        title: "The Betrayal",
+        category: "Drama",
+        situation:
+        "You discover your best friend has been hiding something important from you.",
+        characterA:
+        "You are the suspicious friend.",
+        characterB:
+        "You are the friend who has been hiding the secret.",
+        objectiveA:
+        "You are angry, but try to stay controlled.",
+        objectiveB:
+        "You are nervous and want to avoid admitting the truth.",
+        lineA:
+        "I know you've been lying to me.",
+        lineB:
+        "What are you talking about?",
+        nextA:
+        "Don't lie to me. I saw you.",
+        nextB:
+        "You weren't supposed to see that."
+    },
+
+    {
+        id: 2,
+        title: "Wrong Number",
+        category: "Comedy",
+        situation:
+        "You accidentally call a stranger, but they seem to know exactly who you are.",
+        characterA:
+        "You made the wrong call.",
+        characterB:
+        "A stranger who seems to know you.",
+        objectiveA:
+        "Try to understand what is happening.",
+        objectiveB:
+        "Act as though everything is completely normal.",
+        lineA:
+        "Sorry, I think I have the wrong number.",
+        lineB:
+        "No. I think you finally called the right one.",
+        nextA:
+        "Have we met before?",
+        nextB:
+        "Not exactly."
+    },
+
+    {
+        id: 3,
+        title: "The Last Train",
+        category: "Romance",
+        situation:
+        "One person is leaving forever. The other has one last chance to stop them.",
+        characterA:
+        "The person who wants them to stay.",
+        characterB:
+        "The person leaving.",
+        objectiveA:
+        "Don't admit how much you care.",
+        objectiveB:
+        "Pretend you don't want to stay.",
+        lineA:
+        "So you're really leaving?",
+        lineB:
+        "You knew I would eventually.",
+        nextA:
+        "I didn't think you'd actually do it.",
+        nextB:
+        "Maybe you should have said something sooner."
+    },
+
+    {
+        id: 4,
+        title: "The Interview",
+        category: "Drama",
+        situation:
+        "A job interview suddenly becomes strangely personal.",
+        characterA:
+        "The interviewer.",
+        characterB:
+        "The applicant.",
+        objectiveA:
+        "Remain professional while testing the applicant.",
+        objectiveB:
+        "Stay calm even though something feels wrong.",
+        lineA:
+        "Before we continue, I need to ask you something.",
+        lineB:
+        "Of course. What is it?",
+        nextA:
+        "Where were you last Friday night?",
+        nextB:
+        "Why would that matter for this job?"
+    }
+
+];
+
+
+/* ---------- STATE ---------- */
+
+let currentScene = null;
+let currentRole = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+let cameraStream = null;
+let recordingSeconds = 0;
+let timerInterval = null;
+
+let appState = JSON.parse(
+    localStorage.getItem("sceneplayState") || "{}"
+);
+
+if (!appState.username) {
+    appState.username = null;
 }
+
+if (!appState.myScenes) {
+    appState.myScenes = [];
+}
+
+if (!appState.responses) {
+    appState.responses = [];
+}
+
+if (!appState.completed) {
+    appState.completed = [];
+}
+
+
+/* ---------- SAVE ---------- */
+
+function saveState() {
+
+    localStorage.setItem(
+        "sceneplayState",
+        JSON.stringify(appState)
+    );
+
+}
+
+
+/* ---------- HOME ---------- */
+
+function showHome() {
+
+    document.getElementById("app").innerHTML = `
+
+        <section class="hero">
+
+            <h1>Act.<br>Respond.<br>Create.</h1>
+
+            <p>
+                Play fictional scenes with people anywhere.
+                Record your part whenever you're ready.
+                No live calls. No cameraman.
+            </p>
+
+            <div class="button-row">
+
+                <button class="primary"
+                    onclick="startScene()">
+                    🎬 Start a Scene
+                </button>
+
+                <button class="secondary"
+                    onclick="showFeed()">
+                    👀 Watch Scenes
+                </button>
+
+            </div>
+
+        </section>
+
+        <h2 class="section-title">
+            🎬 How it works
+        </h2>
+
+        <div class="scene-grid">
+
+            <div class="card">
+                <h3>1. Get a scene</h3>
+                <p class="muted">
+                    The app gives you a situation,
+                    character and opening line.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>2. Record yourself</h3>
+                <p class="muted">
+                    Use your phone camera.
+                    Nobody else is needed.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>3. Find a partner</h3>
+                <p class="muted">
+                    Other people can privately
+                    respond to your scene.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>4. Finish together</h3>
+                <p class="muted">
+                    A → B → A → B.
+                    Publish when both agree.
+                </p>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- FEED ---------- */
+
+function showFeed() {
+
+    let completed = appState.completed || [];
+
+    let sampleScenes = [
+        {
+            title: "The Secret",
+            users: "Alex & Sarah",
+            category: "Drama",
+            views: 1248
+        },
+        {
+            title: "Wrong Number",
+            users: "Mike & Emma",
+            category: "Comedy",
+            views: 842
+        }
+    ];
+
+    let html = `
+
+        <h1>🔥 Finished Scenes</h1>
+
+        <p class="muted">
+            Only completed scenes are public.
+        </p>
+
+    `;
+
+    sampleScenes.forEach(scene => {
+
+        html += `
+
+        <div class="feed-card">
+
+            <span class="tag">
+                ${scene.category}
+            </span>
+
+            <h2>${scene.title}</h2>
+
+            <p class="muted">
+                ${scene.users}
+            </p>
+
+            <div class="status">
+                ▶ Finished scene
+                · ${scene.views} views
+            </div>
+
+            <div class="feed-actions">
+
+                <button class="icon-btn"
+                    onclick="alert('Demo like ❤️')">
+                    ❤️
+                </button>
+
+                <button class="icon-btn"
+                    onclick="alert('Comments coming in the real version.')">
+                    💬
+                </button>
+
+                <button class="icon-btn"
+                    onclick="shareScene('${scene.title}')">
+                    ↗
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    if (completed.length > 0) {
+
+        html += `
+            <h2>My finished scenes</h2>
+        `;
+
+        completed.forEach(scene => {
+
+            html += `
+
+                <div class="feed-card">
+
+                    <span class="tag">
+                        ${scene.category}
+                    </span>
+
+                    <h2>${scene.title}</h2>
+
+                    <p>
+                        Your completed scene
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+
+    html += `
+
+        <div class="button-row">
+
+            <button class="primary"
+                onclick="startScene()">
+                🎬 Start a Scene
+            </button>
+
+            <button class="secondary"
+                onclick="showHome()">
+                Home
+            </button>
+
+        </div>
+    `;
+
+
+    document.getElementById("app").innerHTML = html;
+
+}
+
+
+/* ---------- START SCENE ---------- */
+
+function startScene() {
+
+    if (!appState.username) {
+
+        openLogin();
+
+        return;
+
+    }
+
+    document.getElementById("app").innerHTML = `
+
+        <h1>Choose a Scene</h1>
+
+        <p class="muted">
+            Pick a situation and become one of
+            the characters.
+        </p>
+
+        <div class="scene-grid">
+
+            ${scenes.map(scene => `
+
+                <div class="card">
+
+                    <span class="tag">
+                        ${scene.category}
+                    </span>
+
+                    <h3>
+                        ${scene.title}
+                    </h3>
+
+                    <p class="muted">
+                        ${scene.situation}
+                    </p>
+
+                    <button class="primary"
+                        onclick="openScene(${scene.id})">
+                        Play this
+                    </button>
+
+                </div>
+
+            `).join("")}
+
+        </div>
+
+        <div class="button-row">
+
+            <button class="secondary"
+                onclick="showHome()">
+                Back
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- OPEN SCENE ---------- */
+
+function openScene(id) {
+
+    currentScene = scenes.find(
+        scene => scene.id === id
+    );
+
+    currentRole = "A";
+
+    document.getElementById("app").innerHTML = `
+
+        <div class="scene-box">
+
+            <span class="tag">
+                ${currentScene.category}
+            </span>
+
+            <h1>
+                ${currentScene.title}
+            </h1>
+
+            <p>
+                <strong>Situation</strong>
+            </p>
+
+            <p class="muted">
+                ${currentScene.situation}
+            </p>
+
+            <hr>
+
+            <p>
+                <strong>You are:</strong>
+                ${currentScene.characterA}
+            </p>
+
+            <p>
+                <strong>Other character:</strong>
+                ${currentScene.characterB}
+            </p>
+
+            <p class="objective">
+                <strong>Your objective:</strong><br>
+                ${currentScene.objectiveA}
+            </p>
+
+            <div class="line-box">
+                "${currentScene.lineA}"
+            </div>
+
+            <button class="primary"
+                onclick="openCamera()">
+                🎥 Record Opening
+            </button>
+
+            <div class="button-row">
+
+                <button class="secondary"
+                    onclick="startScene()">
+                    Choose another
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- CAMERA ---------- */
+
+async function openCamera() {
+
+    document.getElementById("app").innerHTML = `
+
+        <h1>Record your scene</h1>
+
+        <p class="muted">
+            Hold your phone naturally and perform
+            the line.
+        </p>
+
+        <div class="scene-box">
+
+            <div class="line-box">
+                "${currentRole === "A"
+                    ? currentScene.lineA
+                    : currentScene.lineB}"
+            </div>
+
+        </div>
+
+        <div class="camera-container">
+
+            <video
+                id="cameraPreview"
+                autoplay
+                muted
+                playsinline>
+            </video>
+
+            <div class="camera-overlay">
+
+                <div id="recordStatus">
+                    Ready
+                </div>
+
+                <div class="timer" id="timer">
+                    00:00
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="button-row">
+
+            <button id="recordButton"
+                class="primary"
+                onclick="toggleRecording()">
+                🔴 Record
+            </button>
+
+            <button class="secondary"
+                onclick="closeCamera()">
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        cameraStream =
+            await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "user"
+                },
+                audio: true
+            });
+
+        document.getElementById(
+            "cameraPreview"
+        ).srcObject = cameraStream;
+
+    } catch(error) {
+
+        alert(
+            "Camera permission was not granted. " +
+            "Please allow camera and microphone access."
+        );
+
+        showHome();
+
+    }
+
+}
+
+
+/* ---------- RECORD ---------- */
+
+function toggleRecording() {
+
+    if (!mediaRecorder) {
+
+        startRecording();
+
+    } else if (
+        mediaRecorder.state === "recording"
+    ) {
+
+        stopRecording();
+
+    }
+
+}
+
+
+function startRecording() {
+
+    recordedChunks = [];
+
+    mediaRecorder = new MediaRecorder(
+        cameraStream,
+        {
+            mimeType:
+            MediaRecorder.isTypeSupported(
+                "video/webm"
+            )
+            ? "video/webm"
+            : ""
+        }
+    );
+
+
+    mediaRecorder.ondataavailable =
+        event => {
+
+            if (event.data.size > 0) {
+
+                recordedChunks.push(
+                    event.data
+                );
+
+            }
+
+        };
+
+
+    mediaRecorder.onstop =
+        showRecordedVideo;
+
+
+    mediaRecorder.start();
+
+    recordingSeconds = 0;
+
+    timerInterval = setInterval(() => {
+
+        recordingSeconds++;
+
+        document.getElementById(
+            "timer"
+        ).textContent =
+            formatTime(recordingSeconds);
+
+        if (recordingSeconds >= 30) {
+
+            stopRecording();
+
+        }
+
+    }, 1000);
+
+
+    document.getElementById(
+        "recordButton"
+    ).textContent = "⏹ Stop";
+
+    document.getElementById(
+        "recordStatus"
+    ).innerHTML =
+        '<span class="recording">● RECORDING</span>';
+
+}
+
+
+function stopRecording() {
+
+    if (!mediaRecorder) return;
+
+    mediaRecorder.stop();
+
+    clearInterval(timerInterval);
+
+    document.getElementById(
+        "recordButton"
+    ).disabled = true;
+
+}
+
+
+function formatTime(seconds) {
+
+    let minutes =
+        Math.floor(seconds / 60);
+
+    let secs =
+        seconds % 60;
+
+    return String(minutes).padStart(2, "0")
+        + ":"
+        + String(secs).padStart(2, "0");
+
+}
+
+
+/* ---------- REVIEW ---------- */
+
+function showRecordedVideo() {
+
+    const blob = new Blob(
+        recordedChunks,
+        {
+            type: "video/webm"
+        }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    if (cameraStream) {
+
+        cameraStream.getTracks()
+            .forEach(track => track.stop());
+
+    }
+
+    document.getElementById("app").innerHTML = `
+
+        <h1>Review your video</h1>
+
+        <p class="muted">
+            Make sure you're happy before submitting.
+        </p>
+
+        <div class="camera-container">
+
+            <video
+                src="${url}"
+                controls
+                playsinline>
+            </video>
+
+        </div>
+
+        <div class="button-row">
+
+            <button class="secondary"
+                onclick="retakeVideo()">
+                ↻ Retake
+            </button>
+
+            <button class="primary"
+                onclick="submitVideo('${url}')">
+                ✓ Submit
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- RETAKE ---------- */
+
+function retakeVideo() {
+
+    mediaRecorder = null;
+
+    openCamera();
+
+}
+
+
+/* ---------- SUBMIT ---------- */
+
+function submitVideo(videoUrl) {
+
+    if (!currentScene) {
+
+        showHome();
+
+        return;
+
+    }
+
+
+    if (currentRole === "A") {
+
+        const sceneRecord = {
+
+            id:
+                Date.now(),
+
+            sceneId:
+                currentScene.id,
+
+            title:
+                currentScene.title,
+
+            category:
+                currentScene.category,
+
+            videoUrl:
+                videoUrl,
+
+            status:
+                "waiting",
+
+            created:
+                new Date().toISOString()
+
+        };
+
+
+        appState.myScenes.push(
+            sceneRecord
+        );
+
+        saveState();
+
+        showWaitingScreen(
+            sceneRecord
+        );
+
+    } else {
+
+        showResponseSubmitted();
+
+    }
+
+}
+
+
+/* ---------- WAITING ---------- */
+
+function showWaitingScreen(sceneRecord) {
+
+    document.getElementById("app").innerHTML = `
+
+        <div class="scene-box">
+
+            <span class="tag">
+                ${sceneRecord.category}
+            </span>
+
+            <h1>
+                ${sceneRecord.title}
+            </h1>
+
+            <div class="status success">
+
+                ✓ Your opening has been submitted.
+
+            </div>
+
+            <p class="muted">
+
+                Other people can now respond
+                as Character B.
+
+            </p>
+
+            <h3>
+                Your opening
+            </h3>
+
+            <video
+                class="feed-video"
+                src="${sceneRecord.videoUrl}"
+                controls>
+            </video>
+
+            <div class="status">
+
+                Waiting for responses...
+
+            </div>
+
+            <div class="button-row">
+
+                <button class="primary"
+                    onclick="showDemoResponses()">
+                    👥 View Demo Responses
+                </button>
+
+                <button class="secondary"
+                    onclick="showHome()">
+                    Home
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- DEMO RESPONSES ---------- */
+
+function showDemoResponses() {
+
+    /*
+        This simulates other users responding.
+
+        In the real application these would
+        come from the server.
+    */
+
+    const responses = [
+
+        {
+            name: "Alex",
+            text:
+            "What are you talking about?"
+        },
+
+        {
+            name: "Sarah",
+            text:
+            "You're going to have to be more specific."
+        },
+
+        {
+            name: "Mike",
+            text:
+            "I was hoping you wouldn't find out."
+        }
+
+    ];
+
+
+    document.getElementById("app").innerHTML = `
+
+        <h1>Responses</h1>
+
+        <p class="muted">
+
+            These responses are private.
+            Only you can see them.
+
+        </p>
+
+        ${responses.map((response, index) => `
+
+            <div class="response">
+
+                <h3>
+                    👤 ${response.name}
+                </h3>
+
+                <div class="line-box">
+
+                    "${response.text}"
+
+                </div>
+
+                <div class="button-row">
+
+                    <button class="primary"
+                        onclick="acceptResponse(
+                            '${response.name}'
+                        )">
+
+                        ✓ Continue with ${response.name}
+
+                    </button>
+
+                    <button class="danger"
+                        onclick="alert(
+                            'Response rejected.'
+                        )">
+
+                        Pass
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("")}
+
+
+        <button class="secondary"
+            onclick="showHome()">
+            Back
+        </button>
+
+    `;
+
+}
+
+
+/* ---------- ACCEPT RESPONSE ---------- */
+
+function acceptResponse(name) {
+
+    appState.currentPartner = name;
+
+    saveState();
+
+    currentRole = "A";
+
+    showNextTurn();
+
+}
+
+
+/* ---------- NEXT TURN ---------- */
+
+function showNextTurn() {
+
+    document.getElementById("app").innerHTML = `
+
+        <div class="scene-box">
+
+            <span class="tag">
+                Your turn
+            </span>
+
+            <h1>
+                ${currentScene.title}
+            </h1>
+
+            <p>
+                <strong>
+                    ${appState.currentPartner}
+                </strong>
+                responded.
+            </p>
+
+            <div class="line-box">
+
+                "${currentScene.nextA}"
+
+            </div>
+
+            <p class="objective">
+
+                Stay in character and respond
+                naturally.
+
+            </p>
+
+            <button class="primary"
+                onclick="openCamera()">
+
+                🎥 Record Your Response
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- RESPONSE SUBMITTED ---------- */
+
+function showResponseSubmitted() {
+
+    document.getElementById("app").innerHTML = `
+
+        <div class="scene-box">
+
+            <div class="status success">
+
+                ✓ Response submitted!
+
+            </div>
+
+            <h1>
+                Waiting for the other player.
+            </h1>
+
+            <p class="muted">
+
+                You can leave the app.
+                We'll notify you when it is
+                your turn again.
+
+            </p>
+
+            <button class="secondary"
+                onclick="showHome()">
+
+                Home
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ---------- LOGIN ---------- */
+
+function openLogin() {
+
+    document
+        .getElementById("loginModal")
+        .classList.remove("hidden");
+
+}
+
+
+function closeLogin() {
+
+    document
+        .getElementById("loginModal")
+        .classList.add("hidden");
+
+}
+
+
+function login() {
+
+    const username =
+        document.getElementById(
+            "usernameInput"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "emailInput"
+        ).value.trim();
+
+
+    if (!username || !email) {
+
+        alert(
+            "Please enter a username and email."
+        );
+
+        return;
+
+    }
+
+
+    appState.username = username;
+
+    saveState();
+
+    closeLogin();
+
+    showHome();
+
+}
+
+
+/* ---------- CAMERA CLOSE ---------- */
+
+function closeCamera() {
+
+    if (cameraStream) {
+
+        cameraStream.getTracks()
+            .forEach(track => track.stop());
+
+    }
+
+    mediaRecorder = null;
+
+    showHome();
+
+}
+
+
+/* ---------- SHARE ---------- */
+
+async function shareScene(title) {
+
+    const shareData = {
+
+        title: "ScenePlay",
+        text:
+            "Check out this ScenePlay scene: "
+            + title,
+        url:
+            window.location.href
+
+    };
+
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share(
+                shareData
+            );
+
+        } catch(e) {}
+
+    } else {
+
+        alert(
+            "Share link copied:\n"
+            + window.location.href
+        );
+
+    }
+
+}
+
+
+/* ---------- INITIALIZE ---------- */
+
+showHome();
+
 </script>
 
 </body>
