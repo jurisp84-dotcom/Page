@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1">
-
-<meta name="theme-color" content="#09090d">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ScenePlay</title>
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
 :root{
     --bg:#09090d;
     --card:#15151d;
     --card2:#1d1d27;
-    --border:#2b2b37;
-    --text:#fff;
+    --border:#30303b;
+    --text:#ffffff;
     --muted:#9999a8;
     --purple:#8b5cf6;
-    --purple2:#a78bfa;
+    --purple-light:#b197fc;
     --green:#35d07f;
     --red:#ff5263;
-}
-
-*{
-    box-sizing:border-box;
 }
 
 body{
@@ -40,7 +36,6 @@ body{
 button{
     font:inherit;
     cursor:pointer;
-    border:0;
 }
 
 .hidden{
@@ -56,54 +51,53 @@ header{
     z-index:100;
 
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 
     padding:0 18px;
 
-    background:rgba(9,9,13,.96);
+    background:rgba(9,9,13,.95);
     backdrop-filter:blur(15px);
 
-    border-bottom:1px solid #20202a;
+    border-bottom:1px solid #24242d;
 }
 
 .logo{
-    font-size:22px;
+    font-size:23px;
     font-weight:900;
-    letter-spacing:-1px;
 }
 
 .logo span{
-    color:var(--purple2);
+    color:var(--purple-light);
 }
 
 .header-button{
     background:var(--card2);
-    color:white;
     border:1px solid var(--border);
-    padding:9px 13px;
+    color:white;
+    padding:9px 14px;
     border-radius:10px;
 }
 
 main{
     max-width:760px;
     margin:auto;
-    padding:88px 18px 30px;
+    padding:90px 18px 30px;
 }
 
 .hero{
-    padding:35px 0;
+    padding:30px 0 40px;
 }
 
 .hero h1{
-    font-size:clamp(45px,12vw,75px);
-    line-height:.92;
+    font-size:clamp(50px,12vw,80px);
+    line-height:.9;
+    letter-spacing:-5px;
     margin:0;
-    letter-spacing:-4px;
 }
 
 .hero h1 span{
-    color:var(--purple2);
+    color:var(--purple-light);
 }
 
 .hero p{
@@ -111,19 +105,18 @@ main{
     font-size:18px;
     line-height:1.5;
     max-width:600px;
-    margin:22px 0;
 }
 
 .badge{
     display:inline-block;
-    background:#241b35;
-    color:var(--purple2);
-    border:1px solid #3c2c58;
-    padding:7px 11px;
+    padding:7px 12px;
     border-radius:30px;
+    background:#251b37;
+    color:var(--purple-light);
+    border:1px solid #40305c;
     font-size:12px;
     font-weight:bold;
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .button-row{
@@ -133,9 +126,10 @@ main{
 }
 
 .btn{
-    min-height:50px;
-    padding:13px 18px;
-    border-radius:12px;
+    min-height:48px;
+    padding:12px 18px;
+    border-radius:11px;
+    border:0;
     font-weight:bold;
 }
 
@@ -145,7 +139,7 @@ main{
 }
 
 .primary:hover{
-    background:#794bd9;
+    background:#784bd4;
 }
 
 .secondary{
@@ -155,7 +149,7 @@ main{
 }
 
 .danger{
-    background:#361820;
+    background:#35151c;
     color:#ff9ca8;
 }
 
@@ -163,13 +157,9 @@ main{
     width:100%;
 }
 
-.section-title{
-    margin-top:35px;
-}
-
 .grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
     gap:12px;
 }
 
@@ -177,11 +167,11 @@ main{
     background:var(--card);
     border:1px solid var(--border);
     border-radius:17px;
-    padding:17px;
+    padding:18px;
 }
 
 .card h3{
-    margin:0 0 8px;
+    margin:8px 0;
 }
 
 .card p{
@@ -191,7 +181,6 @@ main{
 
 .emoji{
     font-size:28px;
-    margin-bottom:12px;
 }
 
 .scene{
@@ -199,15 +188,21 @@ main{
     border:1px solid var(--border);
     border-radius:18px;
     padding:18px;
-    margin-bottom:13px;
+    margin-bottom:15px;
+}
+
+.scene h1,
+.scene h2,
+.scene h3{
+    margin-top:10px;
 }
 
 .tag{
     display:inline-block;
-    background:#241b35;
-    color:var(--purple2);
-    padding:5px 9px;
+    background:#251b37;
+    color:var(--purple-light);
     border-radius:30px;
+    padding:5px 9px;
     font-size:12px;
     font-weight:bold;
 }
@@ -216,44 +211,53 @@ main{
     color:var(--muted);
 }
 
+.info{
+    background:#101016;
+    border:1px solid var(--border);
+    padding:14px;
+    border-radius:11px;
+    margin:10px 0;
+    line-height:1.5;
+}
+
 .line{
     background:#08080b;
     border-left:4px solid var(--purple);
     border-radius:10px;
     padding:18px;
-    margin:20px 0;
-    font-size:21px;
+    font-size:20px;
     line-height:1.45;
-}
-
-.info{
-    background:#111118;
-    border:1px solid var(--border);
-    padding:15px;
-    border-radius:12px;
-    color:#c7c7d0;
-    line-height:1.5;
-    margin:12px 0;
+    margin:15px 0;
 }
 
 .status{
     background:#191921;
     border:1px solid var(--border);
-    padding:14px;
-    border-radius:12px;
-    margin:14px 0;
+    padding:13px;
+    border-radius:11px;
+    margin:12px 0;
 }
 
 .success{
     background:#10281b;
     color:#8ff0b3;
+    border-color:#245d3c;
+}
+
+.scene-video{
+    width:100%;
+    display:block;
+    background:#000;
+    border-radius:14px;
+    margin:15px 0;
+    max-height:650px;
 }
 
 .camera{
     background:#000;
-    border-radius:20px;
+    border-radius:18px;
     overflow:hidden;
-    margin:18px 0;
+    margin:15px 0;
 }
 
 .camera video{
@@ -263,99 +267,97 @@ main{
     object-fit:cover;
 }
 
-.feed-video{
-    width:100%;
-    border-radius:14px;
-    background:#000;
-}
-
 .response{
     background:#101016;
     border:1px solid var(--border);
     border-radius:15px;
     padding:15px;
-    margin-bottom:12px;
+    margin:12px 0;
 }
 
 .user-row{
     display:flex;
     align-items:center;
-    margin-bottom:12px;
+    gap:10px;
 }
 
 .avatar{
-    width:40px;
-    height:40px;
+    width:42px;
+    height:42px;
     border-radius:50%;
-    background:linear-gradient(
-        135deg,
-        #8b5cf6,
-        #ec4899
-    );
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
     display:flex;
     align-items:center;
     justify-content:center;
     font-weight:bold;
-    margin-right:10px;
+    flex-shrink:0;
 }
 
 input{
     width:100%;
     background:#0d0d12;
+    border:1px solid #353540;
     color:white;
-    border:1px solid #34343f;
     padding:14px;
     border-radius:10px;
     margin:7px 0 14px;
 }
 
 label{
-    color:#c6c6d0;
     font-size:13px;
+    color:#c8c8d0;
 }
 
 .modal{
     position:fixed;
     inset:0;
     z-index:500;
-    background:rgba(0,0,0,.8);
+
+    background:rgba(0,0,0,.82);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     padding:18px;
 }
 
 .modal-box{
-    width:min(480px,100%);
+    width:min(470px,100%);
     max-height:90vh;
     overflow:auto;
+
     background:#17171f;
     border:1px solid var(--border);
     border-radius:20px;
+
     padding:22px;
 }
 
 .bottom-nav{
     position:fixed;
-    bottom:0;
     left:0;
     right:0;
+    bottom:0;
+
     height:70px;
     z-index:200;
-    background:rgba(15,15,21,.96);
-    backdrop-filter:blur(15px);
+
+    background:rgba(15,15,21,.97);
     border-top:1px solid #292933;
+    backdrop-filter:blur(15px);
 }
 
 .nav{
-    max-width:600px;
-    margin:auto;
+    max-width:650px;
     height:100%;
+    margin:auto;
     display:flex;
 }
 
 .nav button{
     flex:1;
+    border:0;
     background:none;
     color:#858592;
     font-size:11px;
@@ -372,41 +374,48 @@ label{
 }
 
 .nav button.active strong{
-    color:var(--purple2);
+    color:var(--purple-light);
+}
+
+.empty{
+    text-align:center;
+    padding:35px 15px;
+    color:var(--muted);
 }
 
 @media(max-width:500px){
+
+    main{
+        padding-left:14px;
+        padding-right:14px;
+    }
 
     .grid{
         grid-template-columns:1fr 1fr;
     }
 
-    .button-row .btn{
-        flex:1;
-    }
-
 }
 
 </style>
-
 </head>
+
 
 <body>
 
 <header>
 
-<div class="logo">
-    Scene<span>Play</span>
-</div>
+    <div class="logo">
+        Scene<span>Play</span>
+    </div>
 
-<button
-    id="accountButton"
-    class="header-button"
-    onclick="accountAction()">
+    <button
+        id="accountButton"
+        class="header-button"
+        onclick="accountAction()">
 
-    Log in
+        Log in
 
-</button>
+    </button>
 
 </header>
 
@@ -416,127 +425,127 @@ label{
 
 <nav class="bottom-nav">
 
-<div class="nav">
+    <div class="nav">
 
-<button onclick="home()">
-<strong>⌂</strong>
-Home
-</button>
+        <button onclick="home()">
+            <strong>⌂</strong>
+            Home
+        </button>
 
-<button onclick="discover()">
-<strong>🔥</strong>
-Discover
-</button>
+        <button onclick="discover()">
+            <strong>🔥</strong>
+            Discover
+        </button>
 
-<button onclick="createScene()">
-<strong>＋</strong>
-Create
-</button>
+        <button onclick="createScene()">
+            <strong>＋</strong>
+            Create
+        </button>
 
-<button onclick="myScenes()">
-<strong>🎬</strong>
-Scenes
-</button>
+        <button onclick="myScenes()">
+            <strong>🎬</strong>
+            My Scenes
+        </button>
 
-<button onclick="profile()">
-<strong>●</strong>
-Profile
-</button>
+        <button onclick="profile()">
+            <strong>●</strong>
+            Profile
+        </button>
 
-</div>
+    </div>
 
 </nav>
 
 
-<!-- AUTH -->
+<!-- AUTH MODAL -->
 
 <div
     id="authModal"
     class="modal hidden">
 
-<div class="modal-box">
+    <div class="modal-box">
 
-<h2 id="authTitle">
-Create account
-</h2>
+        <h2 id="authTitle">
+            Create account
+        </h2>
 
-<p class="muted">
-Watch scenes without an account.
-Create an account when you want to play.
-</p>
-
-
-<div id="usernameContainer">
-
-<label>
-Username
-</label>
-
-<input
-    id="authUsername"
-    placeholder="Choose username"
-    autocomplete="username">
-
-</div>
+        <p class="muted">
+            Create an account to play in scenes.
+        </p>
 
 
-<label>
-Email
-</label>
+        <div id="usernameContainer">
 
-<input
-    id="authEmail"
-    type="email"
-    placeholder="you@example.com"
-    autocomplete="email">
+            <label>
+                Username
+            </label>
 
+            <input
+                id="authUsername"
+                type="text"
+                placeholder="Choose username"
+                autocomplete="username">
 
-<label>
-Password
-</label>
-
-<input
-    id="authPassword"
-    type="password"
-    placeholder="Password"
-    autocomplete="current-password">
+        </div>
 
 
-<button
-    id="authSubmitButton"
-    class="btn primary full"
-    onclick="submitAuth()">
+        <label>
+            Email
+        </label>
 
-Create account
-
-</button>
-
-
-<br><br>
+        <input
+            id="authEmail"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email">
 
 
-<button
-    id="authSwitchButton"
-    class="btn secondary full"
-    onclick="switchAuth()">
+        <label>
+            Password
+        </label>
 
-Already have an account? Log in
-
-</button>
-
-
-<br><br>
+        <input
+            id="authPassword"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password">
 
 
-<button
-    class="btn secondary full"
-    onclick="closeAuth()">
+        <button
+            id="authSubmitButton"
+            class="btn primary full"
+            onclick="submitAuth()">
 
-Cancel
+            Create account
 
-</button>
+        </button>
 
-</div>
+
+        <br><br>
+
+
+        <button
+            id="authSwitchButton"
+            class="btn secondary full"
+            onclick="switchAuth()">
+
+            Already have an account? Log in
+
+        </button>
+
+
+        <br><br>
+
+
+        <button
+            class="btn secondary full"
+            onclick="closeAuth()">
+
+            Cancel
+
+        </button>
+
+    </div>
 
 </div>
 
@@ -547,33 +556,25 @@ import {
     createClient
 }
 from
-'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
 /* =====================================================
-   SUPABASE CONNECTION
+   SUPABASE
    ===================================================== */
 
 const SUPABASE_URL =
-'https://rktwvhenqumebbgrtxol.supabase.co';
+"https://rktwvhenqumebbgrtxol.supabase.co";
 
 
 /*
-=========================================================
-PASTE YOUR NEW PUBLISHABLE KEY HERE
-=========================================================
+    PUT YOUR NEW PUBLISHABLE KEY BELOW.
 
-Example:
-
-const SUPABASE_KEY =
-'sb_publishable_xxxxxxxxxxxxx';
-
-DO NOT USE sb_secret_...
-=========================================================
+    DO NOT PUT sb_secret_... HERE.
 */
 
 const SUPABASE_KEY =
-'sb_publishable_wBb0U4jBf3SRM0EIHtgheA_c0pOG-WK';
+"sb_publishable_wBb0U4jBf3SRM0EIHtgheA_c0pOG-WK";
 
 
 const supabase =
@@ -584,187 +585,170 @@ createClient(
 
 
 /* =====================================================
-   STATE
+   APP STATE
    ===================================================== */
 
 let currentUser = null;
 let currentProfile = null;
+
 let currentScene = null;
 
 let authMode = "signup";
 
 let cameraStream = null;
 let mediaRecorder = null;
-let chunks = [];
+
+let recordedChunks = [];
+
+let pendingVideoBlob = null;
+
 let recordingTimer = null;
 let recordingSeconds = 0;
 
-let pendingVideoBlob = null;
-let pendingResponseBlob = null;
 let currentResponseSceneId = null;
 
 
 /* =====================================================
-   SCENES
+   SAMPLE SCENE IDEAS
    ===================================================== */
 
-const SCENES = [
+const SCENE_IDEAS = [
 
 {
-title:"The Betrayal",
-category:"Drama",
+    title:"The Betrayal",
+    category:"Drama",
 
-situation:
-"You discover that your best friend has been hiding something important from you.",
+    situation:
+    "You discover that your best friend has been hiding something important from you.",
 
-A:"The suspicious friend",
+    characterA:
+    "The suspicious friend",
 
-B:"The friend hiding the secret",
+    characterB:
+    "The friend hiding the secret",
 
-objectiveA:
-"You're angry, but you're trying to stay controlled.",
+    objectiveA:
+    "You are angry, but trying to stay controlled.",
 
-objectiveB:
-"You're nervous and want to avoid admitting the truth.",
+    objectiveB:
+    "You are nervous and want to avoid admitting the truth.",
 
-lineA:
-"I know you've been lying to me.",
+    lineA:
+    "I know you've been lying to me.",
 
-lineB:
-"What are you talking about?",
-
-nextA:
-"Don't lie to me. I saw you.",
-
-nextB:
-"You weren't supposed to see that."
+    lineB:
+    "What are you talking about?"
 },
 
 {
-title:"Wrong Number",
-category:"Comedy",
+    title:"Wrong Number",
+    category:"Comedy",
 
-situation:
-"You accidentally call a stranger, but they seem to know exactly who you are.",
+    situation:
+    "You accidentally call a stranger, but they seem to know exactly who you are.",
 
-A:"The person who made the wrong call",
+    characterA:
+    "The person who made the wrong call",
 
-B:"A mysterious stranger",
+    characterB:
+    "The mysterious stranger",
 
-objectiveA:
-"Try to understand what is happening.",
+    objectiveA:
+    "Try to understand what is happening.",
 
-objectiveB:
-"Act as though everything is completely normal.",
+    objectiveB:
+    "Act as though everything is completely normal.",
 
-lineA:
-"Sorry, I think I have the wrong number.",
+    lineA:
+    "Sorry, I think I have the wrong number.",
 
-lineB:
-"No. I think you finally called the right one.",
-
-nextA:
-"Have we met before?",
-
-nextB:
-"Not exactly."
+    lineB:
+    "No. I think you finally called the right one."
 },
 
 {
-title:"The Last Train",
-category:"Romance",
+    title:"The Last Train",
+    category:"Romance",
 
-situation:
-"One person is leaving forever. The other has one last chance to stop them.",
+    situation:
+    "One person is leaving forever. The other has one last chance to stop them.",
 
-A:"The person who wants them to stay",
+    characterA:
+    "The person who wants them to stay",
 
-B:"The person leaving",
+    characterB:
+    "The person leaving",
 
-objectiveA:
-"Don't admit how much you care.",
+    objectiveA:
+    "Don't admit how much you care.",
 
-objectiveB:
-"Pretend you don't want to stay.",
+    objectiveB:
+    "Pretend you don't want to stay.",
 
-lineA:
-"So you're really leaving?",
+    lineA:
+    "So you're really leaving?",
 
-lineB:
-"You knew I would eventually.",
-
-nextA:
-"I didn't think you'd actually do it.",
-
-nextB:
-"Maybe you should have said something sooner."
+    lineB:
+    "You knew I would eventually."
 },
 
 {
-title:"The Interview",
-category:"Drama",
+    title:"The Interview",
+    category:"Drama",
 
-situation:
-"A normal job interview suddenly becomes strangely personal.",
+    situation:
+    "A normal job interview suddenly becomes strangely personal.",
 
-A:"The interviewer",
+    characterA:
+    "The interviewer",
 
-B:"The applicant",
+    characterB:
+    "The applicant",
 
-objectiveA:
-"Remain professional while testing the applicant.",
+    objectiveA:
+    "Remain professional while testing the applicant.",
 
-objectiveB:
-"Stay calm even though something feels wrong.",
+    objectiveB:
+    "Stay calm even though something feels wrong.",
 
-lineA:
-"Before we continue, I need to ask you something.",
+    lineA:
+    "Before we continue, I need to ask you something.",
 
-lineB:
-"Of course. What is it?",
-
-nextA:
-"Where were you last Friday night?",
-
-nextB:
-"Why would that matter for this job?"
+    lineB:
+    "Of course. What is it?"
 },
 
 {
-title:"The Stranger",
-category:"Mystery",
+    title:"The Stranger",
+    category:"Mystery",
 
-situation:
-"A stranger approaches you and says they know something about your future.",
+    situation:
+    "A stranger approaches you and says they know something about your future.",
 
-A:"The person being approached",
+    characterA:
+    "The person being approached",
 
-B:"The mysterious stranger",
+    characterB:
+    "The mysterious stranger",
 
-objectiveA:
-"Don't reveal that you're frightened.",
+    objectiveA:
+    "Don't reveal that you are frightened.",
 
-objectiveB:
-"Make them believe you know more than you really do.",
+    objectiveB:
+    "Make them believe you know more than you really do.",
 
-lineA:
-"Do I know you?",
+    lineA:
+    "Do I know you?",
 
-lineB:
-"Not yet.",
-
-nextA:
-"What does that mean?",
-
-nextB:
-"You'll understand soon."
+    lineB:
+    "Not yet."
 }
 
 ];
 
 
 /* =====================================================
-   AUTH UI
+   AUTH
    ===================================================== */
 
 window.accountAction = function(){
@@ -788,7 +772,8 @@ window.openAuth = function(){
 
     document
     .getElementById("authModal")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
     updateAuthForm();
 
@@ -799,17 +784,23 @@ window.closeAuth = function(){
 
     document
     .getElementById("authModal")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
 };
 
 
 window.switchAuth = function(){
 
-    authMode =
-        authMode === "signup"
-        ? "login"
-        : "signup";
+    if(authMode === "signup"){
+
+        authMode = "login";
+
+    }else{
+
+        authMode = "signup";
+
+    }
 
     updateAuthForm();
 
@@ -819,54 +810,55 @@ window.switchAuth = function(){
 function updateAuthForm(){
 
     const title =
-        document.getElementById(
-            "authTitle"
-        );
+    document.getElementById(
+        "authTitle"
+    );
 
-    const usernameContainer =
-        document.getElementById(
-            "usernameContainer"
-        );
+    const username =
+    document.getElementById(
+        "usernameContainer"
+    );
 
-    const submitButton =
-        document.getElementById(
-            "authSubmitButton"
-        );
+    const submit =
+    document.getElementById(
+        "authSubmitButton"
+    );
 
     const switchButton =
-        document.getElementById(
-            "authSwitchButton"
-        );
+    document.getElementById(
+        "authSwitchButton"
+    );
 
 
     if(authMode === "login"){
 
-        title.textContent = "Log in";
+        title.textContent =
+        "Log in";
 
-        usernameContainer
-        .classList
-        .add("hidden");
+        username.classList.add(
+            "hidden"
+        );
 
-        submitButton.textContent =
-            "Log in";
+        submit.textContent =
+        "Log in";
 
         switchButton.textContent =
-            "Don't have an account? Create one";
+        "Don't have an account? Create one";
 
     }else{
 
         title.textContent =
-            "Create account";
+        "Create account";
 
-        usernameContainer
-        .classList
-        .remove("hidden");
+        username.classList.remove(
+            "hidden"
+        );
 
-        submitButton.textContent =
-            "Create account";
+        submit.textContent =
+        "Create account";
 
         switchButton.textContent =
-            "Already have an account? Log in";
+        "Already have an account? Log in";
 
     }
 
@@ -874,33 +866,25 @@ function updateAuthForm(){
 
 
 /* =====================================================
-   SUBMIT AUTH
+   AUTH SUBMIT
    ===================================================== */
 
 window.submitAuth = async function(){
 
     const username =
-        document
-        .getElementById(
-            "authUsername"
-        )
-        .value
-        .trim();
+    document.getElementById(
+        "authUsername"
+    ).value.trim();
 
     const email =
-        document
-        .getElementById(
-            "authEmail"
-        )
-        .value
-        .trim();
+    document.getElementById(
+        "authEmail"
+    ).value.trim();
 
     const password =
-        document
-        .getElementById(
-            "authPassword"
-        )
-        .value;
+    document.getElementById(
+        "authPassword"
+    ).value;
 
 
     if(!email){
@@ -944,16 +928,19 @@ window.submitAuth = async function(){
         } =
         await supabase.auth.signUp({
 
-            email,
-            password,
+            email:email,
+
+            password:password,
 
             options:{
+
                 data:{
                     username:username
                 },
 
                 emailRedirectTo:
-                    "https://businesspage.ie"
+                "https://businesspage.ie"
+
             }
 
         });
@@ -961,40 +948,41 @@ window.submitAuth = async function(){
 
         if(error){
 
-            alert(error.message);
+            alert(
+                error.message
+            );
 
             return;
 
         }
 
 
-        if(data.user){
+        closeAuth();
 
-            closeAuth();
+        alert(
+            "Account created. Please check your email and confirm your account."
+        );
 
-            alert(
-                "Account created. Check your email and confirm your account."
-            );
-
-        }
 
     }else{
 
         const {
             error
         } =
-        await supabase.auth
-        .signInWithPassword({
+        await supabase.auth.signInWithPassword({
 
-            email,
-            password
+            email:email,
+
+            password:password
 
         });
 
 
         if(error){
 
-            alert(error.message);
+            alert(
+                error.message
+            );
 
             return;
 
@@ -1013,7 +1001,7 @@ window.submitAuth = async function(){
 
 
 /* =====================================================
-   LOAD USER
+   USER
    ===================================================== */
 
 async function loadUser(){
@@ -1021,12 +1009,14 @@ async function loadUser(){
     const {
         data
     } =
-    await supabase.auth
-    .getUser();
+    await supabase.auth.getUser();
 
 
     currentUser =
-        data.user || null;
+    data.user || null;
+
+
+    currentProfile = null;
 
 
     if(currentUser){
@@ -1035,25 +1025,17 @@ async function loadUser(){
             data:profile
         } =
         await supabase
-
         .from("profiles")
-
         .select("*")
-
         .eq(
             "id",
             currentUser.id
         )
-
         .maybeSingle();
 
 
         currentProfile =
-            profile || null;
-
-    }else{
-
-        currentProfile = null;
+        profile || null;
 
     }
 
@@ -1066,22 +1048,26 @@ async function loadUser(){
 function updateAccountButton(){
 
     const button =
-        document.getElementById(
-            "accountButton"
-        );
+    document.getElementById(
+        "accountButton"
+    );
 
 
     if(currentProfile){
 
         button.textContent =
-            "@"
-            +
-            currentProfile.username;
+        "@" +
+        currentProfile.username;
+
+    }else if(currentUser){
+
+        button.textContent =
+        "Profile";
 
     }else{
 
         button.textContent =
-            "Log in";
+        "Log in";
 
     }
 
@@ -1097,7 +1083,6 @@ window.logout = async function(){
     await supabase.auth.signOut();
 
     currentUser = null;
-
     currentProfile = null;
 
     updateAccountButton();
@@ -1115,118 +1100,126 @@ window.home = function(){
 
     app.innerHTML = `
 
-    <section class="hero">
+        <section class="hero">
 
-        <div class="badge">
-            🎭 PLAY WITH ANYONE
-        </div>
+            <div class="badge">
+                🎭 PLAY WITH ANYONE
+            </div>
 
-        <h1>
-            Act.<br>
-            <span>Respond.</span><br>
-            Play.
-        </h1>
-
-        <p>
-            Get a scene. Record your part.
-            Someone else responds.
-            Continue whenever you're ready.
-        </p>
-
-        <div class="button-row">
-
-            <button
-                class="btn primary"
-                onclick="createScene()">
-
-                🎬 Start a Scene
-
-            </button>
-
-            <button
-                class="btn secondary"
-                onclick="discover()">
-
-                👀 Watch Scenes
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <h2 class="section-title">
-        How it works
-    </h2>
-
-
-    <div class="grid">
-
-        <div class="card">
-
-            <div class="emoji">🎬</div>
-
-            <h3>
-                Get a scene
-            </h3>
+            <h1>
+                Act.<br>
+                <span>Respond.</span><br>
+                Play.
+            </h1>
 
             <p>
-                Choose a situation and
-                become a character.
+                Get a scene. Record your part.
+                Someone else responds.
+                Continue whenever you're ready.
             </p>
 
+            <div class="button-row">
+
+                <button
+                    class="btn primary"
+                    onclick="discover()">
+
+                    🔥 Discover Scenes
+
+                </button>
+
+                <button
+                    class="btn secondary"
+                    onclick="createScene()">
+
+                    🎬 Create Scene
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <h2>
+            How it works
+        </h2>
+
+
+        <div class="grid">
+
+            <div class="card">
+
+                <div class="emoji">
+                    🎬
+                </div>
+
+                <h3>
+                    Create
+                </h3>
+
+                <p>
+                    Choose a situation and
+                    record Character A.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="emoji">
+                    📱
+                </div>
+
+                <h3>
+                    Record
+                </h3>
+
+                <p>
+                    Your phone is your camera.
+                    No cameraman needed.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="emoji">
+                    👥
+                </div>
+
+                <h3>
+                    Respond
+                </h3>
+
+                <p>
+                    Multiple people can
+                    respond to the same scene.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="emoji">
+                    🎭
+                </div>
+
+                <h3>
+                    Choose
+                </h3>
+
+                <p>
+                    The creator chooses
+                    who continues the scene.
+                </p>
+
+            </div>
+
         </div>
-
-
-        <div class="card">
-
-            <div class="emoji">📱</div>
-
-            <h3>
-                Record alone
-            </h3>
-
-            <p>
-                Your phone is your camera.
-                No cameraman needed.
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="emoji">👥</div>
-
-            <h3>
-                People respond
-            </h3>
-
-            <p>
-                Multiple people can
-                respond to your scene.
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="emoji">🌎</div>
-
-            <h3>
-                Finish together
-            </h3>
-
-            <p>
-                A → B → A → B.
-                Then publish it.
-            </p>
-
-        </div>
-
-    </div>
 
     `;
 
@@ -1250,24 +1243,26 @@ window.createScene = function(){
 
     app.innerHTML = `
 
-    <h1>
-        🎬 Choose a scene
-    </h1>
+        <h1>
+            🎬 Choose a scene
+        </h1>
 
-    <p class="muted">
-        Pick a situation.
-        You become Character A.
-    </p>
+        <p class="muted">
+            You will play Character A.
+        </p>
+
+    `;
 
 
-    ${
-        SCENES.map(
-            (scene,index)=>`
+    SCENE_IDEAS.forEach(
+    (scene,index)=>{
+
+        app.innerHTML += `
 
             <div class="scene">
 
                 <span class="tag">
-                    ${scene.category}
+                    ${escapeHtml(scene.category)}
                 </span>
 
                 <h2>
@@ -1275,9 +1270,7 @@ window.createScene = function(){
                 </h2>
 
                 <p class="muted">
-                    ${escapeHtml(
-                        scene.situation
-                    )}
+                    ${escapeHtml(scene.situation)}
                 </p>
 
                 <button
@@ -1290,9 +1283,109 @@ window.createScene = function(){
 
             </div>
 
-            `
-        ).join("")
-    }
+        `;
+
+    });
+
+};
+
+
+/* =====================================================
+   PREVIEW
+   ===================================================== */
+
+window.previewScene = function(index){
+
+    currentScene =
+    SCENE_IDEAS[index];
+
+
+    app.innerHTML = `
+
+        <div class="scene">
+
+            <span class="tag">
+                ${escapeHtml(
+                    currentScene.category
+                )}
+            </span>
+
+            <h1>
+                ${escapeHtml(
+                    currentScene.title
+                )}
+            </h1>
+
+            <p class="muted">
+                ${escapeHtml(
+                    currentScene.situation
+                )}
+            </p>
+
+
+            <div class="info">
+
+                <strong>
+                    Your character
+                </strong>
+
+                <br>
+
+                ${escapeHtml(
+                    currentScene.characterA
+                )}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Other character
+                </strong>
+
+                <br>
+
+                ${escapeHtml(
+                    currentScene.characterB
+                )}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Your objective
+                </strong>
+
+                <br>
+
+                ${escapeHtml(
+                    currentScene.objectiveA
+                )}
+
+            </div>
+
+
+            <div class="line">
+
+                "${escapeHtml(
+                    currentScene.lineA
+                )}"
+
+            </div>
+
+
+            <button
+                class="btn primary full"
+                onclick="openCameraForOpening()">
+
+                🎥 Record Character A
+
+            </button>
+
+        </div>
 
     `;
 
@@ -1300,49 +1393,29 @@ window.createScene = function(){
 
 
 /* =====================================================
-   PREVIEW SCENE
+   CAMERA
    ===================================================== */
 
-window.previewScene = function(index){
-
-    currentScene =
-        SCENES[index];
-
+window.openCameraForOpening =
+async function(){
 
     app.innerHTML = `
 
-    <div class="scene">
-
-        <span class="tag">
-            ${escapeHtml(
-                currentScene.category
-            )}
-        </span>
-
         <h1>
-            ${escapeHtml(
-                currentScene.title
-            )}
+            🎥 Record your part
         </h1>
 
-        <p class="muted">
-            ${escapeHtml(
-                currentScene.situation
-            )}
-        </p>
-
-
         <div class="info">
 
             <strong>
-                Your character
+                Say:
             </strong>
 
             <br>
 
-            ${escapeHtml(
-                currentScene.A
-            )}
+            "${escapeHtml(
+                currentScene.lineA
+            )}"
 
         </div>
 
@@ -1350,22 +1423,7 @@ window.previewScene = function(index){
         <div class="info">
 
             <strong>
-                Other character
-            </strong>
-
-            <br>
-
-            ${escapeHtml(
-                currentScene.B
-            )}
-
-        </div>
-
-
-        <div class="info">
-
-            <strong>
-                Your objective
+                Your objective:
             </strong>
 
             <br>
@@ -1377,109 +1435,47 @@ window.previewScene = function(index){
         </div>
 
 
-        <div class="line">
+        <div class="camera">
 
-            "${escapeHtml(
-                currentScene.lineA
-            )}"
+            <video
+                id="cameraVideo"
+                autoplay
+                muted
+                playsinline>
+            </video>
+
+        </div>
+
+
+        <div
+            id="recordStatus"
+            class="status">
+
+            Ready
 
         </div>
 
 
         <button
-            class="btn primary full"
-            onclick="openCamera()">
-
-            🎥 Record Opening
-
-        </button>
-
-    </div>
-
-    `;
-
-};
-
-
-/* =====================================================
-   CAMERA
-   ===================================================== */
-
-window.openCamera = async function(){
-
-    app.innerHTML = `
-
-    <h1>
-        🎥 Record your part
-    </h1>
-
-
-    <div class="info">
-
-        <strong>
-            Your objective:
-        </strong>
-
-        <br>
-
-        ${escapeHtml(
-            currentScene.objectiveA
-        )}
-
-    </div>
-
-
-    <div class="line">
-
-        "${escapeHtml(
-            currentScene.lineA
-        )}"
-
-    </div>
-
-
-    <div class="camera">
-
-        <video
-            id="cameraVideo"
-            autoplay
-            muted
-            playsinline>
-        </video>
-
-    </div>
-
-
-    <div
-        id="recordStatus"
-        class="status">
-
-        Ready to record
-
-    </div>
-
-
-    <div class="button-row">
-
-        <button
             id="recordButton"
-            class="btn primary"
-            onclick="toggleRecording()">
+            class="btn primary full"
+            onclick="toggleOpeningRecording()">
 
             🔴 Record
 
         </button>
 
 
+        <br><br>
+
+
         <button
-            class="btn secondary"
-            onclick="stopCamera()">
+            class="btn secondary full"
+            onclick="cancelCamera()">
 
             Cancel
 
         </button>
-
-    </div>
 
     `;
 
@@ -1487,17 +1483,17 @@ window.openCamera = async function(){
     try{
 
         cameraStream =
-            await navigator
-            .mediaDevices
-            .getUserMedia({
+        await navigator
+        .mediaDevices
+        .getUserMedia({
 
-                video:{
-                    facingMode:"user"
-                },
+            video:{
+                facingMode:"user"
+            },
 
-                audio:true
+            audio:true
 
-            });
+        });
 
 
         document
@@ -1505,13 +1501,13 @@ window.openCamera = async function(){
             "cameraVideo"
         )
         .srcObject =
-            cameraStream;
+        cameraStream;
 
 
     }catch(error){
 
         alert(
-            "Camera or microphone access was denied."
+            "Camera/microphone permission was denied."
         );
 
         home();
@@ -1521,18 +1517,46 @@ window.openCamera = async function(){
 };
 
 
+function stopCameraTracks(){
+
+    if(cameraStream){
+
+        cameraStream
+        .getTracks()
+        .forEach(
+            track => track.stop()
+        );
+
+        cameraStream = null;
+
+    }
+
+}
+
+
+window.cancelCamera =
+function(){
+
+    stopCameraTracks();
+
+    home();
+
+};
+
+
 /* =====================================================
    RECORD OPENING
    ===================================================== */
 
-window.toggleRecording = function(){
+window.toggleOpeningRecording =
+function(){
 
     if(
         !mediaRecorder ||
         mediaRecorder.state === "inactive"
     ){
 
-        startRecording();
+        startOpeningRecording();
 
     }else{
 
@@ -1543,9 +1567,9 @@ window.toggleRecording = function(){
 };
 
 
-function startRecording(){
+function startOpeningRecording(){
 
-    chunks = [];
+    recordedChunks = [];
 
 
     let options = {};
@@ -1554,39 +1578,43 @@ function startRecording(){
     if(
         MediaRecorder
         .isTypeSupported(
-            "video/webm"
+            "video/webm;codecs=vp8,opus"
         )
     ){
 
         options.mimeType =
-            "video/webm";
+        "video/webm;codecs=vp8,opus";
 
     }
 
 
     mediaRecorder =
-        new MediaRecorder(
-            cameraStream,
-            options
-        );
+    new MediaRecorder(
+        cameraStream,
+        options
+    );
 
 
     mediaRecorder.ondataavailable =
-        event => {
+    function(event){
 
-            if(event.data.size){
+        if(event.data.size > 0){
 
-                chunks.push(
-                    event.data
-                );
+            recordedChunks.push(
+                event.data
+            );
 
-            }
+        }
 
-        };
+    };
 
 
     mediaRecorder.onstop =
-        reviewRecording;
+    function(){
+
+        reviewRecordedVideo();
+
+    };
 
 
     mediaRecorder.start();
@@ -1596,39 +1624,34 @@ function startRecording(){
 
 
     recordingTimer =
-        setInterval(()=>{
+    setInterval(function(){
 
-            recordingSeconds++;
-
-
-            const status =
-                document
-                .getElementById(
-                    "recordStatus"
-                );
+        recordingSeconds++;
 
 
-            if(status){
-
-                status.textContent =
-                    "🔴 Recording "
-                    +
-                    recordingSeconds
-                    +
-                    " / 30 seconds";
-
-            }
+        const status =
+        document.getElementById(
+            "recordStatus"
+        );
 
 
-            if(
-                recordingSeconds >= 30
-            ){
+        if(status){
 
-                stopRecording();
+            status.textContent =
+            "🔴 Recording " +
+            recordingSeconds +
+            " seconds";
 
-            }
+        }
 
-        },1000);
+
+        if(recordingSeconds >= 30){
+
+            stopRecording();
+
+        }
+
+    },1000);
 
 
     document
@@ -1636,7 +1659,7 @@ function startRecording(){
         "recordButton"
     )
     .textContent =
-        "⏹ Stop";
+    "⏹ Stop";
 
 }
 
@@ -1660,98 +1683,72 @@ function stopRecording(){
 }
 
 
-window.stopCamera = function(){
-
-    stopCameraTracks();
-
-    home();
-
-};
-
-
-function stopCameraTracks(){
-
-    if(cameraStream){
-
-        cameraStream
-        .getTracks()
-        .forEach(
-            track => track.stop()
-        );
-
-        cameraStream = null;
-
-    }
-
-}
-
-
 /* =====================================================
-   REVIEW OPENING
+   REVIEW VIDEO
    ===================================================== */
 
-function reviewRecording(){
+function reviewRecordedVideo(){
 
     stopCameraTracks();
 
 
     pendingVideoBlob =
-        new Blob(
-            chunks,
-            {
-                type:"video/webm"
-            }
-        );
+    new Blob(
+        recordedChunks,
+        {
+            type:"video/webm"
+        }
+    );
 
 
-    const url =
-        URL.createObjectURL(
-            pendingVideoBlob
-        );
+    const videoUrl =
+    URL.createObjectURL(
+        pendingVideoBlob
+    );
 
 
     app.innerHTML = `
 
-    <h1>
-        Review your video
-    </h1>
+        <h1>
+            Review your video
+        </h1>
 
-    <p class="muted">
-        Happy with it?
-    </p>
-
-
-    <div class="camera">
-
-        <video
-            src="${url}"
-            controls
-            playsinline>
-        </video>
-
-    </div>
+        <p class="muted">
+            Make sure you are happy with your performance.
+        </p>
 
 
-    <div class="button-row">
+        <div class="camera">
 
-        <button
-            class="btn secondary"
-            onclick="openCamera()">
+            <video
+                src="${videoUrl}"
+                controls
+                playsinline>
+            </video>
 
-            ↻ Retake
-
-        </button>
+        </div>
 
 
-        <button
-            class="btn primary"
-            onclick="uploadOpening()">
+        <div class="button-row">
 
-            ✓ Use this video
+            <button
+                class="btn secondary"
+                onclick="openCameraForOpening()">
 
-        </button>
+                ↻ Retake
 
-    </div>
+            </button>
+
+
+            <button
+                class="btn primary"
+                onclick="uploadOpeningVideo()">
+
+                ✓ Publish Scene
+
+            </button>
+
+        </div>
 
     `;
 
@@ -1759,15 +1756,16 @@ function reviewRecording(){
 
 
 /* =====================================================
-   UPLOAD OPENING
+   UPLOAD OPENING VIDEO
    ===================================================== */
 
-window.uploadOpening = async function(){
+window.uploadOpeningVideo =
+async function(){
 
     if(!pendingVideoBlob){
 
         alert(
-            "No video available."
+            "There is no recorded video."
         );
 
         return;
@@ -1783,17 +1781,20 @@ window.uploadOpening = async function(){
     try{
 
         const sceneId =
-            crypto.randomUUID();
+        crypto.randomUUID();
 
 
-        const path =
-            currentUser.id
-            +
-            "/"
-            +
-            sceneId
-            +
-            "/opening.webm";
+        /*
+            IMPORTANT:
+            The video path is saved in the
+            database as well as Storage.
+        */
+
+        const videoPath =
+        currentUser.id +
+        "/" +
+        sceneId +
+        "/opening.webm";
 
 
         const {
@@ -1803,19 +1804,25 @@ window.uploadOpening = async function(){
         .storage
         .from("scene-videos")
         .upload(
-            path,
+            videoPath,
             pendingVideoBlob,
             {
-                contentType:
-                    "video/webm",
-                upsert:true
+                contentType:"video/webm",
+                upsert:false
             }
         );
 
 
-        if(uploadError)
+        if(uploadError){
+
             throw uploadError;
 
+        }
+
+
+        /*
+            GET THE PUBLIC URL.
+        */
 
         const {
             data:urlData
@@ -1823,8 +1830,24 @@ window.uploadOpening = async function(){
         supabase
         .storage
         .from("scene-videos")
-        .getPublicUrl(path);
+        .getPublicUrl(
+            videoPath
+        );
 
+
+        const videoUrl =
+        urlData.publicUrl;
+
+
+        console.log(
+            "VIDEO URL:",
+            videoUrl
+        );
+
+
+        /*
+            CREATE THE SCENE.
+        */
 
         const {
             error:sceneError
@@ -1836,40 +1859,50 @@ window.uploadOpening = async function(){
             id:sceneId,
 
             creator_id:
-                currentUser.id,
+            currentUser.id,
 
             title:
-                currentScene.title,
+            currentScene.title,
 
             category:
-                currentScene.category,
+            currentScene.category,
 
             situation:
-                currentScene.situation,
+            currentScene.situation,
 
             character_a:
-                currentScene.A,
+            currentScene.characterA,
 
             character_b:
-                currentScene.B,
+            currentScene.characterB,
 
             objective_a:
-                currentScene.objectiveA,
+            currentScene.objectiveA,
 
             objective_b:
-                currentScene.objectiveB,
+            currentScene.objectiveB,
 
             opening_line:
-                currentScene.lineA,
+            currentScene.lineA,
 
             status:"open"
 
         });
 
 
-        if(sceneError)
+        if(sceneError){
+
             throw sceneError;
 
+        }
+
+
+        /*
+            SAVE THE FIRST TURN.
+
+            This is where the actual video URL
+            is connected to the scene.
+        */
 
         const {
             error:turnError
@@ -1879,38 +1912,43 @@ window.uploadOpening = async function(){
         .insert({
 
             scene_id:
-                sceneId,
+            sceneId,
 
             player_id:
-                currentUser.id,
+            currentUser.id,
 
             turn_number:1,
 
             video_path:
-                urlData.publicUrl
+            videoUrl
 
         });
 
 
-        if(turnError)
+        if(turnError){
+
             throw turnError;
+
+        }
 
 
         pendingVideoBlob = null;
 
 
-        showSceneCreated(
-            sceneId
+        showPublishedScene(
+            sceneId,
+            videoUrl
         );
 
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         alert(
-            "Upload failed: "
-            +
+            "Upload failed:\n\n" +
             error.message
         );
 
@@ -1922,58 +1960,70 @@ window.uploadOpening = async function(){
 
 
 /* =====================================================
-   SCENE CREATED
+   PUBLISHED SCENE
    ===================================================== */
 
-function showSceneCreated(sceneId){
+function showPublishedScene(
+    sceneId,
+    videoUrl
+){
 
     app.innerHTML = `
 
-    <div class="scene">
+        <div class="scene">
 
-        <div class="status success">
+            <div class="status success">
 
-            ✓ Your scene is live
+                ✓ Your scene is live
+
+            </div>
+
+
+            <h1>
+                ${escapeHtml(
+                    currentScene.title
+                )}
+            </h1>
+
+
+            <video
+                class="scene-video"
+                controls
+                playsinline
+                preload="metadata"
+                src="${videoUrl}">
+            </video>
+
+
+            <p class="muted">
+
+                Other people can now respond
+                as Character B.
+
+            </p>
+
+
+            <button
+                class="btn primary full"
+                onclick="viewResponses('${sceneId}')">
+
+                👥 View responses
+
+            </button>
+
+
+            <br><br>
+
+
+            <button
+                class="btn secondary full"
+                onclick="discover()">
+
+                🔥 Discover scenes
+
+            </button>
 
         </div>
-
-
-        <h1>
-            ${escapeHtml(
-                currentScene.title
-            )}
-        </h1>
-
-
-        <p class="muted">
-
-            Other people can now respond
-            as Character B.
-
-        </p>
-
-
-        <button
-            class="btn primary full"
-            onclick="viewResponses('${sceneId}')">
-
-            👥 View responses
-
-        </button>
-
-
-        <br><br>
-
-
-        <button
-            class="btn secondary full"
-            onclick="discover()">
-
-            👀 Discover scenes
-
-        </button>
-
-    </div>
 
     `;
 
@@ -1984,7 +2034,8 @@ function showSceneCreated(sceneId){
    DISCOVER
    ===================================================== */
 
-window.discover = async function(){
+window.discover =
+async function(){
 
     showLoading(
         "Loading scenes..."
@@ -1992,7 +2043,7 @@ window.discover = async function(){
 
 
     const {
-        data,
+        data:scenes,
         error
     } =
     await supabase
@@ -2001,14 +2052,6 @@ window.discover = async function(){
         *,
         profiles(username)
     `)
-    .in(
-        "status",
-        [
-            "open",
-            "in_progress",
-            "finished"
-        ]
-    )
     .order(
         "created_at",
         {
@@ -2019,7 +2062,9 @@ window.discover = async function(){
 
     if(error){
 
-        alert(error.message);
+        alert(
+            error.message
+        );
 
         home();
 
@@ -2030,28 +2075,41 @@ window.discover = async function(){
 
     app.innerHTML = `
 
-    <h1>
-        🔥 Discover
-    </h1>
+        <h1>
+            🔥 Discover
+        </h1>
 
-    <p class="muted">
-        Find someone to play with.
-    </p>
+        <p class="muted">
+            Find someone to play with.
+        </p>
 
     `;
 
 
-    if(!data.length){
+    if(!scenes ||
+       scenes.length === 0){
 
         app.innerHTML += `
 
-        <div class="info">
+            <div class="empty">
 
-            No scenes yet.
+                <h2>
+                    No scenes yet
+                </h2>
 
-            Be the first to create one!
+                <p>
+                    Be the first person to create one.
+                </p>
 
-        </div>
+                <button
+                    class="btn primary"
+                    onclick="createScene()">
+
+                    Create Scene
+
+                </button>
+
+            </div>
 
         `;
 
@@ -2060,78 +2118,177 @@ window.discover = async function(){
     }
 
 
-    data.forEach(scene=>{
+    /*
+        Load scenes one by one and retrieve
+        their actual opening video.
+    */
 
-        app.innerHTML += `
+    for(
+        const scene of scenes
+    ){
 
-        <div class="scene">
-
-            <span class="tag">
-
-                ${escapeHtml(
-                    scene.category
-                )}
-
-            </span>
-
-
-            <h2>
-
-                ${escapeHtml(
-                    scene.title
-                )}
-
-            </h2>
+        const videoUrl =
+        await getOpeningVideo(
+            scene.id
+        );
 
 
-            <p class="muted">
+        /*
+            Don't show broken scenes.
+        */
 
-                ${escapeHtml(
-                    scene.situation
-                )}
+        const videoHTML =
+        videoUrl
 
-            </p>
+        ?
 
+        `
 
-            <div class="line">
+            <video
+                class="scene-video"
+                controls
+                playsinline
+                preload="metadata"
+                src="${videoUrl}">
+            </video>
 
-                "${escapeHtml(
-                    scene.opening_line
-                )}"
+        `
+
+        :
+
+        `
+
+            <div class="status">
+
+                Video unavailable
 
             </div>
 
-
-            <p class="muted">
-
-                Created by
-                @${escapeHtml(
-                    scene.profiles?.username
-                    || "player"
-                )}
-
-            </p>
+        `;
 
 
-            <button
-                class="btn primary full"
-                onclick="respondToScene('${scene.id}')">
+        app.innerHTML += `
 
-                🎭 Respond
+            <div class="scene">
 
-            </button>
+                <span class="tag">
 
-        </div>
+                    ${escapeHtml(
+                        scene.category || "Scene"
+                    )}
+
+                </span>
+
+
+                <h2>
+
+                    ${escapeHtml(
+                        scene.title
+                    )}
+
+                </h2>
+
+
+                <p class="muted">
+
+                    ${escapeHtml(
+                        scene.situation
+                    )}
+
+                </p>
+
+
+                ${videoHTML}
+
+
+                <p class="muted">
+
+                    Created by
+                    @${escapeHtml(
+                        scene.profiles?.username
+                        || "player"
+                    )}
+
+                </p>
+
+
+                <button
+                    class="btn primary full"
+                    onclick="respondToScene(
+                        '${scene.id}'
+                    )">
+
+                    🎭 Play Character B
+
+                </button>
+
+            </div>
 
         `;
 
-    });
+    }
 
 };
 
 
 /* =====================================================
-   RESPOND
+   GET OPENING VIDEO
+   ===================================================== */
+
+async function getOpeningVideo(
+    sceneId
+){
+
+    /*
+        First try scene_turns.
+    */
+
+    const {
+        data:turn,
+        error
+    } =
+    await supabase
+    .from("scene_turns")
+    .select("video_path")
+    .eq(
+        "scene_id",
+        sceneId
+    )
+    .eq(
+        "turn_number",
+        1
+    )
+    .maybeSingle();
+
+
+    if(
+        !error &&
+        turn &&
+        turn.video_path
+    ){
+
+        return turn.video_path;
+
+    }
+
+
+    /*
+        If the database does not return it,
+        construct the expected Storage path.
+    */
+
+    /*
+        We need creator_id to construct it.
+        This fallback is mainly for older scenes.
+    */
+
+    return null;
+
+}
+
+
+/* =====================================================
+   RESPOND TO SCENE
    ===================================================== */
 
 window.respondToScene =
@@ -2162,90 +2319,123 @@ async function(sceneId){
 
     if(error){
 
-        alert(error.message);
+        alert(
+            error.message
+        );
 
         return;
 
     }
 
 
-    currentScene = scene;
+    currentScene =
+    scene;
+
+
+    const openingVideo =
+    await getOpeningVideo(
+        sceneId
+    );
 
 
     app.innerHTML = `
 
-    <div class="scene">
+        <div class="scene">
 
-        <span class="tag">
-            CHARACTER B
-        </span>
-
-
-        <h1>
-            ${escapeHtml(
-                scene.title
-            )}
-        </h1>
+            <span class="tag">
+                CHARACTER B
+            </span>
 
 
-        <p class="muted">
-
-            ${escapeHtml(
-                scene.situation
-            )}
-
-        </p>
+            <h1>
+                ${escapeHtml(
+                    scene.title
+                )}
+            </h1>
 
 
-        <div class="info">
+            <p class="muted">
 
-            <strong>
-                Your character
-            </strong>
+                ${escapeHtml(
+                    scene.situation
+                )}
 
-            <br>
+            </p>
 
-            ${escapeHtml(
-                scene.character_b
-            )}
+
+            ${
+                openingVideo
+
+                ?
+
+                `
+
+                <video
+                    class="scene-video"
+                    controls
+                    playsinline
+                    preload="metadata"
+                    src="${openingVideo}">
+                </video>
+
+                `
+
+                :
+
+                ""
+
+            }
+
+
+            <div class="info">
+
+                <strong>
+                    Your character
+                </strong>
+
+                <br>
+
+                ${escapeHtml(
+                    scene.character_b
+                )}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Your objective
+                </strong>
+
+                <br>
+
+                ${escapeHtml(
+                    scene.objective_b || ""
+                )}
+
+            </div>
+
+
+            <div class="line">
+
+                Respond naturally to the
+                opening scene.
+
+            </div>
+
+
+            <button
+                class="btn primary full"
+                onclick="recordResponse(
+                    '${scene.id}'
+                )">
+
+                🎥 Record Character B
+
+            </button>
 
         </div>
-
-
-        <div class="info">
-
-            <strong>
-                Your objective
-            </strong>
-
-            <br>
-
-            ${escapeHtml(
-                scene.objective_b
-                || ""
-            )}
-
-        </div>
-
-
-        <div class="line">
-
-            "${escapeHtml(
-                scene.opening_line
-            )}"
-
-        </div>
-
-
-        <button
-            class="btn primary full"
-            onclick="recordResponse('${scene.id}')">
-
-            🎥 Record Response
-
-        </button>
-
-    </div>
 
     `;
 
@@ -2253,49 +2443,52 @@ async function(sceneId){
 
 
 /* =====================================================
-   RECORD RESPONSE
+   RESPONSE CAMERA
    ===================================================== */
 
 window.recordResponse =
 async function(sceneId){
 
     currentResponseSceneId =
-        sceneId;
+    sceneId;
 
 
     app.innerHTML = `
 
-    <h1>
-        🎥 Your response
-    </h1>
+        <h1>
+            🎥 Record your response
+        </h1>
 
 
-    <div class="camera">
-
-        <video
-            id="responseCamera"
-            autoplay
-            muted
-            playsinline>
-        </video>
-
-    </div>
+        <p class="muted">
+            Play Character B.
+        </p>
 
 
-    <div
-        id="responseStatus"
-        class="status">
+        <div class="camera">
 
-        Ready
+            <video
+                id="responseCamera"
+                autoplay
+                muted
+                playsinline>
+            </video>
 
-    </div>
+        </div>
 
 
-    <div class="button-row">
+        <div
+            id="responseStatus"
+            class="status">
+
+            Ready
+
+        </div>
+
 
         <button
             id="responseRecordButton"
-            class="btn primary"
+            class="btn primary full"
             onclick="toggleResponseRecording()">
 
             🔴 Record
@@ -2303,15 +2496,16 @@ async function(sceneId){
         </button>
 
 
+        <br><br>
+
+
         <button
-            class="btn secondary"
-            onclick="stopCamera()">
+            class="btn secondary full"
+            onclick="cancelCamera()">
 
             Cancel
 
         </button>
-
-    </div>
 
     `;
 
@@ -2319,17 +2513,17 @@ async function(sceneId){
     try{
 
         cameraStream =
-            await navigator
-            .mediaDevices
-            .getUserMedia({
+        await navigator
+        .mediaDevices
+        .getUserMedia({
 
-                video:{
-                    facingMode:"user"
-                },
+            video:{
+                facingMode:"user"
+            },
 
-                audio:true
+            audio:true
 
-            });
+        });
 
 
         document
@@ -2337,13 +2531,13 @@ async function(sceneId){
             "responseCamera"
         )
         .srcObject =
-            cameraStream;
+        cameraStream;
 
 
     }catch(error){
 
         alert(
-            "Camera or microphone access was denied."
+            "Camera/microphone permission was denied."
         );
 
         home();
@@ -2365,7 +2559,7 @@ function(){
 
     }else{
 
-        stopResponseRecording();
+        stopRecording();
 
     }
 
@@ -2374,7 +2568,7 @@ function(){
 
 function startResponseRecording(){
 
-    chunks = [];
+    recordedChunks = [];
 
 
     let options = {};
@@ -2383,39 +2577,43 @@ function startResponseRecording(){
     if(
         MediaRecorder
         .isTypeSupported(
-            "video/webm"
+            "video/webm;codecs=vp8,opus"
         )
     ){
 
         options.mimeType =
-            "video/webm";
+        "video/webm;codecs=vp8,opus";
 
     }
 
 
     mediaRecorder =
-        new MediaRecorder(
-            cameraStream,
-            options
-        );
+    new MediaRecorder(
+        cameraStream,
+        options
+    );
 
 
     mediaRecorder.ondataavailable =
-        event => {
+    function(event){
 
-            if(event.data.size){
+        if(event.data.size){
 
-                chunks.push(
-                    event.data
-                );
+            recordedChunks.push(
+                event.data
+            );
 
-            }
+        }
 
-        };
+    };
 
 
     mediaRecorder.onstop =
-        reviewResponse;
+    function(){
+
+        reviewResponse();
+
+    };
 
 
     mediaRecorder.start();
@@ -2425,39 +2623,34 @@ function startResponseRecording(){
 
 
     recordingTimer =
-        setInterval(()=>{
+    setInterval(function(){
 
-            recordingSeconds++;
-
-
-            const status =
-                document
-                .getElementById(
-                    "responseStatus"
-                );
+        recordingSeconds++;
 
 
-            if(status){
-
-                status.textContent =
-                    "🔴 Recording "
-                    +
-                    recordingSeconds
-                    +
-                    " / 30 seconds";
-
-            }
+        const status =
+        document.getElementById(
+            "responseStatus"
+        );
 
 
-            if(
-                recordingSeconds >= 30
-            ){
+        if(status){
 
-                stopResponseRecording();
+            status.textContent =
+            "🔴 Recording " +
+            recordingSeconds +
+            " seconds";
 
-            }
+        }
 
-        },1000);
+
+        if(recordingSeconds >= 30){
+
+            stopRecording();
+
+        }
+
+    },1000);
 
 
     document
@@ -2465,88 +2658,75 @@ function startResponseRecording(){
         "responseRecordButton"
     )
     .textContent =
-        "⏹ Stop";
+    "⏹ Stop";
 
 }
 
 
-function stopResponseRecording(){
-
-    if(
-        mediaRecorder &&
-        mediaRecorder.state === "recording"
-    ){
-
-        mediaRecorder.stop();
-
-    }
-
-
-    clearInterval(
-        recordingTimer
-    );
-
-}
-
+/* =====================================================
+   REVIEW RESPONSE
+   ===================================================== */
 
 function reviewResponse(){
 
     stopCameraTracks();
 
 
-    pendingResponseBlob =
-        new Blob(
-            chunks,
-            {
-                type:"video/webm"
-            }
-        );
+    pendingVideoBlob =
+    new Blob(
+        recordedChunks,
+        {
+            type:"video/webm"
+        }
+    );
 
 
-    const url =
-        URL.createObjectURL(
-            pendingResponseBlob
-        );
+    const videoUrl =
+    URL.createObjectURL(
+        pendingVideoBlob
+    );
 
 
     app.innerHTML = `
 
-    <h1>
-        Review response
-    </h1>
+        <h1>
+            Review response
+        </h1>
 
 
-    <div class="camera">
+        <div class="camera">
 
-        <video
-            src="${url}"
-            controls
-            playsinline>
-        </video>
+            <video
+                src="${videoUrl}"
+                controls
+                playsinline>
+            </video>
 
-    </div>
-
-
-    <div class="button-row">
-
-        <button
-            class="btn secondary"
-            onclick="recordResponse('${currentResponseSceneId}')">
-
-            ↻ Retake
-
-        </button>
+        </div>
 
 
-        <button
-            class="btn primary"
-            onclick="uploadResponse()">
+        <div class="button-row">
 
-            ✓ Send response
+            <button
+                class="btn secondary"
+                onclick="recordResponse(
+                    '${currentResponseSceneId}'
+                )">
 
-        </button>
+                ↻ Retake
 
-    </div>
+            </button>
+
+
+            <button
+                class="btn primary"
+                onclick="uploadResponse()">
+
+                ✓ Send Response
+
+            </button>
+
+        </div>
 
     `;
 
@@ -2560,7 +2740,7 @@ function reviewResponse(){
 window.uploadResponse =
 async function(){
 
-    if(!pendingResponseBlob){
+    if(!pendingVideoBlob){
 
         alert(
             "No response video."
@@ -2572,24 +2752,21 @@ async function(){
 
 
     showLoading(
-        "Sending your response..."
+        "Uploading response..."
     );
 
 
     try{
 
         const responseId =
-            crypto.randomUUID();
+        crypto.randomUUID();
 
 
-        const path =
-            currentUser.id
-            +
-            "/responses/"
-            +
-            responseId
-            +
-            ".webm";
+        const videoPath =
+        currentUser.id +
+        "/responses/" +
+        responseId +
+        ".webm";
 
 
         const {
@@ -2599,18 +2776,20 @@ async function(){
         .storage
         .from("scene-videos")
         .upload(
-            path,
-            pendingResponseBlob,
+            videoPath,
+            pendingVideoBlob,
             {
-                contentType:
-                    "video/webm",
-                upsert:true
+                contentType:"video/webm",
+                upsert:false
             }
         );
 
 
-        if(uploadError)
+        if(uploadError){
+
             throw uploadError;
+
+        }
 
 
         const {
@@ -2619,7 +2798,13 @@ async function(){
         supabase
         .storage
         .from("scene-videos")
-        .getPublicUrl(path);
+        .getPublicUrl(
+            videoPath
+        );
+
+
+        const videoUrl =
+        urlData.publicUrl;
 
 
         const {
@@ -2632,59 +2817,62 @@ async function(){
             id:responseId,
 
             scene_id:
-                currentResponseSceneId,
+            currentResponseSceneId,
 
             responder_id:
-                currentUser.id,
+            currentUser.id,
 
             video_path:
-                urlData.publicUrl,
+            videoUrl,
 
             status:"pending"
 
         });
 
 
-        if(error)
+        if(error){
+
             throw error;
 
+        }
 
-        pendingResponseBlob = null;
+
+        pendingVideoBlob = null;
 
 
         app.innerHTML = `
 
-        <div class="scene">
+            <div class="scene">
 
-            <div class="status success">
+                <div class="status success">
 
-                ✓ Response sent
+                    ✓ Response sent
+
+                </div>
+
+
+                <h1>
+                    Now you wait.
+                </h1>
+
+
+                <p class="muted">
+
+                    The creator can watch your
+                    response and choose you.
+
+                </p>
+
+
+                <button
+                    class="btn primary full"
+                    onclick="discover()">
+
+                    🔥 Find another scene
+
+                </button>
 
             </div>
-
-
-            <h1>
-                Now you wait.
-            </h1>
-
-
-            <p class="muted">
-
-                The creator can watch your
-                response and choose you.
-
-            </p>
-
-
-            <button
-                class="btn secondary full"
-                onclick="discover()">
-
-                Find another scene
-
-            </button>
-
-        </div>
 
         `;
 
@@ -2694,12 +2882,179 @@ async function(){
         console.error(error);
 
         alert(
-            "Upload failed: "
-            +
+            "Response upload failed:\n\n" +
             error.message
         );
 
         home();
+
+    }
+
+};
+
+
+/* =====================================================
+   MY SCENES
+   ===================================================== */
+
+window.myScenes =
+async function(){
+
+    if(!currentUser){
+
+        openAuth();
+
+        return;
+
+    }
+
+
+    const {
+        data:scenes,
+        error
+    } =
+    await supabase
+    .from("scenes")
+    .select("*")
+    .eq(
+        "creator_id",
+        currentUser.id
+    )
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+
+        alert(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    app.innerHTML = `
+
+        <h1>
+            🎬 My Scenes
+        </h1>
+
+    `;
+
+
+    if(!scenes ||
+       scenes.length === 0){
+
+        app.innerHTML += `
+
+            <div class="empty">
+
+                <h2>
+                    No scenes yet
+                </h2>
+
+                <button
+                    class="btn primary"
+                    onclick="createScene()">
+
+                    Create your first scene
+
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    for(
+        const scene of scenes
+    ){
+
+        const videoUrl =
+        await getOpeningVideo(
+            scene.id
+        );
+
+
+        app.innerHTML += `
+
+            <div class="scene">
+
+                <span class="tag">
+
+                    ${escapeHtml(
+                        scene.category || "Scene"
+                    )}
+
+                </span>
+
+
+                <h2>
+
+                    ${escapeHtml(
+                        scene.title
+                    )}
+
+                </h2>
+
+
+                ${
+                    videoUrl
+
+                    ?
+
+                    `
+
+                    <video
+                        class="scene-video"
+                        controls
+                        playsinline
+                        preload="metadata"
+                        src="${videoUrl}">
+                    </video>
+
+                    `
+
+                    :
+
+                    ""
+
+                }
+
+
+                <div class="status">
+
+                    Status:
+                    ${escapeHtml(
+                        scene.status || "open"
+                    )}
+
+                </div>
+
+
+                <button
+                    class="btn primary full"
+                    onclick="viewResponses(
+                        '${scene.id}'
+                    )">
+
+                    👥 View Responses
+
+                </button>
+
+            </div>
+
+        `;
 
     }
 
@@ -2723,7 +3078,7 @@ async function(sceneId){
 
 
     const {
-        data,
+        data:responses,
         error
     } =
     await supabase
@@ -2746,7 +3101,9 @@ async function(sceneId){
 
     if(error){
 
-        alert(error.message);
+        alert(
+            error.message
+        );
 
         return;
 
@@ -2755,32 +3112,34 @@ async function(sceneId){
 
     app.innerHTML = `
 
-    <h1>
-        👥 Responses
-    </h1>
+        <h1>
+            👥 Responses
+        </h1>
 
-
-    <p class="muted">
-
-        Choose who you want to continue
-        the scene with.
-
-    </p>
+        <p class="muted">
+            People who want to play Character B.
+        </p>
 
     `;
 
 
-    if(!data.length){
+    if(!responses ||
+       responses.length === 0){
 
         app.innerHTML += `
 
-        <div class="info">
+            <div class="empty">
 
-            No responses yet.
+                <h2>
+                    No responses yet
+                </h2>
 
-            Check again later.
+                <p>
+                    Leave the scene open and
+                    check again later.
+                </p>
 
-        </div>
+            </div>
 
         `;
 
@@ -2789,80 +3148,103 @@ async function(sceneId){
     }
 
 
-    data.forEach(response=>{
+    responses.forEach(
+    response=>{
 
         app.innerHTML += `
 
-        <div class="response">
+            <div class="response">
 
-            <div class="user-row">
+                <div class="user-row">
 
-                <div class="avatar">
+                    <div class="avatar">
 
-                    ${
-                        (
+                        ${escapeHtml(
+                            (
+                                response
+                                .profiles
+                                ?.username
+                                || "P"
+                            )[0]
+                        ).toUpperCase()}
+
+                    </div>
+
+
+                    <strong>
+
+                        @${escapeHtml(
                             response
                             .profiles
                             ?.username
-                            || "P"
-                        )[0]
-                        .toUpperCase()
-                    }
+                            || "player"
+                        )}
+
+                    </strong>
 
                 </div>
 
 
-                <strong>
+                <video
+                    class="scene-video"
+                    controls
+                    playsinline
+                    preload="metadata"
+                    src="${response.video_path}">
+                </video>
 
-                    @${escapeHtml(
-                        response
-                        .profiles
-                        ?.username
-                        || "player"
-                    )}
 
-                </strong>
+                ${
+                    response.status === "pending"
+
+                    ?
+
+                    `
+
+                    <button
+                        class="btn primary full"
+                        onclick="chooseResponse(
+                            '${response.id}',
+                            '${sceneId}'
+                        )">
+
+                        ✓ Choose this player
+
+                    </button>
+
+
+                    <br><br>
+
+
+                    <button
+                        class="btn danger full"
+                        onclick="rejectResponse(
+                            '${response.id}'
+                        )">
+
+                        Pass
+
+                    </button>
+
+                    `
+
+                    :
+
+                    `
+
+                    <div class="status">
+
+                        ${escapeHtml(
+                            response.status
+                        )}
+
+                    </div>
+
+                    `
+
+                }
 
             </div>
-
-
-            <video
-                class="feed-video"
-                controls
-                playsinline
-                src="${response.video_path}">
-            </video>
-
-
-            <br><br>
-
-
-            <button
-                class="btn primary full"
-                onclick="chooseResponse(
-                    '${response.id}',
-                    '${sceneId}'
-                )">
-
-                ✓ Choose this player
-
-            </button>
-
-
-            <br><br>
-
-
-            <button
-                class="btn danger full"
-                onclick="rejectResponse(
-                    '${response.id}'
-                )">
-
-                Pass
-
-            </button>
-
-        </div>
 
         `;
 
@@ -2887,7 +3269,9 @@ async function(
     await supabase
     .from("scene_responses")
     .update({
+
         status:"accepted"
+
     })
     .eq(
         "id",
@@ -2897,17 +3281,25 @@ async function(
 
     if(error){
 
-        alert(error.message);
+        alert(
+            error.message
+        );
 
         return;
 
     }
 
 
+    /*
+        Reject all other responses.
+    */
+
     await supabase
     .from("scene_responses")
     .update({
+
         status:"rejected"
+
     })
     .eq(
         "scene_id",
@@ -2919,10 +3311,16 @@ async function(
     );
 
 
+    /*
+        Scene is now in progress.
+    */
+
     await supabase
     .from("scenes")
     .update({
+
         status:"in_progress"
+
     })
     .eq(
         "id",
@@ -2949,7 +3347,9 @@ async function(responseId){
     await supabase
     .from("scene_responses")
     .update({
+
         status:"rejected"
+
     })
     .eq(
         "id",
@@ -2959,7 +3359,9 @@ async function(responseId){
 
     if(error){
 
-        alert(error.message);
+        alert(
+            error.message
+        );
 
         return;
 
@@ -2970,151 +3372,6 @@ async function(responseId){
         "Response passed."
     );
 
-};
-
-
-/* =====================================================
-   MY SCENES
-   ===================================================== */
-
-window.myScenes =
-async function(){
-
-    if(!currentUser){
-
-        openAuth();
-
-        return;
-
-    }
-
-
-    const {
-        data,
-        error
-    } =
-    await supabase
-    .from("scenes")
-    .select("*")
-    .eq(
-        "creator_id",
-        currentUser.id
-    )
-    .order(
-        "created_at",
-        {
-            ascending:false
-        }
-    );
-
-
-    if(error){
-
-        alert(error.message);
-
-        return;
-
-    }
-
-
-    app.innerHTML = `
-
-    <h1>
-        🎬 My Scenes
-    </h1>
-
-    `;
-
-
-    if(!data.length){
-
-        app.innerHTML += `
-
-        <div class="info">
-
-            You haven't created a scene yet.
-
-        </div>
-
-
-        <button
-            class="btn primary full"
-            onclick="createScene()">
-
-            Start your first scene
-
-        </button>
-
-        `;
-
-        return;
-
-    }
-
-
-    data.forEach(scene=>{
-
-        app.innerHTML += `
-
-        <div class="scene">
-
-            <span class="tag">
-
-                ${escapeHtml(
-                    scene.category
-                )}
-
-            </span>
-
-
-            <h2>
-
-                ${escapeHtml(
-                    scene.title
-                )}
-
-            </h2>
-
-
-            <div class="status">
-
-                Status:
-                ${escapeHtml(
-                    scene.status
-                )}
-
-            </div>
-
-
-            ${
-                scene.status === "open"
-                ?
-
-                `
-
-                <button
-                    class="btn primary full"
-                    onclick="viewResponses(
-                        '${scene.id}'
-                    )">
-
-                    👥 View responses
-
-                </button>
-
-                `
-
-                :
-
-                ""
-
-            }
-
-        </div>
-
-        `;
-
-    });
 
 };
 
@@ -3123,7 +3380,8 @@ async function(){
    PROFILE
    ===================================================== */
 
-window.profile = function(){
+window.profile =
+function(){
 
     if(!currentUser){
 
@@ -3135,53 +3393,58 @@ window.profile = function(){
 
 
     const username =
-        currentProfile
-        ?.username
-        || "player";
+    currentProfile?.username
+    || "player";
 
 
     app.innerHTML = `
 
-    <div class="scene">
+        <div class="scene">
 
-        <div class="avatar">
+            <div class="avatar">
 
-            ${escapeHtml(
-                username[0]
-                .toUpperCase()
-            )}
+                ${escapeHtml(
+                    username[0]
+                ).toUpperCase()}
+
+            </div>
+
+
+            <h1>
+
+                @${escapeHtml(
+                    username
+                )}
+
+            </h1>
+
+
+            <p class="muted">
+                ScenePlay player
+            </p>
+
+
+            <button
+                class="btn primary full"
+                onclick="myScenes()">
+
+                🎬 My Scenes
+
+            </button>
+
+
+            <br><br>
+
+
+            <button
+                class="btn danger full"
+                onclick="logout()">
+
+                Log out
+
+            </button>
 
         </div>
-
-
-        <h1>
-
-            @${escapeHtml(
-                username
-            )}
-
-        </h1>
-
-
-        <p class="muted">
-
-            ScenePlay player
-
-        </p>
-
-
-        <hr>
-
-
-        <button
-            class="btn danger full"
-            onclick="logout()">
-
-            Log out
-
-        </button>
-
-    </div>
 
     `;
 
@@ -3196,17 +3459,17 @@ function showLoading(text){
 
     app.innerHTML = `
 
-    <div class="scene">
+        <div class="scene">
 
-        <h2>
-            ${escapeHtml(text)}
-        </h2>
+            <h2>
+                ${escapeHtml(text)}
+            </h2>
 
-        <div class="status">
-            Please wait...
+            <div class="status">
+                Please wait...
+            </div>
+
         </div>
-
-    </div>
 
     `;
 
@@ -3217,17 +3480,19 @@ function showLoading(text){
    ESCAPE HTML
    ===================================================== */
 
-function escapeHtml(text){
+function escapeHtml(value){
 
-    if(text === null ||
-       text === undefined){
+    if(
+        value === null ||
+        value === undefined
+    ){
 
         return "";
 
     }
 
 
-    return String(text)
+    return String(value)
 
         .replaceAll(
             "&",
@@ -3261,17 +3526,18 @@ function escapeHtml(text){
    AUTH STATE
    ===================================================== */
 
-supabase.auth
-.onAuthStateChange(
-    async(event,session)=>{
+supabase.auth.onAuthStateChange(
+async function(
+    event,
+    session
+){
 
-        currentUser =
-            session?.user || null;
+    currentUser =
+    session?.user || null;
 
-        await loadUser();
+    await loadUser();
 
-    }
-);
+});
 
 
 /* =====================================================
