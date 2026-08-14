@@ -1559,7 +1559,6 @@ const {data:scenes,error} =
     .from("scenes")
     .select(`*,profiles(username)`)
     .eq("status","ended")
-    .not("finished_video_url","is",null)
     .order("created_at",{ascending:false});
 
 if(error){
@@ -1575,7 +1574,7 @@ app.innerHTML=`
 <h1>🔥 Discover</h1>
 
 <p class="muted">
-Completed public scenes — one finished video each.
+Watch completed public scenes.
 </p>
 
 `;
@@ -1589,8 +1588,16 @@ app.innerHTML+=`
 <h2>No finished scenes yet</h2>
 
 <p class="muted">
-Incomplete scenes are available under Create Scene.
+Incomplete A1 scenes are available under Create Scene.
 </p>
+
+<button
+class="btn primary"
+onclick="createScene()">
+
+🎬 Create Scene
+
+</button>
 
 </div>
 
@@ -1601,6 +1608,15 @@ return;
 }
 
 for(const scene of scenes){
+
+/*
+   Discover is public-only.
+
+   IMPORTANT:
+   We do NOT call getOpeningVideo() here.
+   A1 is an incomplete opening and must not appear in Discover.
+   Completed scenes are shown here instead.
+*/
 
 app.innerHTML+=`
 
@@ -1618,19 +1634,23 @@ ${escapeHtml(scene.title)}
 ${escapeHtml(scene.situation||"")}
 </p>
 
-<video
-class="scene-video"
-controls
-playsinline
-preload="metadata"
-src="${escapeHtml(scene.finished_video_url)}">
-</video>
+<div class="status success">
+✓ Finished — public
+</div>
 
 <p class="muted">
 Created by @${escapeHtml(
     scene.profiles?.username||"player"
 )}
 </p>
+
+<button
+class="btn secondary full"
+onclick="viewResponses('${scene.id}')">
+
+👥 View finished scene
+
+</button>
 
 </div>
 
@@ -1640,6 +1660,56 @@ Created by @${escapeHtml(
 
 };
 
+
+
+async function getOpeningVideo(sceneId){
+
+    const {data:turn,error} =
+        await supabase
+        .from("scene_turns")
+        .select("video_path")
+        .eq("scene_id",sceneId)
+        .eq("turn_number",1)
+        .is("session_id",null)
+        .limit(1)
+        .maybeSingle();
+
+    if(error){
+        console.error("PUBLIC A1 VIDEO ERROR:", error);
+        return null;
+    }
+
+    return turn?.video_path || null;
+}
+
+
+async function getMyResponseSafe(sceneId){
+
+if(!currentUser)return null;
+
+const {data,error}=
+await supabase
+.from("scene_responses")
+.select("*")
+.eq("scene_id",sceneId)
+.eq("responder_id",currentUser.id)
+.maybeSingle();
+
+if(error){
+
+console.warn(error);
+return null;
+
+}
+
+return data;
+
+}
+
+
+/* =========================================================
+   CHARACTER B
+========================================================= */
 
 window.respondToScene=async sceneId=>{
 
@@ -4131,348 +4201,46 @@ currentResponseSceneId
    END SCENE
 ========================================================= */
 
-/* =========================================================
-   BUILD ONE PUBLIC FINISHED VIDEO
-   A1 -> B1 -> A2 -> B2 -> ...
-========================================================= */
+window.endScene=async sceneId=>{
 
-async function buildFinishedVideo(sceneId){
+if(!currentUser)return;
 
-    const {data:scene,error:sceneError} =
-        await supabase
-        .from("scenes")
-        .select("id,creator_id")
-        .eq("id",sceneId)
-        .single();
+if(
+!confirm(
+"End this scene?\n\nNobody will be able to record another turn."
+)
+){
 
-    if(sceneError) throw sceneError;
+return;
 
-    const {data:turns,error:turnError} =
-        await supabase
-        .from("scene_turns")
-        .select("turn_number,video_path,session_id")
-        .eq("scene_id",sceneId)
-        .order("turn_number",{ascending:true});
-
-    if(turnError) throw turnError;
-
-    const {data:responses,error:responseError} =
-        await supabase
-        .from("scene_responses")
-        .select("video_path,status,created_at")
-        .eq("scene_id",sceneId)
-        .eq("status","accepted")
-        .order("created_at",{ascending:true});
-
-    if(responseError) throw responseError;
-
-    const opening =
-        (turns||[]).find(t=>Number(t.turn_number)===1);
-
-    if(!opening?.video_path){
-        throw new Error("A1 video is missing.");
-    }
-
-    /*
-       Exact public sequence:
-       A1
-       B1 (accepted response)
-       A2/B2/A3/B3... (session turns)
-    */
-    const sequence = [opening.video_path];
-
-    if(responses?.[0]?.video_path){
-        sequence.push(responses[0].video_path);
-    }
-
-    (turns||[])
-        .filter(t=>Number(t.turn_number)>1 && t.video_path)
-        .forEach(t=>sequence.push(t.video_path));
-
-    if(sequence.length<2){
-        throw new Error(
-            "The scene has only A1. Record B1 before finishing."
-        );
-    }
-
-    showLoading(
-        "Creating ONE finished video...<br><br>"+
-        "A1 → B1 → A2 → B2 → ...<br><br>"+
-        "Please keep this page open."
-    );
-
-    const loadVideo = url => new Promise((resolve,reject)=>{
-
-        const v=document.createElement("video");
-        v.crossOrigin="anonymous";
-        v.preload="auto";
-        v.playsInline=true;
-
-        v.onloadedmetadata=()=>resolve(v);
-        v.onerror=()=>reject(
-            new Error("Could not load one of the videos.")
-        );
-
-        v.src=url;
-        v.load();
-    });
-
-    const first=await loadVideo(sequence[0]);
-
-    const width=first.videoWidth||1280;
-    const height=first.videoHeight||720;
-
-    first.pause();
-    first.removeAttribute("src");
-    first.load();
-
-    const canvas=document.createElement("canvas");
-    canvas.width=width;
-    canvas.height=height;
-
-    const ctx=canvas.getContext("2d");
-
-    if(!ctx){
-        throw new Error("Could not create video canvas.");
-    }
-
-    const videoStream=canvas.captureStream(30);
-
-    const AudioContextClass =
-        window.AudioContext||window.webkitAudioContext;
-
-    if(!AudioContextClass){
-        throw new Error("This browser does not support audio.");
-    }
-
-    const audioContext=new AudioContextClass();
-    await audioContext.resume();
-
-    const audioDestination =
-        audioContext.createMediaStreamDestination();
-
-    const mimeTypes=[
-        "video/webm;codecs=vp9,opus",
-        "video/webm;codecs=vp8,opus",
-        "video/webm"
-    ];
-
-    const mimeType=mimeTypes.find(
-        m=>MediaRecorder.isTypeSupported(m)
-    );
-
-    if(!mimeType){
-        await audioContext.close();
-        throw new Error(
-            "Your browser cannot create the finished WebM."
-        );
-    }
-
-    const stream=new MediaStream([
-        ...videoStream.getVideoTracks(),
-        ...audioDestination.stream.getAudioTracks()
-    ]);
-
-    const recorder=new MediaRecorder(
-        stream,
-        {mimeType}
-    );
-
-    const chunks=[];
-
-    const recordingDone=new Promise((resolve,reject)=>{
-
-        recorder.ondataavailable=e=>{
-            if(e.data?.size) chunks.push(e.data);
-        };
-
-        recorder.onerror=e=>{
-            reject(
-                e.error||new Error("Final recording failed.")
-            );
-        };
-
-        recorder.onstop=()=>{
-
-            if(!chunks.length){
-                reject(new Error("Final video is empty."));
-                return;
-            }
-
-            resolve(
-                new Blob(chunks,{type:mimeType})
-            );
-        };
-    });
-
-    recorder.start(250);
-
-    try{
-
-        for(const url of sequence){
-
-            const video=await loadVideo(url);
-
-            video.muted=true;
-
-            const source =
-                audioContext.createMediaElementSource(video);
-
-            const gain =
-                audioContext.createGain();
-
-            gain.gain.value=1;
-
-            source.connect(gain);
-            gain.connect(audioDestination);
-
-            await new Promise((resolve,reject)=>{
-
-                let frame;
-
-                const draw=()=>{
-
-                    if(video.ended){
-                        if(frame) cancelAnimationFrame(frame);
-                        resolve();
-                        return;
-                    }
-
-                    ctx.fillStyle="#000";
-                    ctx.fillRect(
-                        0,0,
-                        canvas.width,
-                        canvas.height
-                    );
-
-                    const scale=Math.min(
-                        canvas.width/video.videoWidth,
-                        canvas.height/video.videoHeight
-                    );
-
-                    const w=video.videoWidth*scale;
-                    const h=video.videoHeight*scale;
-
-                    ctx.drawImage(
-                        video,
-                        (canvas.width-w)/2,
-                        (canvas.height-h)/2,
-                        w,h
-                    );
-
-                    frame=requestAnimationFrame(draw);
-                };
-
-                video.onended=resolve;
-
-                video.onerror=()=>{
-                    reject(
-                        new Error(
-                            "A video failed while combining the scene."
-                        )
-                    );
-                };
-
-                video.play().catch(reject);
-
-                frame=requestAnimationFrame(draw);
-            });
-
-            video.pause();
-            video.removeAttribute("src");
-            video.load();
-        }
-
-    }catch(e){
-
-        try{ recorder.stop(); }catch(ignore){}
-        try{ await audioContext.close(); }catch(ignore){}
-
-        throw e;
-    }
-
-    recorder.stop();
-
-    const finishedBlob=await recordingDone;
-
-    await audioContext.close();
-
-    const path =
-        scene.creator_id+
-        "/finished/"+
-        scene.id+
-        ".webm";
-
-    const {error:uploadError} =
-        await supabase.storage
-        .from("scene-videos")
-        .upload(
-            path,
-            finishedBlob,
-            {
-                contentType:"video/webm",
-                upsert:true
-            }
-        );
-
-    if(uploadError) throw uploadError;
-
-    const {data:urlData} =
-        supabase.storage
-        .from("scene-videos")
-        .getPublicUrl(path);
-
-    return urlData.publicUrl;
 }
 
 
-/* =========================================================
-   END SCENE
-========================================================= */
+const {error}=
+await supabase
+.from("scenes")
+.update({
+status:"ended"
+})
+.eq(
+"id",
+sceneId
+)
+.eq(
+"creator_id",
+currentUser.id
+);
 
-window.endScene=async sceneId=>{
 
-    if(!currentUser)return;
+if(error){
 
-    if(!confirm(
-        "Finish this scene?\n\n"+
-        "A1, B1, A2, B2 and all later turns will be "+
-        "combined into ONE public video."
-    )){
-        return;
-    }
+alert(error.message);
+return;
 
-    try{
+}
 
-        const finalUrl =
-            await buildFinishedVideo(sceneId);
 
-        const {error} =
-            await supabase
-            .from("scenes")
-            .update({
-                status:"ended",
-                finished_video_url:finalUrl
-            })
-            .eq("id",sceneId)
-            .eq("creator_id",currentUser.id);
-
-        if(error) throw error;
-
-        alert("✓ One finished video created successfully!");
-
-        await showActiveScene(sceneId);
-
-    }catch(e){
-
-        console.error(e);
-
-        alert(
-            "Could not create the finished video:\n\n"+
-            e.message
-        );
-
-    }
+await showActiveScene(sceneId);
 
 };
 
