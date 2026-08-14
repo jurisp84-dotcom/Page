@@ -2,397 +2,4288 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ScenePlay</title>
+
 <style>
 *{box-sizing:border-box}
-:root{--bg:#09090d;--card:#15151d;--card2:#1d1d27;--border:#30303b;--text:#fff;--muted:#9999a8;--purple:#8b5cf6;--purple-light:#b197fc;--green:#35d07f;--red:#ff5263}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding-bottom:80px}
-button{font:inherit;cursor:pointer}.hidden{display:none!important}
-header{position:fixed;top:0;left:0;right:0;height:64px;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:0 18px;background:rgba(9,9,13,.95);backdrop-filter:blur(15px);border-bottom:1px solid #24242d}
-.logo{font-size:23px;font-weight:900}.logo span{color:var(--purple-light)}
-.header-button{background:var(--card2);border:1px solid var(--border);color:#fff;padding:9px 14px;border-radius:10px}
-main{max-width:760px;margin:auto;padding:90px 18px 30px}
-.hero{padding:30px 0 40px}.hero h1{font-size:clamp(50px,12vw,80px);line-height:.9;letter-spacing:-5px;margin:0}.hero h1 span{color:var(--purple-light)}
-.hero p{color:var(--muted);font-size:18px;line-height:1.5;max-width:600px}
-.badge,.tag{display:inline-block;background:#251b37;color:var(--purple-light);border:1px solid #40305c;border-radius:30px;padding:7px 12px;font-size:12px;font-weight:bold}
-.button-row{display:flex;gap:10px;flex-wrap:wrap}.btn{min-height:48px;padding:12px 18px;border-radius:11px;border:0;font-weight:bold}.primary{background:var(--purple);color:#fff}.secondary{background:var(--card2);color:#fff;border:1px solid var(--border)}.danger{background:#35151c;color:#ff9ca8}.full{width:100%}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card,.scene{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:18px}.scene{border-radius:18px;margin-bottom:15px}.card h3{margin:8px 0}.card p,.muted{color:var(--muted);line-height:1.5}.emoji{font-size:28px}
-.info,.status{background:#101016;border:1px solid var(--border);padding:14px;border-radius:11px;margin:10px 0;line-height:1.5}.success{background:#10281b;color:#8ff0b3;border-color:#245d3c}
-.line{background:#08080b;border-left:4px solid var(--purple);border-radius:10px;padding:18px;font-size:20px;line-height:1.45;margin:15px 0}
-.scene-video{width:100%;display:block;background:#000;border-radius:14px;margin:15px 0;max-height:650px}.camera{background:#000;border-radius:18px;overflow:hidden;margin:15px 0}.camera video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover}
-.response{background:#101016;border:1px solid var(--border);border-radius:15px;padding:15px;margin:12px 0}.user-row{display:flex;align-items:center;gap:10px}.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
-input{width:100%;background:#0d0d12;border:1px solid #353540;color:#fff;padding:14px;border-radius:10px;margin:7px 0 14px}label{font-size:13px;color:#c8c8d0}
-.modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:18px}.modal-box{width:min(470px,100%);max-height:90vh;overflow:auto;background:#17171f;border:1px solid var(--border);border-radius:20px;padding:22px}
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;height:70px;z-index:200;background:rgba(15,15,21,.97);border-top:1px solid #292933;backdrop-filter:blur(15px)}.nav{max-width:650px;height:100%;margin:auto;display:flex}.nav button{flex:1;border:0;background:none;color:#858592;font-size:11px}.nav button strong{display:block;font-size:21px;margin-bottom:3px}.empty{text-align:center;padding:35px 15px;color:var(--muted)}
+
+:root{
+--bg:#09090d;
+--card:#15151d;
+--card2:#1d1d27;
+--border:#30303b;
+--text:#fff;
+--muted:#9999a8;
+--purple:#8b5cf6;
+--purple-light:#b197fc;
+--green:#35d07f;
+--red:#ff5263
+}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+padding-bottom:80px
+}
+
+button{
+font:inherit;
+cursor:pointer
+}
+
+.hidden{display:none!important}
+
+header{
+position:fixed;
+top:0;
+left:0;
+right:0;
+height:64px;
+z-index:100;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 18px;
+background:rgba(9,9,13,.95);
+backdrop-filter:blur(15px);
+border-bottom:1px solid #24242d
+}
+
+.logo{
+font-size:23px;
+font-weight:900
+}
+
+.logo span{
+color:var(--purple-light)
+}
+
+.header-button{
+background:var(--card2);
+border:1px solid var(--border);
+color:#fff;
+padding:9px 14px;
+border-radius:10px
+}
+
+main{
+max-width:760px;
+margin:auto;
+padding:90px 18px 30px
+}
+
+.hero{
+padding:30px 0 40px
+}
+
+.hero h1{
+font-size:clamp(50px,12vw,80px);
+line-height:.9;
+letter-spacing:-5px;
+margin:0
+}
+
+.hero h1 span{
+color:var(--purple-light)
+}
+
+.hero p{
+color:var(--muted);
+font-size:18px;
+line-height:1.5;
+max-width:600px
+}
+
+.badge,.tag{
+display:inline-block;
+background:#251b37;
+color:var(--purple-light);
+border:1px solid #40305c;
+border-radius:30px;
+padding:7px 12px;
+font-size:12px;
+font-weight:bold
+}
+
+.button-row{
+display:flex;
+gap:10px;
+flex-wrap:wrap
+}
+
+.btn{
+min-height:48px;
+padding:12px 18px;
+border-radius:11px;
+border:0;
+font-weight:bold
+}
+
+.primary{
+background:var(--purple);
+color:#fff
+}
+
+.secondary{
+background:var(--card2);
+color:#fff;
+border:1px solid var(--border)
+}
+
+.danger{
+background:#35151c;
+color:#ff9ca8
+}
+
+.full{
+width:100%
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+
+.card,.scene{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+padding:18px
+}
+
+.scene{
+border-radius:18px;
+margin-bottom:15px
+}
+
+.card h3{
+margin:8px 0
+}
+
+.card p,.muted{
+color:var(--muted);
+line-height:1.5
+}
+
+.emoji{
+font-size:28px
+}
+
+.info,.status{
+background:#101016;
+border:1px solid var(--border);
+padding:14px;
+border-radius:11px;
+margin:10px 0;
+line-height:1.5
+}
+
+.success{
+background:#10281b;
+color:#8ff0b3;
+border-color:#245d3c
+}
+
+.line{
+background:#08080b;
+border-left:4px solid var(--purple);
+border-radius:10px;
+padding:18px;
+font-size:20px;
+line-height:1.45;
+margin:15px 0
+}
+
+.scene-video{
+width:100%;
+display:block;
+background:#000;
+border-radius:14px;
+margin:15px 0;
+max-height:650px
+}
+
+.camera{
+background:#000;
+border-radius:18px;
+overflow:hidden;
+margin:15px 0
+}
+
+.camera video{
+width:100%;
+display:block;
+aspect-ratio:9/16;
+object-fit:cover
+}
+
+.response{
+background:#101016;
+border:1px solid var(--border);
+border-radius:15px;
+padding:15px;
+margin:12px 0
+}
+
+.user-row{
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.avatar{
+width:42px;
+height:42px;
+border-radius:50%;
+background:linear-gradient(135deg,#8b5cf6,#ec4899);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+flex-shrink:0
+}
+
+input{
+width:100%;
+background:#0d0d12;
+border:1px solid #353540;
+color:#fff;
+padding:14px;
+border-radius:10px;
+margin:7px 0 14px
+}
+
+label{
+font-size:13px;
+color:#c8c8d0
+}
+
+.modal{
+position:fixed;
+inset:0;
+z-index:500;
+background:rgba(0,0,0,.82);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:18px
+}
+
+.modal-box{
+width:min(470px,100%);
+max-height:90vh;
+overflow:auto;
+background:#17171f;
+border:1px solid var(--border);
+border-radius:20px;
+padding:22px
+}
+
+.bottom-nav{
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+height:70px;
+z-index:200;
+background:rgba(15,15,21,.97);
+border-top:1px solid #292933;
+backdrop-filter:blur(15px)
+}
+
+.nav{
+max-width:650px;
+height:100%;
+margin:auto;
+display:flex
+}
+
+.nav button{
+flex:1;
+border:0;
+background:none;
+color:#858592;
+font-size:11px
+}
+
+.nav button strong{
+display:block;
+font-size:21px;
+margin-bottom:3px
+}
+
+.nav button.active,
+.nav button.active strong{
+color:#fff
+}
+
+.empty{
+text-align:center;
+padding:35px 15px;
+color:var(--muted)
+}
+
+@media(max-width:500px){
+main{
+padding-left:14px;
+padding-right:14px
+}
+
+.grid{
+grid-template-columns:1fr 1fr
+}
+}
 </style>
 </head>
+
 <body>
-<header><div class="logo">Scene<span>Play</span></div><button id="accountButton" class="header-button" onclick="accountAction()">Log in</button></header>
+
+<header>
+<div class="logo">Scene<span>Play</span></div>
+<button id="accountButton" class="header-button" onclick="accountAction()">Log in</button>
+</header>
+
 <main id="app"></main>
-<nav class="bottom-nav"><div class="nav">
+
+<nav class="bottom-nav">
+<div class="nav">
 <button onclick="home()"><strong>⌂</strong>Home</button>
 <button onclick="discover()"><strong>🔥</strong>Discover</button>
 <button onclick="createScene()"><strong>＋</strong>Create</button>
 <button onclick="myScenes()"><strong>🎬</strong>My Scenes</button>
 <button onclick="profile()"><strong>●</strong>Profile</button>
-</div></nav>
+</div>
+</nav>
 
-<div id="authModal" class="modal hidden"><div class="modal-box">
-<h2 id="authTitle">Create account</h2><p class="muted">Create an account to play in scenes.</p>
-<div id="usernameContainer"><label>Username</label><input id="authUsername" type="text" placeholder="Choose username"></div>
-<label>Email</label><input id="authEmail" type="email" placeholder="you@example.com">
-<label>Password</label><input id="authPassword" type="password" placeholder="Password">
-<button id="authSubmitButton" class="btn primary full" onclick="submitAuth()">Create account</button><br><br>
-<button id="authSwitchButton" class="btn secondary full" onclick="switchAuth()">Already have an account? Log in</button><br><br>
-<button class="btn secondary full" onclick="closeAuth()">Cancel</button>
-</div></div>
+<div id="authModal" class="modal hidden">
+<div class="modal-box">
+
+<h2 id="authTitle">Create account</h2>
+
+<p class="muted">
+Create an account to play in scenes.
+</p>
+
+<div id="usernameContainer">
+<label>Username</label>
+<input id="authUsername" type="text" placeholder="Choose username">
+</div>
+
+<label>Email</label>
+<input id="authEmail" type="email" placeholder="you@example.com">
+
+<label>Password</label>
+<input id="authPassword" type="password" placeholder="Password">
+
+<button id="authSubmitButton"
+class="btn primary full"
+onclick="submitAuth()">
+Create account
+</button>
+
+<br><br>
+
+<button id="authSwitchButton"
+class="btn secondary full"
+onclick="switchAuth()">
+Already have an account? Log in
+</button>
+
+<br><br>
+
+<button class="btn secondary full"
+onclick="closeAuth()">
+Cancel
+</button>
+
+</div>
+</div>
 
 <script type="module">
-import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL="https://rktwvhenqumebbgrtxol.supabase.co";
-const SUPABASE_KEY="sb_publishable_wBb0U4jBf3SRM0EIHtgheA_c0pOG-WK";
-
-const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
-
-function videoSrc(value){
-  if(!value) return "";
-  const v=String(value).trim();
-  if(/^https?:\/\//i.test(v)) return v;
-  return supabase.storage.from("scene-videos").getPublicUrl(v).data.publicUrl;
+import {
+createClient
 }
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
-let currentUser=null,currentProfile=null,currentScene=null,authMode="signup";
-let cameraStream=null,mediaRecorder=null,recordedChunks=[],pendingVideoBlob=null;
-let recordingTimer=null,recordingSeconds=0,currentResponseSceneId=null;
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL=
+"https://rktwvhenqumebbgrtxol.supabase.co";
+
+const SUPABASE_KEY=
+"sb_publishable_wBb0U4jBf3SRM0EIHtgheA_c0pOG-WK";
+
+const supabase=
+createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let currentUser=null;
+let currentProfile=null;
+let currentScene=null;
+
+let authMode="signup";
+
+let cameraStream=null;
+let mediaRecorder=null;
+let recordedChunks=[];
+
+let pendingVideoBlob=null;
+
+let recordingTimer=null;
+let recordingSeconds=0;
+
+let currentResponseSceneId=null;
+
+
+/* =========================================================
+   SCENE IDEAS
+========================================================= */
 
 const SCENE_IDEAS=[
-{title:"The Betrayal",category:"Drama",situation:"You discover that your best friend has been hiding something important from you.",characterA:"The suspicious friend",characterB:"The friend hiding the secret",objectiveA:"You are angry, but trying to stay controlled.",objectiveB:"You are nervous and want to avoid admitting the truth.",lineA:"I know you've been lying to me.",lineB:"What are you talking about?"},
-{title:"Wrong Number",category:"Comedy",situation:"You accidentally call a stranger, but they seem to know exactly who you are.",characterA:"The person who made the wrong call",characterB:"The mysterious stranger",objectiveA:"Try to understand what is happening.",objectiveB:"Act as though everything is completely normal.",lineA:"Sorry, I think I have the wrong number.",lineB:"No. I think you finally called the right one."},
-{title:"The Last Train",category:"Romance",situation:"One person is leaving forever. The other has one last chance to stop them.",characterA:"The person who wants them to stay",characterB:"The person leaving",objectiveA:"Don't admit how much you care.",objectiveB:"Pretend you don't want to stay.",lineA:"So you're really leaving?",lineB:"You knew I would eventually."},
-{title:"The Interview",category:"Drama",situation:"A normal job interview suddenly becomes strangely personal.",characterA:"The interviewer",characterB:"The applicant",objectiveA:"Remain professional while testing the applicant.",objectiveB:"Stay calm even though something feels wrong.",lineA:"Before we continue, I need to ask you something.",lineB:"Of course. What is it?"},
-{title:"The Stranger",category:"Mystery",situation:"A stranger approaches you and says they know something about your future.",characterA:"The person being approached",characterB:"The mysterious stranger",objectiveA:"Don't reveal that you are frightened.",objectiveB:"Make them believe you know more than you really do.",lineA:"Do I know you?",lineB:"Not yet."}
+
+{
+title:"The Betrayal",
+category:"Drama",
+situation:"You discover that your best friend has been hiding something important from you.",
+characterA:"The suspicious friend",
+characterB:"The friend hiding the secret",
+objectiveA:"You are angry, but trying to stay controlled.",
+objectiveB:"You are nervous and want to avoid admitting the truth.",
+lineA:"I know you've been lying to me.",
+lineB:"What are you talking about?"
+},
+
+{
+title:"Wrong Number",
+category:"Comedy",
+situation:"You accidentally call a stranger, but they seem to know exactly who you are.",
+characterA:"The person who made the wrong call",
+characterB:"The mysterious stranger",
+objectiveA:"Try to understand what is happening.",
+objectiveB:"Act as though everything is completely normal.",
+lineA:"Sorry, I think I have the wrong number.",
+lineB:"No. I think you finally called the right one."
+},
+
+{
+title:"The Last Train",
+category:"Romance",
+situation:"One person is leaving forever. The other has one last chance to stop them.",
+characterA:"The person who wants them to stay",
+characterB:"The person leaving",
+objectiveA:"Don't admit how much you care.",
+objectiveB:"Pretend you don't want to stay.",
+lineA:"So you're really leaving?",
+lineB:"You knew I would eventually."
+},
+
+{
+title:"The Interview",
+category:"Drama",
+situation:"A normal job interview suddenly becomes strangely personal.",
+characterA:"The interviewer",
+characterB:"The applicant",
+objectiveA:"Remain professional while testing the applicant.",
+objectiveB:"Stay calm even though something feels wrong.",
+lineA:"Before we continue, I need to ask you something.",
+lineB:"Of course. What is it?"
+},
+
+{
+title:"The Stranger",
+category:"Mystery",
+situation:"A stranger approaches you and says they know something about your future.",
+characterA:"The person being approached",
+characterB:"The mysterious stranger",
+objectiveA:"Don't reveal that you are frightened.",
+objectiveB:"Make them believe you know more than you really do.",
+lineA:"Do I know you?",
+lineB:"Not yet."
+}
+
 ];
 
-function escapeHtml(v){if(v===null||v===undefined)return"";return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function showLoading(t){app.innerHTML=`<div class="scene"><h2>${escapeHtml(t)}</h2><div class="status">Please wait...</div></div>`}
 
-/* IMPORTANT VIDEO FIX:
-   Database values may be either a complete public URL or a storage path.
-   This function accepts both and always returns a usable public URL. */
-function videoUrl(value){
- if(!value)return null;
- value=String(value);
- if(/^https?:\\/\\//i.test(value))return value;
- let path=value.replace(/^\\/+/, "");
- path=path.replace(/^scene-videos\\//,"");
- return supabase.storage.from("scene-videos").getPublicUrl(path).data.publicUrl;
-}
-async function getTurn(sceneId,turnNumber){
- const {data,error}=await supabase.from("scene_turns").select("*").eq("scene_id",sceneId).eq("turn_number",turnNumber).maybeSingle();
- if(error)throw error;
- return data||null;
-}
-async function getSceneTurns(sceneId){
- const {data,error}=await supabase.from("scene_turns").select("*").eq("scene_id",sceneId).order("turn_number",{ascending:true});
- if(error)throw error;
- return data||[];
-}
-async function getOpeningVideo(sceneId){
- const t=await getTurn(sceneId,1);
- return t?videoUrl(t.video_path):null;
-}
+/* =========================================================
+   AUTH
+========================================================= */
 
-window.accountAction=()=>currentUser?profile():openAuth();
-window.openAuth=()=>{authMode="signup";document.getElementById("authModal").classList.remove("hidden");updateAuthForm()};
-window.closeAuth=()=>document.getElementById("authModal").classList.add("hidden");
-window.switchAuth=()=>{authMode=authMode==="signup"?"login":"signup";updateAuthForm()};
-function updateAuthForm(){
- const title=document.getElementById("authTitle"),username=document.getElementById("usernameContainer"),submit=document.getElementById("authSubmitButton"),sw=document.getElementById("authSwitchButton");
- if(authMode==="login"){title.textContent="Log in";username.classList.add("hidden");submit.textContent="Log in";sw.textContent="Don't have an account? Create one"}
- else{title.textContent="Create account";username.classList.remove("hidden");submit.textContent="Create account";sw.textContent="Already have an account? Log in"}
+window.accountAction=()=>{
+if(currentUser){
+profile();
+}else{
+openAuth();
 }
-window.submitAuth=async()=>{
- const username=document.getElementById("authUsername").value.trim(),email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;
- if(!email||!password||(authMode==="signup"&&!username)){alert("Please complete all required fields.");return}
- if(authMode==="signup"){
-  const {error}=await supabase.auth.signUp({email,password,options:{data:{username},emailRedirectTo:"https://businesspage.ie"}});
-  if(error){alert(error.message);return}
-  closeAuth();alert("Account created. Please check your email and confirm your account.");
- }else{
-  const {error}=await supabase.auth.signInWithPassword({email,password});
-  if(error){alert(error.message);return}
-  closeAuth();await loadUser();home();
- }
 };
-async function loadUser(){
- const {data}=await supabase.auth.getUser();currentUser=data.user||null;currentProfile=null;
- if(currentUser){const {data:p}=await supabase.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();currentProfile=p||null}
- updateAccountButton();
-}
-function updateAccountButton(){document.getElementById("accountButton").textContent=currentProfile?"@"+currentProfile.username:currentUser?"Profile":"Log in"}
-window.logout=async()=>{await supabase.auth.signOut();currentUser=null;currentProfile=null;updateAccountButton();home()};
 
-window.home=()=>{app.innerHTML=`<section class="hero"><div class="badge">🎭 PLAY WITH ANYONE</div><h1>Act.<br><span>Respond.</span><br>Play.</h1><p>Get a scene. Record your part. Someone else responds. Continue whenever you're ready.</p><div class="button-row"><button class="btn primary" onclick="discover()">🔥 Discover Scenes</button><button class="btn secondary" onclick="createScene()">🎬 Create Scene</button></div></section><h2>How it works</h2><div class="grid"><div class="card"><div class="emoji">🎬</div><h3>Create</h3><p>Choose a situation and record Character A.</p></div><div class="card"><div class="emoji">📱</div><h3>Record</h3><p>Your phone is your camera.</p></div><div class="card"><div class="emoji">👥</div><h3>Respond</h3><p>People can respond to the same scene.</p></div><div class="card"><div class="emoji">🎭</div><h3>Choose</h3><p>The creator chooses who continues.</p></div></div>`};
+window.openAuth=()=>{
+authMode="signup";
+
+document
+.getElementById("authModal")
+.classList.remove("hidden");
+
+updateAuthForm();
+};
+
+window.closeAuth=()=>{
+document
+.getElementById("authModal")
+.classList.add("hidden");
+};
+
+window.switchAuth=()=>{
+authMode=
+authMode==="signup"
+?"login"
+:"signup";
+
+updateAuthForm();
+};
+
+function updateAuthForm(){
+
+const title=
+document.getElementById("authTitle");
+
+const username=
+document.getElementById("usernameContainer");
+
+const submit=
+document.getElementById("authSubmitButton");
+
+const sw=
+document.getElementById("authSwitchButton");
+
+if(authMode==="login"){
+
+title.textContent="Log in";
+
+username.classList.add("hidden");
+
+submit.textContent="Log in";
+
+sw.textContent=
+"Don't have an account? Create one";
+
+}else{
+
+title.textContent="Create account";
+
+username.classList.remove("hidden");
+
+submit.textContent="Create account";
+
+sw.textContent=
+"Already have an account? Log in";
+
+}
+
+}
+
+
+window.submitAuth=async()=>{
+
+const username=
+document.getElementById("authUsername")
+.value.trim();
+
+const email=
+document.getElementById("authEmail")
+.value.trim();
+
+const password=
+document.getElementById("authPassword")
+.value;
+
+if(
+!email||
+!password||
+(authMode==="signup"&&!username)
+){
+
+alert("Please complete all required fields.");
+return;
+
+}
+
+if(authMode==="signup"){
+
+const {error}=
+await supabase.auth.signUp({
+
+email,
+password,
+
+options:{
+data:{username},
+emailRedirectTo:"https://businesspage.ie"
+}
+
+});
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+closeAuth();
+
+alert(
+"Account created. Please check your email and confirm your account."
+);
+
+}else{
+
+const {error}=
+await supabase.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+closeAuth();
+
+await loadUser();
+
+home();
+
+}
+
+};
+
+
+async function loadUser(){
+
+const {data}=
+await supabase.auth.getUser();
+
+currentUser=
+data.user||null;
+
+currentProfile=null;
+
+if(currentUser){
+
+const {data:profile}=
+await supabase
+.from("profiles")
+.select("*")
+.eq("id",currentUser.id)
+.maybeSingle();
+
+currentProfile=
+profile||null;
+
+}
+
+updateAccountButton();
+
+}
+
+
+function updateAccountButton(){
+
+const b=
+document.getElementById("accountButton");
+
+b.textContent=
+currentProfile
+?"@"+currentProfile.username
+:currentUser
+?"Profile"
+:"Log in";
+
+}
+
+
+window.logout=async()=>{
+
+await supabase.auth.signOut();
+
+currentUser=null;
+currentProfile=null;
+
+updateAccountButton();
+
+home();
+
+};
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+window.home=()=>{
+
+app.innerHTML=`
+
+<section class="hero">
+
+<div class="badge">
+🎭 PLAY WITH ANYONE
+</div>
+
+<h1>
+Act.<br>
+<span>Respond.</span><br>
+Play.
+</h1>
+
+<p>
+Get a scene. Record your part.
+Someone else responds.
+Continue whenever you're ready.
+</p>
+
+<div class="button-row">
+
+<button
+class="btn primary"
+onclick="discover()">
+🔥 Discover Scenes
+</button>
+
+<button
+class="btn secondary"
+onclick="createScene()">
+🎬 Create Scene
+</button>
+
+</div>
+
+</section>
+
+<h2>How it works</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="emoji">🎬</div>
+<h3>Create</h3>
+<p>
+Choose a situation and record Character A.
+</p>
+</div>
+
+<div class="card">
+<div class="emoji">📱</div>
+<h3>Record</h3>
+<p>
+Your phone is your camera.
+</p>
+</div>
+
+<div class="card">
+<div class="emoji">👥</div>
+<h3>Respond</h3>
+<p>
+People can respond to the same scene.
+</p>
+</div>
+
+<div class="card">
+<div class="emoji">🎭</div>
+<h3>Choose</h3>
+<p>
+The creator chooses who continues.
+</p>
+</div>
+
+</div>
+
+`;
+
+};
+
+
+/* =========================================================
+   CREATE SCENE
+========================================================= */
 
 window.createScene=()=>{
- if(!currentUser){openAuth();return}
- app.innerHTML=`<h1>🎬 Choose a scene</h1><p class="muted">You will play Character A.</p>`;
- SCENE_IDEAS.forEach((s,i)=>app.innerHTML+=`<div class="scene"><span class="tag">${escapeHtml(s.category)}</span><h2>${escapeHtml(s.title)}</h2><p class="muted">${escapeHtml(s.situation)}</p><button class="btn primary full" onclick="previewScene(${i})">Play this scene</button></div>`)
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+app.innerHTML=`
+
+<h1>🎬 Choose a scene</h1>
+
+<p class="muted">
+You will play Character A.
+</p>
+
+`;
+
+SCENE_IDEAS.forEach((s,i)=>{
+
+app.innerHTML+=`
+
+<div class="scene">
+
+<span class="tag">
+${escapeHtml(s.category)}
+</span>
+
+<h2>
+${escapeHtml(s.title)}
+</h2>
+
+<p class="muted">
+${escapeHtml(s.situation)}
+</p>
+
+<button
+class="btn primary full"
+onclick="previewScene(${i})">
+
+Play this scene
+
+</button>
+
+</div>
+
+`;
+
+});
+
 };
+
+
+/* =========================================================
+   PREVIEW SCENE
+========================================================= */
+
 window.previewScene=i=>{
- currentScene=SCENE_IDEAS[i];
- app.innerHTML=`<div class="scene"><span class="tag">${escapeHtml(currentScene.category)}</span><h1>${escapeHtml(currentScene.title)}</h1><p class="muted">${escapeHtml(currentScene.situation)}</p><div class="info"><strong>Your character</strong><br>${escapeHtml(currentScene.characterA)}</div><div class="info"><strong>Other character</strong><br>${escapeHtml(currentScene.characterB)}</div><div class="info"><strong>Your objective</strong><br>${escapeHtml(currentScene.objectiveA)}</div><div class="line">"${escapeHtml(currentScene.lineA)}"</div><button class="btn primary full" onclick="openCameraForOpening()">🎥 Record Character A</button></div>`
+
+currentScene=
+SCENE_IDEAS[i];
+
+app.innerHTML=`
+
+<div class="scene">
+
+<span class="tag">
+${escapeHtml(currentScene.category)}
+</span>
+
+<h1>
+${escapeHtml(currentScene.title)}
+</h1>
+
+<p class="muted">
+${escapeHtml(currentScene.situation)}
+</p>
+
+<div class="info">
+<strong>Your character</strong><br>
+${escapeHtml(currentScene.characterA)}
+</div>
+
+<div class="info">
+<strong>Other character</strong><br>
+${escapeHtml(currentScene.characterB)}
+</div>
+
+<div class="info">
+<strong>Your objective</strong><br>
+${escapeHtml(currentScene.objectiveA)}
+</div>
+
+<div class="line">
+"${escapeHtml(currentScene.lineA)}"
+</div>
+
+<button
+class="btn primary full"
+onclick="openCameraForOpening()">
+
+🎥 Record Character A
+
+</button>
+
+</div>
+
+`;
+
 };
+
+
+/* =========================================================
+   CAMERA HELPERS
+========================================================= */
+
+function stopCameraTracks(){
+
+if(cameraStream){
+
+cameraStream
+.getTracks()
+.forEach(track=>track.stop());
+
+cameraStream=null;
+
+}
+
+}
+
+
+window.cancelCamera=()=>{
+stopCameraTracks();
+home();
+};
+
+
+/* =========================================================
+   OPENING RECORDING
+========================================================= */
+
 window.openCameraForOpening=async()=>{
- app.innerHTML=`<h1>🎥 Record your part</h1><div class="info"><strong>Say:</strong><br>"${escapeHtml(currentScene.lineA)}"</div><div class="info"><strong>Your objective:</strong><br>${escapeHtml(currentScene.objectiveA)}</div><div class="camera"><video id="cameraVideo" autoplay muted playsinline></video></div><div id="recordStatus" class="status">Ready</div><button id="recordButton" class="btn primary full" onclick="toggleOpeningRecording()">🔴 Record</button><br><br><button class="btn secondary full" onclick="cancelCamera()">Cancel</button>`;
- try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById("cameraVideo").srcObject=cameraStream}catch(e){alert("Camera/microphone permission was denied.");home()}
+
+app.innerHTML=`
+
+<h1>🎥 Record your part</h1>
+
+<div class="info">
+<strong>Say:</strong><br>
+"${escapeHtml(currentScene.lineA)}"
+</div>
+
+<div class="info">
+<strong>Your objective:</strong><br>
+${escapeHtml(currentScene.objectiveA)}
+</div>
+
+<div class="camera">
+
+<video
+id="cameraVideo"
+autoplay
+muted
+playsinline>
+</video>
+
+</div>
+
+<div id="recordStatus" class="status">
+Ready
+</div>
+
+<button
+id="recordButton"
+class="btn primary full"
+onclick="toggleOpeningRecording()">
+
+🔴 Record
+
+</button>
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="cancelCamera()">
+
+Cancel
+
+</button>
+
+`;
+
+try{
+
+cameraStream=
+await navigator.mediaDevices.getUserMedia({
+video:{facingMode:"user"},
+audio:true
+});
+
+document.getElementById("cameraVideo")
+.srcObject=cameraStream;
+
+}catch(e){
+
+alert(
+"Camera/microphone permission was denied."
+);
+
+home();
+
+}
+
 };
-function stopCameraTracks(){if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}}
-window.cancelCamera=()=>{stopCameraTracks();home()};
-window.toggleOpeningRecording=()=>!mediaRecorder||mediaRecorder.state==="inactive"?startOpeningRecording():stopRecording();
+
+
+window.toggleOpeningRecording=()=>{
+
+if(
+!mediaRecorder||
+mediaRecorder.state==="inactive"
+){
+
+startOpeningRecording();
+
+}else{
+
+stopRecording();
+
+}
+
+};
+
+
 function startOpeningRecording(){
- recordedChunks=[];let options={};if(MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus"))options.mimeType="video/webm;codecs=vp8,opus";
- mediaRecorder=new MediaRecorder(cameraStream,options);mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data)};mediaRecorder.onstop=reviewRecordedVideo;mediaRecorder.start();recordingSeconds=0;
- recordingTimer=setInterval(()=>{recordingSeconds++;const s=document.getElementById("recordStatus");if(s)s.textContent="🔴 Recording "+recordingSeconds+" seconds";if(recordingSeconds>=30)stopRecording()},1000);
- document.getElementById("recordButton").textContent="⏹ Stop";
+
+recordedChunks=[];
+
+let options={};
+
+if(
+MediaRecorder.isTypeSupported(
+"video/webm;codecs=vp8,opus"
+)
+){
+
+options.mimeType=
+"video/webm;codecs=vp8,opus";
+
 }
-function stopRecording(){if(mediaRecorder&&mediaRecorder.state==="recording")mediaRecorder.stop();clearInterval(recordingTimer)}
-function reviewRecordedVideo(){
- stopCameraTracks();pendingVideoBlob=new Blob(recordedChunks,{type:"video/webm"});const url=URL.createObjectURL(pendingVideoBlob);
- app.innerHTML=`<h1>Review your video</h1><div class="camera"><video src="${url}" controls playsinline></video></div><div class="button-row"><button class="btn secondary" onclick="openCameraForOpening()">↻ Retake</button><button class="btn primary" onclick="uploadOpeningVideo()">✓ Publish Scene</button></div>`
+
+mediaRecorder=
+new MediaRecorder(
+cameraStream,
+options
+);
+
+mediaRecorder.ondataavailable=e=>{
+
+if(e.data.size){
+recordedChunks.push(e.data);
 }
-window.uploadOpeningVideo=async()=>{
- if(!pendingVideoBlob){alert("There is no recorded video.");return}
- showLoading("Uploading your scene...");
- try{
-  const sceneId=crypto.randomUUID(),path=currentUser.id+"/"+sceneId+"/opening.webm";
-  let {error}=await supabase.storage.from("scene-videos").upload(path,pendingVideoBlob,{contentType:"video/webm",upsert:false});if(error)throw error;
-  const url=videoUrl(path);
-  ({error}=await supabase.from("scenes").insert({id:sceneId,creator_id:currentUser.id,title:currentScene.title,category:currentScene.category,situation:currentScene.situation,character_a:currentScene.characterA,character_b:currentScene.characterB,objective_a:currentScene.objectiveA,objective_b:currentScene.objectiveB,opening_line:currentScene.lineA,status:"open"}));if(error)throw error;
-  ({error}=await supabase.from("scene_turns").insert({id:crypto.randomUUID(),scene_id:sceneId,player_id:currentUser.id,turn_number:1,video_path:path}));if(error)throw error;
-  pendingVideoBlob=null;showPublishedScene(sceneId,url);
- }catch(e){console.error(e);alert("Upload failed:\\n\\n"+e.message);home()}
+
 };
-function showPublishedScene(id,url){app.innerHTML=`<div class="scene"><div class="status success">✓ Your scene is live</div><h1>${escapeHtml(currentScene.title)}</h1><video class="scene-video" controls playsinline src="${escapeHtml(url)}"></video><p class="muted">Other people can respond as Character B.</p><button class="btn primary full" onclick="viewResponses('${id}')">👥 View responses</button></div>`}
+
+mediaRecorder.onstop=
+reviewRecordedVideo;
+
+mediaRecorder.start();
+
+recordingSeconds=0;
+
+recordingTimer=
+setInterval(()=>{
+
+recordingSeconds++;
+
+const s=
+document.getElementById("recordStatus");
+
+if(s){
+
+s.textContent=
+"🔴 Recording "+
+recordingSeconds+
+" seconds";
+
+}
+
+if(recordingSeconds>=30){
+
+stopRecording();
+
+}
+
+},1000);
+
+document.getElementById("recordButton")
+.textContent="⏹ Stop";
+
+}
+
+
+function stopRecording(){
+
+if(
+mediaRecorder&&
+mediaRecorder.state==="recording"
+){
+
+mediaRecorder.stop();
+
+}
+
+clearInterval(recordingTimer);
+
+}
+
+
+/* =========================================================
+   REVIEW OPENING
+========================================================= */
+
+function reviewRecordedVideo(){
+
+stopCameraTracks();
+
+pendingVideoBlob=
+new Blob(
+recordedChunks,
+{type:"video/webm"}
+);
+
+const url=
+URL.createObjectURL(
+pendingVideoBlob
+);
+
+app.innerHTML=`
+
+<h1>Review your video</h1>
+
+<p class="muted">
+Make sure you are happy with your performance.
+</p>
+
+<div class="camera">
+
+<video
+src="${url}"
+controls
+playsinline>
+</video>
+
+</div>
+
+<div class="button-row">
+
+<button
+class="btn secondary"
+onclick="openCameraForOpening()">
+
+↻ Retake
+
+</button>
+
+<button
+class="btn primary"
+onclick="uploadOpeningVideo()">
+
+✓ Publish Scene
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   UPLOAD OPENING
+========================================================= */
+
+window.uploadOpeningVideo=async()=>{
+
+if(!pendingVideoBlob){
+
+alert("There is no recorded video.");
+return;
+
+}
+
+showLoading("Uploading your scene...");
+
+try{
+
+const sceneId=
+crypto.randomUUID();
+
+const videoPath=
+currentUser.id+
+"/"+
+sceneId+
+"/opening.webm";
+
+
+let {error}=
+await supabase.storage
+.from("scene-videos")
+.upload(
+videoPath,
+pendingVideoBlob,
+{
+contentType:"video/webm",
+upsert:false
+}
+);
+
+if(error)throw error;
+
+
+const {data:urlData}=
+supabase.storage
+.from("scene-videos")
+.getPublicUrl(videoPath);
+
+const videoUrl=
+urlData.publicUrl;
+
+
+({error}=
+await supabase
+.from("scenes")
+.insert({
+
+id:sceneId,
+
+creator_id:
+currentUser.id,
+
+title:
+currentScene.title,
+
+category:
+currentScene.category,
+
+situation:
+currentScene.situation,
+
+character_a:
+currentScene.characterA,
+
+character_b:
+currentScene.characterB,
+
+objective_a:
+currentScene.objectiveA,
+
+objective_b:
+currentScene.objectiveB,
+
+opening_line:
+currentScene.lineA,
+
+status:"open"
+
+}));
+
+if(error)throw error;
+
+
+({error}=
+await supabase
+.from("scene_turns")
+.insert({
+
+id:crypto.randomUUID(),
+
+scene_id:sceneId,
+
+player_id:
+currentUser.id,
+
+turn_number:1,
+
+video_path:videoUrl
+
+}));
+
+if(error)throw error;
+
+
+pendingVideoBlob=null;
+
+showPublishedScene(
+sceneId,
+videoUrl
+);
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Upload failed:\n\n"+
+e.message
+);
+
+home();
+
+}
+
+};
+
+
+/* =========================================================
+   PUBLISHED SCENE
+========================================================= */
+
+function showPublishedScene(
+sceneId,
+videoUrl
+){
+
+app.innerHTML=`
+
+<div class="scene">
+
+<div class="status success">
+✓ Your scene is live
+</div>
+
+<h1>
+${escapeHtml(currentScene.title)}
+</h1>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(videoUrl)}">
+</video>
+
+<p class="muted">
+Other people can now respond as Character B.
+</p>
+
+<button
+class="btn primary full"
+onclick="viewResponses('${sceneId}')">
+
+👥 View responses
+
+</button>
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="discover()">
+
+🔥 Discover scenes
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   DISCOVER
+========================================================= */
 
 window.discover=async()=>{
- showLoading("Loading scenes...");
- const {data:scenes,error}=await supabase.from("scenes").select(`*,profiles(username)`).order("created_at",{ascending:false});
- if(error){alert(error.message);home();return}
- app.innerHTML=`<h1>🔥 Discover</h1><p class="muted">Find someone to play with.</p>`;
- if(!scenes?.length){app.innerHTML+=`<div class="empty"><h2>No scenes yet</h2><button class="btn primary" onclick="createScene()">Create Scene</button></div>`;return}
- for(const scene of scenes){
-  const url=await getOpeningVideo(scene.id);
-  app.innerHTML+=`<div class="scene"><span class="tag">${escapeHtml(scene.category||"Scene")}</span><h2>${escapeHtml(scene.title)}</h2><p class="muted">${escapeHtml(scene.situation)}</p>${url?`<video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(url)}"></video>`:`<div class="status">Video unavailable</div>`}<p class="muted">Created by @${escapeHtml(scene.profiles?.username||"player")}</p><button class="btn primary full" onclick="respondToScene('${scene.id}')">🎭 Play Character B</button></div>`;
- }
+
+showLoading("Loading scenes...");
+
+const {data:scenes,error}=
+await supabase
+.from("scenes")
+.select(`*,profiles(username)`)
+.order(
+"created_at",
+{ascending:false}
+);
+
+if(error){
+
+alert(error.message);
+home();
+return;
+
+}
+
+app.innerHTML=`
+
+<h1>🔥 Discover</h1>
+
+<p class="muted">
+Find someone to play with.
+</p>
+
+`;
+
+if(!scenes?.length){
+
+app.innerHTML+=`
+
+<div class="empty">
+
+<h2>No scenes yet</h2>
+
+<button
+class="btn primary"
+onclick="createScene()">
+
+Create Scene
+
+</button>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+for(const scene of scenes){
+
+const videoUrl=
+await getOpeningVideo(scene.id);
+
+let action="";
+
+if(scene.status==="ended"){
+
+action=`
+
+<div class="status">
+Scene ended
+</div>
+
+`;
+
+}else{
+
+const myResponse=
+currentUser
+?await getMyResponseSafe(scene.id)
+:null;
+
+if(myResponse){
+
+action=`
+
+<button
+class="btn secondary full"
+onclick="showMyResponse('${scene.id}')">
+
+✓ My Response
+(${escapeHtml(myResponse.status||"pending")})
+
+</button>
+
+`;
+
+}else{
+
+action=`
+
+<button
+class="btn primary full"
+onclick="respondToScene('${scene.id}')">
+
+🎭 Play Character B
+
+</button>
+
+`;
+
+}
+
+}
+
+
+app.innerHTML+=`
+
+<div class="scene">
+
+<span class="tag">
+${escapeHtml(scene.category||"Scene")}
+</span>
+
+<h2>
+${escapeHtml(scene.title)}
+</h2>
+
+<p class="muted">
+${escapeHtml(scene.situation)}
+</p>
+
+${
+videoUrl
+?
+`
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(videoUrl)}">
+</video>
+`
+:
+`
+<div class="status">
+Video unavailable
+</div>
+`
+}
+
+<p class="muted">
+Created by @${escapeHtml(
+scene.profiles?.username||"player"
+)}
+</p>
+
+${action}
+
+</div>
+
+`;
+
+}
+
 };
+
+
+async function getOpeningVideo(sceneId){
+
+const {data:turn,error}=
+await supabase
+.from("scene_turns")
+.select("video_path")
+.eq("scene_id",sceneId)
+.eq("turn_number",1)
+.maybeSingle();
+
+return
+!error&&turn?.video_path
+?turn.video_path
+:null;
+
+}
+
+
+async function getMyResponseSafe(sceneId){
+
+if(!currentUser)return null;
+
+const {data,error}=
+await supabase
+.from("scene_responses")
+.select("*")
+.eq("scene_id",sceneId)
+.eq("responder_id",currentUser.id)
+.maybeSingle();
+
+if(error){
+
+console.warn(error);
+return null;
+
+}
+
+return data;
+
+}
+
+
+/* =========================================================
+   CHARACTER B
+========================================================= */
 
 window.respondToScene=async sceneId=>{
- if(!currentUser){openAuth();return}
- const {data:scene,error}=await supabase.from("scenes").select("*").eq("id",sceneId).single();if(error){alert(error.message);return}
- currentScene=scene;
- const openingVideo=await getOpeningVideo(sceneId);
- const {data:existing,error:ce}=await supabase.from("scene_responses").select("*").eq("scene_id",sceneId).eq("responder_id",currentUser.id).maybeSingle();if(ce)console.warn(ce);
- app.innerHTML=`<div class="scene"><span class="tag">CHARACTER B</span><h1>${escapeHtml(scene.title)}</h1><p class="muted">${escapeHtml(scene.situation)}</p>${openingVideo?`<video class="scene-video" controls playsinline src="${escapeHtml(openingVideo)}"></video>`:`<div class="status">Opening video unavailable.</div>`}<div class="info"><strong>Your character</strong><br>${escapeHtml(scene.character_b)}</div><div class="info"><strong>Your objective</strong><br>${escapeHtml(scene.objective_b||"")}</div><div class="line">Respond naturally to the opening scene.</div>${existing?`<div class="status success">✓ You already responded.<br>Status: ${escapeHtml(existing.status||"pending")}</div>${existing.video_path?`<video class="scene-video" controls playsinline src="${escapeHtml(videoUrl(existing.video_path))}"></video>`:""}`:`<button class="btn primary full" onclick="recordResponse('${scene.id}')">🎥 Record Character B</button>`}<br><br><button class="btn secondary full" onclick="discover()">← Back to Discover</button></div>`;
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+const {data:scene,error}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+if(scene.status==="ended"){
+
+alert("This scene has ended.");
+return;
+
+}
+
+currentScene=scene;
+
+const openingVideo=
+await getOpeningVideo(sceneId);
+
+const {data:existingResponse,error:checkError}=
+await supabase
+.from("scene_responses")
+.select(
+"id,video_path,status,created_at"
+)
+.eq("scene_id",sceneId)
+.eq("responder_id",currentUser.id)
+.maybeSingle();
+
+if(checkError){
+
+console.error(checkError);
+
+}
+
+
+app.innerHTML=`
+
+<div class="scene">
+
+<span class="tag">
+CHARACTER B
+</span>
+
+<h1>
+${escapeHtml(scene.title)}
+</h1>
+
+<p class="muted">
+${escapeHtml(scene.situation)}
+</p>
+
+${
+openingVideo
+?
+`
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(openingVideo)}">
+</video>
+`
+:
+""
+}
+
+<div class="info">
+<strong>Your character</strong><br>
+${escapeHtml(scene.character_b)}
+</div>
+
+<div class="info">
+<strong>Your objective</strong><br>
+${escapeHtml(scene.objective_b||"")}
+</div>
+
+<div class="line">
+Respond naturally to the opening scene.
+</div>
+
+${
+existingResponse
+?
+`
+
+<div class="status success">
+
+✓ You already responded.
+
+<br>
+
+Status:
+${escapeHtml(
+existingResponse.status||"pending"
+)}
+
+</div>
+
+${
+existingResponse.video_path
+?
+`
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(existingResponse.video_path)}">
+</video>
+`
+:
+""
+}
+
+${
+existingResponse.status==="pending"
+?
+`
+<button
+class="btn danger full"
+onclick="deleteMyResponse(
+'${existingResponse.id}',
+'${scene.id}'
+)">
+
+🗑 Delete my response
+
+</button>
+`
+:
+""
+}
+
+`
+:
+`
+
+<button
+class="btn primary full"
+onclick="recordResponse('${scene.id}')">
+
+🎥 Record Character B
+
+</button>
+
+`
+}
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="discover()">
+
+← Back to Discover
+
+</button>
+
+</div>
+
+`;
+
 };
+
+
+/* =========================================================
+   RECORD CHARACTER B
+========================================================= */
 
 window.recordResponse=async sceneId=>{
- currentResponseSceneId=sceneId;
- app.innerHTML=`<h1>🎥 Record your response</h1><p class="muted">Play Character B.</p><div class="camera"><video id="responseCamera" autoplay muted playsinline></video></div><div id="responseStatus" class="status">Ready</div><button id="responseRecordButton" class="btn primary full" onclick="toggleResponseRecording()">🔴 Record</button><br><br><button class="btn secondary full" onclick="cancelCamera()">Cancel</button>`;
- try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById("responseCamera").srcObject=cameraStream}catch(e){alert("Camera/microphone permission was denied.");home()}
-};
-window.toggleResponseRecording=()=>!mediaRecorder||mediaRecorder.state==="inactive"?startResponseRecording():stopRecording();
-function startResponseRecording(){
- recordedChunks=[];let options={};if(MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus"))options.mimeType="video/webm;codecs=vp8,opus";
- mediaRecorder=new MediaRecorder(cameraStream,options);mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data)};mediaRecorder.onstop=reviewResponse;mediaRecorder.start();recordingSeconds=0;
- recordingTimer=setInterval(()=>{recordingSeconds++;const s=document.getElementById("responseStatus");if(s)s.textContent="🔴 Recording "+recordingSeconds+" seconds";if(recordingSeconds>=30)stopRecording()},1000);document.getElementById("responseRecordButton").textContent="⏹ Stop";
+
+currentResponseSceneId=sceneId;
+
+app.innerHTML=`
+
+<h1>
+🎥 Record your response
+</h1>
+
+<p class="muted">
+Play Character B.
+</p>
+
+<div class="camera">
+
+<video
+id="responseCamera"
+autoplay
+muted
+playsinline>
+</video>
+
+</div>
+
+<div
+id="responseStatus"
+class="status">
+
+Ready
+
+</div>
+
+<button
+id="responseRecordButton"
+class="btn primary full"
+onclick="toggleResponseRecording()">
+
+🔴 Record
+
+</button>
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="cancelCamera()">
+
+Cancel
+
+</button>
+
+`;
+
+try{
+
+cameraStream=
+await navigator.mediaDevices.getUserMedia({
+
+video:{facingMode:"user"},
+audio:true
+
+});
+
+document.getElementById(
+"responseCamera"
+).srcObject=
+cameraStream;
+
+}catch(e){
+
+alert(
+"Camera/microphone permission was denied."
+);
+
+home();
+
 }
-function reviewResponse(){stopCameraTracks();pendingVideoBlob=new Blob(recordedChunks,{type:"video/webm"});const url=URL.createObjectURL(pendingVideoBlob);app.innerHTML=`<h1>Review response</h1><div class="camera"><video src="${url}" controls playsinline></video></div><div class="button-row"><button class="btn secondary" onclick="recordResponse('${currentResponseSceneId}')">↻ Retake</button><button class="btn primary" onclick="uploadResponse()">✓ Send Response</button></div>`}
-window.uploadResponse=async()=>{
- if(!pendingVideoBlob||!currentUser||!currentResponseSceneId){alert("Missing response/session.");return}
- showLoading("Uploading response...");
- try{
-  const {data:existing}=await supabase.from("scene_responses").select("id").eq("scene_id",currentResponseSceneId).eq("responder_id",currentUser.id).maybeSingle();
-  if(existing){alert("You have already responded to this scene.");pendingVideoBlob=null;respondToScene(currentResponseSceneId);return}
-  const id=crypto.randomUUID(),path=currentUser.id+"/responses/"+id+".webm";
-  let {error}=await supabase.storage.from("scene-videos").upload(path,pendingVideoBlob,{contentType:"video/webm",upsert:false});if(error)throw error;
-  ({error}=await supabase.from("scene_responses").insert({id,scene_id:currentResponseSceneId,responder_id:currentUser.id,video_path:path,status:"pending"}));
-  if(error){await supabase.storage.from("scene-videos").remove([path]);throw error}
-  pendingVideoBlob=null;viewResponses(currentResponseSceneId);
- }catch(e){console.error(e);alert("Response upload failed:\\n\\n"+e.message);respondToScene(currentResponseSceneId)}
+
 };
 
-window.viewResponses=async sceneId=>{
- if(!currentUser){openAuth();return}
- showLoading("Loading responses...");
- try{
-  const {data:scene,error:se}=await supabase.from("scenes").select("*").eq("id",sceneId).single();if(se)throw se;
-  const {data:responses,error:re}=await supabase.from("scene_responses").select(`*,profiles(username)`).eq("scene_id",sceneId).order("created_at",{ascending:false});if(re)throw re;
-  const turns=await getSceneTurns(sceneId),last=turns[turns.length-1];
-  const accepted=responses?.find(r=>r.status==="accepted");
-  const creatorCanContinue=scene.creator_id===currentUser.id&&scene.status==="in_progress"&&accepted&&last?.player_id===accepted.responder_id;
-  app.innerHTML=`<h1>👥 Responses</h1><p class="muted">People who want to play Character B.</p>${creatorCanContinue?`<div class="status success">✓ Player accepted — it is your turn.</div><button class="btn primary full" onclick="showActiveScene('${sceneId}')">🎭 Continue Scene</button><br><br>`:""}`;
-  if(!responses?.length){app.innerHTML+=`<div class="empty"><h2>No responses yet</h2></div>`;return}
-  responses.forEach(r=>{
-   const username=r.profiles?.username||"player";
-   let actions="";
-   if(r.status==="pending")actions=`<button class="btn primary full" onclick="chooseResponse('${r.id}','${sceneId}')">✓ Choose this player</button><br><br><button class="btn danger full" onclick="rejectResponse('${r.id}','${sceneId}')">Pass</button>`;
-   else if(r.status==="accepted")actions=`<div class="status success">✓ Accepted</div>${scene.status==="in_progress"?`<br><button class="btn primary full" onclick="showActiveScene('${sceneId}')">🎭 Continue Scene</button>`:""}`;
-   else actions=`<div class="status">Passed</div>`;
-   app.innerHTML+=`<div class="response"><div class="user-row"><div class="avatar">${escapeHtml(username[0]).toUpperCase()}</div><strong>@${escapeHtml(username)}</strong></div><video class="scene-video" controls playsinline src="${escapeHtml(videoUrl(r.video_path))}"></video>${actions}</div>`;
-  });
- }catch(e){console.error(e);alert("Could not load responses:\\n\\n"+e.message)}
-};
 
-/* CHANGING PLAYER:
-   The old B acceptance and Turn 2 are removed before the new player is accepted.
-   This prevents an old player from blocking the new continuation. */
-window.chooseResponse=async(responseId,sceneId)=>{
- if(!currentUser){openAuth();return}
- try{
-  const {data:scene,error:se}=await supabase.from("scenes").select("*").eq("id",sceneId).single();if(se)throw se;
-  if(scene.creator_id!==currentUser.id){alert("Only the scene creator can choose a player.");return}
-  const {data:chosen,error:ce}=await supabase.from("scene_responses").select("*").eq("id",responseId).eq("scene_id",sceneId).single();if(ce)throw ce;
-
-  /* Delete any old continuation turns. */
-  const oldTurns=await supabase.from("scene_turns").select("id,video_path,turn_number").eq("scene_id",sceneId).gt("turn_number",1);
-  if(oldTurns.error)throw oldTurns.error;
-
-  /* Delete old Turn 2+ rows. Storage files are left alone deliberately so old
-     response videos remain playable in the response list. */
-  const {error:td}=await supabase.from("scene_turns").delete().eq("scene_id",sceneId).gt("turn_number",1);
-  if(td)throw td;
-
-  let {error}=await supabase.from("scene_responses").update({status:"rejected"}).eq("scene_id",sceneId).neq("id",responseId);if(error)throw error;
-  ({error}=await supabase.from("scene_responses").update({status:"accepted"}).eq("id",responseId).eq("scene_id",sceneId));if(error)throw error;
-
-  /* Turn 2 is the chosen B response. */
-  ({error}=await supabase.from("scene_turns").insert({id:crypto.randomUUID(),scene_id:sceneId,player_id:chosen.responder_id,turn_number:2,video_path:chosen.video_path}));if(error)throw error;
-
-  ({error}=await supabase.from("scenes").update({status:"in_progress"}).eq("id",sceneId).eq("creator_id",currentUser.id));if(error)throw error;
-  await showActiveScene(sceneId);
- }catch(e){console.error(e);alert("Could not start the scene:\\n\\n"+e.message)}
-};
-
-window.rejectResponse=async(responseId,sceneId)=>{
- const {error}=await supabase.from("scene_responses").update({status:"rejected"}).eq("id",responseId);
- if(error){alert(error.message);return}
- viewResponses(sceneId);
-};
-
-/* ACTIVE SCENE */
-window.showActiveScene=async sceneId=>{
- if(!currentUser){openAuth();return}
- try{
-  const {data:scene,error:se}=await supabase.from("scenes").select("*").eq("id",sceneId).single();if(se)throw se;
-  const turns=await getSceneTurns(sceneId);
-  const accepted=(await supabase.from("scene_responses").select("responder_id").eq("scene_id",sceneId).eq("status","accepted").maybeSingle()).data;
-  const bId=accepted?.responder_id,last=turns[turns.length-1];
-  const myTurn=scene.status!=="ended"&&scene.creator_id===currentUser.id&&last&&bId&&last.player_id===bId;
-
-  app.innerHTML=`<div class="scene"><span class="tag">🎬 ACTIVE SCENE</span><h1>${escapeHtml(scene.title)}</h1><p class="muted">${escapeHtml(scene.situation||"")}</p><div class="status ${scene.status==="ended"?"success":""}">${scene.status==="ended"?"✓ Scene ended":myTurn?"🎭 Your turn":"⏳ Waiting for the other player"}</div><div id="activeTurns"></div>${scene.status!=="ended"&&myTurn?`<button class="btn primary full" onclick="recordNextTurn('${scene.id}')">🎥 Record your next turn</button><br><br>`:""}${scene.status!=="ended"&&scene.creator_id===currentUser.id?`<button class="btn danger full" onclick="endScene('${scene.id}')">🛑 End Scene</button>`:""}<br><br><button class="btn secondary full" onclick="viewResponses('${scene.id}')">← Back to Responses</button></div>`;
-  const box=document.getElementById("activeTurns");
-  turns.forEach(t=>box.innerHTML+=`<div class="info"><strong>Turn ${escapeHtml(t.turn_number)}</strong> — ${t.player_id===currentUser.id?"You":"Other player"}</div><video class="scene-video" controls playsinline src="${escapeHtml(videoUrl(t.video_path))}"></video>`);
- }catch(e){console.error(e);alert("Could not load scene:\\n\\n"+e.message)}
-};
-
-window.recordNextTurn=async sceneId=>{
- currentResponseSceneId=sceneId;
- const {data:scene,error}=await supabase.from("scenes").select("*").eq("id",sceneId).single();if(error){alert(error.message);return}currentScene=scene;
- app.innerHTML=`<h1>🎥 Record your next turn</h1><p class="muted">Continue the scene naturally.</p><div class="camera"><video id="responseCamera" autoplay muted playsinline></video></div><div id="responseStatus" class="status">Ready</div><button id="responseRecordButton" class="btn primary full" onclick="toggleResponseRecording()">🔴 Record</button><br><br><button class="btn secondary full" onclick="showActiveScene('${sceneId}')">Cancel</button>`;
- try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById("responseCamera").srcObject=cameraStream}catch(e){alert("Camera/microphone permission was denied.");showActiveScene(sceneId)}
-};
-
-/* Next-turn review uses the same recorder, but has its own upload button. */
-function reviewNextTurn(){
- stopCameraTracks();pendingVideoBlob=new Blob(recordedChunks,{type:"video/webm"});
- const url=URL.createObjectURL(pendingVideoBlob);
- app.innerHTML=`<h1>Review your turn</h1><div class="camera"><video src="${url}" controls playsinline></video></div><div class="button-row"><button class="btn secondary" onclick="recordNextTurn('${currentResponseSceneId}')">↻ Retake</button><button class="btn primary" onclick="uploadNextTurn()">✓ Add Turn</button></div>`;
-}
-window.uploadNextTurn=async()=>{
- if(!pendingVideoBlob){alert("No video recorded.");return}
- try{
-  showLoading("Adding your turn...");
-  const turns=await getSceneTurns(currentResponseSceneId);
-  const scene=(await supabase.from("scenes").select("*").eq("id",currentResponseSceneId).single()).data;
-  if(!scene||scene.status==="ended"){alert("This scene has ended.");showActiveScene(currentResponseSceneId);return}
-  const accepted=(await supabase.from("scene_responses").select("responder_id").eq("scene_id",currentResponseSceneId).eq("status","accepted").maybeSingle()).data;
-  const last=turns[turns.length-1];
-  if(!accepted||!last||scene.creator_id!==currentUser.id||last.player_id!==accepted.responder_id){
-   alert("It is not your turn.");showActiveScene(currentResponseSceneId);return;
-  }
-  const id=crypto.randomUUID(),path=currentUser.id+"/turns/"+id+".webm";
-  let {error}=await supabase.storage.from("scene-videos").upload(path,pendingVideoBlob,{contentType:"video/webm",upsert:false});if(error)throw error;
-  ({error}=await supabase.from("scene_turns").insert({id,scene_id:currentResponseSceneId,player_id:currentUser.id,turn_number:turns.length+1,video_path:path}));
-  if(error){await supabase.storage.from("scene-videos").remove([path]);throw error}
-  pendingVideoBlob=null;await showActiveScene(currentResponseSceneId);
- }catch(e){console.error(e);alert("Turn upload failed:\\n\\n"+e.message);showActiveScene(currentResponseSceneId)}
-};
-
-/* Make the response recorder show the correct review for B.
-   The next-turn recorder replaces the stop handler temporarily. */
-const oldStartResponseRecording=startResponseRecording;
-window.toggleNextAwareRecording=()=>{};
-
-/* Override record button handler by selecting based on current page. */
-const originalToggleResponse=window.toggleResponseRecording;
 window.toggleResponseRecording=()=>{
- if(currentScene&&currentResponseSceneId&&document.getElementById("responseRecordButton")){
-  if(!mediaRecorder||mediaRecorder.state==="inactive"){
-   recordedChunks=[];let options={};if(MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus"))options.mimeType="video/webm;codecs=vp8,opus";
-   mediaRecorder=new MediaRecorder(cameraStream,options);
-   mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data)};
-   const isNext=document.querySelector("h1")?.textContent?.includes("next turn");
-   mediaRecorder.onstop=isNext?reviewNextTurn:reviewResponse;
-   mediaRecorder.start();recordingSeconds=0;
-   recordingTimer=setInterval(()=>{recordingSeconds++;const s=document.getElementById("responseStatus");if(s)s.textContent="🔴 Recording "+recordingSeconds+" seconds";if(recordingSeconds>=30)stopRecording()},1000);
-   document.getElementById("responseRecordButton").textContent="⏹ Stop";
-  }else stopRecording();
- }
+
+if(
+!mediaRecorder||
+mediaRecorder.state==="inactive"
+){
+
+startResponseRecording();
+
+}else{
+
+stopRecording();
+
+}
+
 };
 
-window.endScene=async sceneId=>{
- if(!confirm("End this scene? Nobody will be able to record another turn."))return;
- const {error}=await supabase.from("scenes").update({status:"ended"}).eq("id",sceneId).eq("creator_id",currentUser.id);
- if(error){alert(error.message);return}
- await showActiveScene(sceneId);
+
+function startResponseRecording(){
+
+recordedChunks=[];
+
+let options={};
+
+if(
+MediaRecorder.isTypeSupported(
+"video/webm;codecs=vp8,opus"
+)
+){
+
+options.mimeType=
+"video/webm;codecs=vp8,opus";
+
+}
+
+mediaRecorder=
+new MediaRecorder(
+cameraStream,
+options
+);
+
+mediaRecorder.ondataavailable=e=>{
+
+if(e.data.size){
+
+recordedChunks.push(e.data);
+
+}
+
 };
+
+mediaRecorder.onstop=
+reviewResponse;
+
+mediaRecorder.start();
+
+recordingSeconds=0;
+
+recordingTimer=
+setInterval(()=>{
+
+recordingSeconds++;
+
+const s=
+document.getElementById(
+"responseStatus"
+);
+
+if(s){
+
+s.textContent=
+"🔴 Recording "+
+recordingSeconds+
+" seconds";
+
+}
+
+if(recordingSeconds>=30){
+
+stopRecording();
+
+}
+
+},1000);
+
+document.getElementById(
+"responseRecordButton"
+).textContent="⏹ Stop";
+
+}
+
+
+function reviewResponse(){
+
+stopCameraTracks();
+
+pendingVideoBlob=
+new Blob(
+recordedChunks,
+{type:"video/webm"}
+);
+
+const url=
+URL.createObjectURL(
+pendingVideoBlob
+);
+
+app.innerHTML=`
+
+<h1>
+Review response
+</h1>
+
+<div class="camera">
+
+<video
+src="${url}"
+controls
+playsinline>
+</video>
+
+</div>
+
+<div class="button-row">
+
+<button
+class="btn secondary"
+onclick="recordResponse('${currentResponseSceneId}')">
+
+↻ Retake
+
+</button>
+
+<button
+class="btn primary"
+onclick="uploadResponse()">
+
+✓ Send Response
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   UPLOAD CHARACTER B RESPONSE
+========================================================= */
+
+window.uploadResponse=async()=>{
+
+if(!pendingVideoBlob){
+
+alert("No response video.");
+return;
+
+}
+
+if(
+!currentUser||
+!currentResponseSceneId
+){
+
+alert(
+"Your session or scene is missing."
+);
+
+return;
+
+}
+
+showLoading("Uploading response...");
+
+let videoPath=null;
+
+try{
+
+let {data:existing,error}=
+await supabase
+.from("scene_responses")
+.select(
+"id,video_path,status"
+)
+.eq(
+"scene_id",
+currentResponseSceneId
+)
+.eq(
+"responder_id",
+currentUser.id
+)
+.maybeSingle();
+
+if(error)throw error;
+
+if(existing){
+
+pendingVideoBlob=null;
+
+alert(
+"You have already responded to this scene."
+);
+
+respondToScene(
+currentResponseSceneId
+);
+
+return;
+
+}
+
+
+const responseId=
+crypto.randomUUID();
+
+videoPath=
+currentUser.id+
+"/responses/"+
+responseId+
+".webm";
+
+
+({error}=
+await supabase.storage
+.from("scene-videos")
+.upload(
+videoPath,
+pendingVideoBlob,
+{
+contentType:"video/webm",
+upsert:false
+}
+));
+
+if(error)throw error;
+
+
+const {data:urlData}=
+supabase.storage
+.from("scene-videos")
+.getPublicUrl(videoPath);
+
+const videoUrl=
+urlData.publicUrl;
+
+
+({error}=
+await supabase
+.from("scene_responses")
+.insert({
+
+id:responseId,
+
+scene_id:
+currentResponseSceneId,
+
+responder_id:
+currentUser.id,
+
+video_path:
+videoUrl,
+
+status:"pending"
+
+}));
+
+
+if(error){
+
+await supabase.storage
+.from("scene-videos")
+.remove([videoPath]);
+
+throw error;
+
+}
+
+
+pendingVideoBlob=null;
+
+app.innerHTML=`
+
+<div class="scene">
+
+<div class="status success">
+✓ Response sent
+</div>
+
+<h1>
+Your response is saved
+</h1>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(videoUrl)}">
+</video>
+
+<p class="muted">
+The creator can now watch your response
+and choose you.
+</p>
+
+<button
+class="btn primary full"
+onclick="respondToScene('${currentResponseSceneId}')">
+
+View My Response
+
+</button>
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="discover()">
+
+🔥 Find another scene
+
+</button>
+
+</div>
+
+`;
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Response upload failed:\n\n"+
+e.message
+);
+
+respondToScene(
+currentResponseSceneId
+);
+
+}
+
+};
+
+
+/* =========================================================
+   MY SCENES
+========================================================= */
 
 window.myScenes=async()=>{
- if(!currentUser){openAuth();return}
- const {data:scenes,error}=await supabase.from("scenes").select("*").eq("creator_id",currentUser.id).order("created_at",{ascending:false});
- if(error){alert(error.message);return}
- app.innerHTML=`<h1>🎬 My Scenes</h1>`;
- if(!scenes?.length){app.innerHTML+=`<div class="empty"><h2>No scenes yet</h2><button class="btn primary" onclick="createScene()">Create your first scene</button></div>`;return}
- for(const s of scenes){
-  const u=await getOpeningVideo(s.id);
-  app.innerHTML+=`<div class="scene"><span class="tag">${escapeHtml(s.category||"Scene")}</span><h2>${escapeHtml(s.title)}</h2>${u?`<video class="scene-video" controls playsinline src="${escapeHtml(u)}"></video>`:""}<div class="status">Status: ${escapeHtml(s.status||"open")}</div><button class="btn primary full" onclick="viewResponses('${s.id}')">👥 View Responses</button><br><br><button class="btn danger full" onclick="deleteScene('${s.id}')">🗑 Delete Scene</button></div>`;
- }
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+const {data:scenes,error}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("creator_id",currentUser.id)
+.order(
+"created_at",
+{ascending:false}
+);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+app.innerHTML=`
+
+<h1>
+🎬 My Scenes
+</h1>
+
+`;
+
+if(!scenes?.length){
+
+app.innerHTML+=`
+
+<div class="empty">
+
+<h2>
+No scenes yet
+</h2>
+
+<button
+class="btn primary"
+onclick="createScene()">
+
+Create your first scene
+
+</button>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+for(const scene of scenes){
+
+const videoUrl=
+await getOpeningVideo(scene.id);
+
+app.innerHTML+=`
+
+<div class="scene">
+
+<span class="tag">
+${escapeHtml(scene.category||"Scene")}
+</span>
+
+<h2>
+${escapeHtml(scene.title)}
+</h2>
+
+${
+videoUrl
+?
+`
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(videoUrl)}">
+</video>
+`
+:
+""
+}
+
+<div class="status">
+
+Status:
+${escapeHtml(scene.status||"open")}
+
+</div>
+
+<button
+class="btn primary full"
+onclick="viewResponses('${scene.id}')">
+
+👥 View Responses
+
+</button>
+
+<br><br>
+
+<button
+class="btn danger full"
+onclick="deleteScene('${scene.id}')">
+
+🗑 Delete Scene
+
+</button>
+
+</div>
+
+`;
+
+}
+
 };
+
+
+/* =========================================================
+   DELETE SCENE
+========================================================= */
 
 window.deleteScene=async sceneId=>{
- if(!currentUser||!confirm("Delete this scene and its responses? This cannot be undone."))return;
- try{
-  const {data:s,error:se}=await supabase.from("scenes").select("creator_id").eq("id",sceneId).single();if(se)throw se;
-  if(s.creator_id!==currentUser.id){alert("You can only delete your own scenes.");return}
-  let r=await supabase.from("scene_responses").delete().eq("scene_id",sceneId);if(r.error)throw r.error;
-  r=await supabase.from("scene_turns").delete().eq("scene_id",sceneId);if(r.error)throw r.error;
-  r=await supabase.from("scenes").delete().eq("id",sceneId).eq("creator_id",currentUser.id);if(r.error)throw r.error;
-  alert("Scene deleted.");myScenes();
- }catch(e){console.error(e);alert("Could not delete scene:\\n\\n"+e.message)}
+
+if(!currentUser)return;
+
+if(
+!confirm(
+"Delete this scene and its responses?\n\nThis cannot be undone."
+)
+){
+
+return;
+
+}
+
+try{
+
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("creator_id")
+.eq("id",sceneId)
+.single();
+
+if(sceneError)throw sceneError;
+
+if(
+scene.creator_id!==currentUser.id
+){
+
+alert(
+"You can only delete your own scenes."
+);
+
+return;
+
+}
+
+
+const {data:turns}=
+await supabase
+.from("scene_turns")
+.select("video_path")
+.eq("scene_id",sceneId);
+
+
+const {data:responses}=
+await supabase
+.from("scene_responses")
+.select("video_path")
+.eq("scene_id",sceneId);
+
+
+const paths=[];
+
+
+[
+...(turns||[]),
+...(responses||[])
+]
+.forEach(row=>{
+
+const url=
+row.video_path||"";
+
+const marker=
+"/storage/v1/object/public/scene-videos/";
+
+const idx=
+url.indexOf(marker);
+
+if(idx>=0){
+
+paths.push(
+decodeURIComponent(
+url.slice(
+idx+marker.length
+)
+)
+);
+
+}
+
+});
+
+
+if(paths.length){
+
+await supabase.storage
+.from("scene-videos")
+.remove(
+[...new Set(paths)]
+);
+
+}
+
+
+let r=
+await supabase
+.from("scene_responses")
+.delete()
+.eq("scene_id",sceneId);
+
+if(r.error)throw r.error;
+
+
+r=
+await supabase
+.from("scene_turns")
+.delete()
+.eq("scene_id",sceneId);
+
+if(r.error)throw r.error;
+
+
+r=
+await supabase
+.from("scenes")
+.delete()
+.eq("id",sceneId)
+.eq(
+"creator_id",
+currentUser.id
+);
+
+if(r.error)throw r.error;
+
+
+alert("Scene deleted.");
+
+myScenes();
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Could not delete scene:\n\n"+
+e.message
+);
+
+}
+
 };
+
+
+/* =========================================================
+   VIEW RESPONSES
+========================================================= */
+
+window.viewResponses=async sceneId=>{
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+showLoading("Loading responses...");
+
+try{
+
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(sceneError)throw sceneError;
+
+currentScene=scene;
+
+
+const {data:responses,error:responseError}=
+await supabase
+.from("scene_responses")
+.select(`*, profiles(username)`)
+.eq("scene_id",sceneId)
+.order(
+"created_at",
+{ascending:false}
+);
+
+if(responseError)throw responseError;
+
+
+const accepted=
+(responses||[])
+.find(
+r=>r.status==="accepted"
+);
+
+
+const {data:turns,error:turnError}=
+await supabase
+.from("scene_turns")
+.select("*")
+.eq("scene_id",sceneId)
+.order(
+"turn_number",
+{ascending:true}
+);
+
+if(turnError)throw turnError;
+
+
+const lastTurn=
+turns?.length
+?turns[turns.length-1]
+:null;
+
+
+let creatorCanContinue=false;
+
+if(
+scene.status==="in_progress" &&
+accepted &&
+scene.creator_id===currentUser.id &&
+lastTurn &&
+lastTurn.player_id===
+accepted.responder_id
+){
+
+creatorCanContinue=true;
+
+}
+
+
+app.innerHTML=`
+
+<h1>
+👥 Responses
+</h1>
+
+<p class="muted">
+People who want to play Character B.
+</p>
+
+${
+creatorCanContinue
+?
+`
+
+<div class="status success">
+
+✓ Player accepted —
+it is your turn.
+
+</div>
+
+<button
+class="btn primary full"
+onclick="showActiveScene('${sceneId}')">
+
+🎭 Continue Scene
+
+</button>
+
+<br><br>
+
+`
+:
+""
+}
+
+`;
+
+
+if(
+!responses||
+responses.length===0
+){
+
+app.innerHTML+=`
+
+<div class="empty">
+
+<h2>
+No responses yet
+</h2>
+
+<p>
+Leave the scene open and check again later.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+responses.forEach(response=>{
+
+const username=
+response.profiles?.username||
+"player";
+
+let actions="";
+
+
+if(response.status==="pending"){
+
+actions=`
+
+<button
+class="btn primary full"
+onclick="chooseResponse(
+'${response.id}',
+'${sceneId}'
+)">
+
+✓ Choose this player
+
+</button>
+
+<br><br>
+
+<button
+class="btn danger full"
+onclick="rejectResponse(
+'${response.id}',
+'${sceneId}'
+)">
+
+Pass
+
+</button>
+
+`;
+
+}else if(response.status==="accepted"){
+
+actions=`
+
+<div class="status success">
+✓ Accepted
+</div>
+
+${
+scene.status==="in_progress"
+?
+`
+
+<br>
+
+<button
+class="btn primary full"
+onclick="showActiveScene('${sceneId}')">
+
+🎭 Open Scene
+
+</button>
+
+`
+:
+""
+}
+
+`;
+
+}else{
+
+actions=`
+
+<div class="status">
+${escapeHtml(
+response.status||"rejected"
+)}
+</div>
+
+`;
+
+}
+
+
+app.innerHTML+=`
+
+<div class="response">
+
+<div class="user-row">
+
+<div class="avatar">
+${escapeHtml(
+username[0]
+).toUpperCase()}
+</div>
+
+<strong>
+@${escapeHtml(username)}
+</strong>
+
+</div>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(response.video_path)}">
+</video>
+
+${actions}
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Could not load responses:\n\n"+
+error.message
+);
+
+}
+
+};
+
+
+/* =========================================================
+   CHOOSE PLAYER
+========================================================= */
+
+window.chooseResponse=async(
+responseId,
+sceneId
+)=>{
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+try{
+
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(sceneError)throw sceneError;
+
+
+if(
+scene.creator_id!==currentUser.id
+){
+
+alert(
+"Only the scene creator can choose a player."
+);
+
+return;
+
+}
+
+
+const {data:response,error:responseError}=
+await supabase
+.from("scene_responses")
+.select("*")
+.eq("id",responseId)
+.eq("scene_id",sceneId)
+.single();
+
+if(responseError)throw responseError;
+
+
+/* Accept selected player */
+
+let {error:acceptError}=
+await supabase
+.from("scene_responses")
+.update({
+status:"accepted"
+})
+.eq("id",responseId)
+.eq("scene_id",sceneId);
+
+if(acceptError)throw acceptError;
+
+
+/* Reject all other responses */
+
+const {error:rejectError}=
+await supabase
+.from("scene_responses")
+.update({
+status:"rejected"
+})
+.eq("scene_id",sceneId)
+.neq("id",responseId);
+
+if(rejectError){
+
+console.warn(
+"Could not reject other responses:",
+rejectError.message
+);
+
+}
+
+
+/* Make sure Turn 2 exists */
+
+const {data:turn2,error:turnLookupError}=
+await supabase
+.from("scene_turns")
+.select("id")
+.eq("scene_id",sceneId)
+.eq("turn_number",2)
+.maybeSingle();
+
+if(turnLookupError)throw turnLookupError;
+
+
+if(!turn2){
+
+const {error:turnInsertError}=
+await supabase
+.from("scene_turns")
+.insert({
+
+id:crypto.randomUUID(),
+
+scene_id:sceneId,
+
+player_id:
+response.responder_id,
+
+turn_number:2,
+
+video_path:
+response.video_path
+
+});
+
+
+if(turnInsertError){
+
+console.error(
+"Turn 2 insert failed:",
+turnInsertError
+);
+
+alert(
+"Player was selected, but Turn 2 could not be added:\n\n"+
+turnInsertError.message
+);
+
+return;
+
+}
+
+}
+
+
+/* Start scene */
+
+const {error:statusError}=
+await supabase
+.from("scenes")
+.update({
+status:"in_progress"
+})
+.eq(
+"id",
+sceneId
+)
+.eq(
+"creator_id",
+currentUser.id
+);
+
+if(statusError)throw statusError;
+
+
+await showActiveScene(sceneId);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Could not start the scene:\n\n"+
+error.message
+);
+
+}
+
+};
+
+
+/* =========================================================
+   REJECT RESPONSE
+========================================================= */
+
+window.rejectResponse=async(
+responseId,
+sceneId
+)=>{
+
+const {error}=
+await supabase
+.from("scene_responses")
+.update({
+status:"rejected"
+})
+.eq("id",responseId);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Response passed.");
+
+viewResponses(sceneId);
+
+};
+
+
+/* =========================================================
+   MY RESPONSE
+========================================================= */
+
+async function getMyResponse(sceneId){
+
+if(!currentUser)return null;
+
+const {data,error}=
+await supabase
+.from("scene_responses")
+.select("*")
+.eq("scene_id",sceneId)
+.eq("responder_id",currentUser.id)
+.maybeSingle();
+
+if(error)throw error;
+
+return data;
+
+}
+
+
+window.showMyResponse=async sceneId=>{
+
+const response=
+await getMyResponse(sceneId);
+
+if(!response){
+
+alert(
+"You haven't responded to this scene yet."
+);
+
+return;
+
+}
+
+
+app.innerHTML=`
+
+<div class="scene">
+
+<span class="tag">
+YOUR RESPONSE
+</span>
+
+<h1>
+Your Character B response
+</h1>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(response.video_path)}">
+</video>
+
+<div class="status">
+${escapeHtml(response.status)}
+</div>
+
+${
+response.status==="pending"
+?
+`
+
+<button
+class="btn danger full"
+onclick="deleteMyResponse(
+'${response.id}',
+'${sceneId}'
+)">
+
+🗑 Delete my response
+
+</button>
+
+`
+:
+""
+}
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="discover()">
+
+Back to Discover
+
+</button>
+
+</div>
+
+`;
+
+};
+
+
+window.deleteMyResponse=async(
+responseId,
+sceneId
+)=>{
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+if(
+!confirm(
+"Delete your response?"
+)
+){
+
+return;
+
+}
+
+
+const {data:row,error:readError}=
+await supabase
+.from("scene_responses")
+.select(
+"video_path,responder_id,status"
+)
+.eq("id",responseId)
+.single();
+
+if(readError){
+
+alert(readError.message);
+return;
+
+}
+
+
+if(
+row.responder_id!==currentUser.id
+){
+
+alert(
+"You can only delete your own response."
+);
+
+return;
+
+}
+
+
+if(row.status!=="pending"){
+
+alert(
+"Only a pending response can be deleted."
+);
+
+return;
+
+}
+
+
+const url=
+row.video_path||"";
+
+const marker=
+"/storage/v1/object/public/scene-videos/";
+
+const idx=
+url.indexOf(marker);
+
+if(idx>=0){
+
+const storagePath=
+decodeURIComponent(
+url.slice(
+idx+marker.length
+)
+);
+
+await supabase.storage
+.from("scene-videos")
+.remove([storagePath]);
+
+}
+
+
+const {error}=
+await supabase
+.from("scene_responses")
+.delete()
+.eq("id",responseId)
+.eq(
+"responder_id",
+currentUser.id
+);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Response deleted.");
+
+discover();
+
+};
+
+
+/* =========================================================
+   GET TURNS
+========================================================= */
+
+async function getSceneTurns(sceneId){
+
+const {data,error}=
+await supabase
+.from("scene_turns")
+.select("*")
+.eq("scene_id",sceneId)
+.order(
+"turn_number",
+{ascending:true}
+);
+
+if(error)throw error;
+
+return data||[];
+
+}
+
+
+/* =========================================================
+   ACTIVE SCENE
+   THIS IS THE IMPORTANT FIX
+========================================================= */
+
+window.showActiveScene=async sceneId=>{
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+try{
+
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(sceneError)throw sceneError;
+
+
+const turns=
+await getSceneTurns(sceneId);
+
+
+const {
+data:accepted,
+error:acceptedError
+}=
+await supabase
+.from("scene_responses")
+.select(
+"responder_id,status"
+)
+.eq(
+"scene_id",
+sceneId
+)
+.eq(
+"status",
+"accepted"
+)
+.maybeSingle();
+
+if(acceptedError)throw acceptedError;
+
+
+const bId=
+accepted?.responder_id||null;
+
+const last=
+turns.length
+?turns[turns.length-1]
+:null;
+
+
+/*
+NEXT PLAYER LOGIC
+
+Turn 1 = A
+Turn 2 = B
+Turn 3 = A
+Turn 4 = B
+Turn 5 = A
+
+If the last turn was A,
+B goes next.
+
+If the last turn was B,
+A goes next.
+*/
+
+let expectedPlayerId=null;
+
+
+if(
+scene.status==="in_progress" &&
+bId &&
+last
+){
+
+if(
+last.player_id===
+scene.creator_id
+){
+
+expectedPlayerId=
+bId;
+
+}else if(
+last.player_id===
+bId
+){
+
+expectedPlayerId=
+scene.creator_id;
+
+}
+
+}
+
+
+const myTurn=
+scene.status!=="ended" &&
+expectedPlayerId===
+currentUser.id;
+
+
+let turnMessage="";
+
+
+if(scene.status==="ended"){
+
+turnMessage=
+"✓ Scene ended";
+
+}else if(myTurn){
+
+turnMessage=
+"🎭 Your turn";
+
+}else if(expectedPlayerId){
+
+turnMessage=
+"⏳ Waiting for the other player";
+
+}else{
+
+turnMessage=
+"⏳ Waiting for the scene to start";
+
+}
+
+
+app.innerHTML=`
+
+<div class="scene">
+
+<span class="tag">
+🎬 ACTIVE SCENE
+</span>
+
+<h1>
+${escapeHtml(scene.title)}
+</h1>
+
+<p class="muted">
+${escapeHtml(scene.situation||"")}
+</p>
+
+<div
+class="status
+${scene.status==="ended"
+?"success"
+:myTurn
+?"success"
+:""}">
+
+${turnMessage}
+
+</div>
+
+<div id="activeTurns"></div>
+
+
+${
+scene.status!=="ended" &&
+myTurn
+?
+`
+
+<button
+class="btn primary full"
+onclick="recordNextTurn('${scene.id}')">
+
+🎥 Record your next turn
+
+</button>
+
+<br><br>
+
+`
+:
+""
+}
+
+
+${
+scene.status!=="ended" &&
+scene.creator_id===currentUser.id
+?
+`
+
+<button
+class="btn danger full"
+onclick="endScene('${scene.id}')">
+
+🛑 End Scene
+
+</button>
+
+`
+:
+""
+}
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="viewResponses('${scene.id}')">
+
+← Back to Responses
+
+</button>
+
+</div>
+
+`;
+
+
+const box=
+document.getElementById(
+"activeTurns"
+);
+
+
+turns.forEach(t=>{
+
+let playerLabel="Other player";
+
+if(
+t.player_id===
+currentUser.id
+){
+
+playerLabel="You";
+
+}else if(
+t.player_id===
+scene.creator_id
+){
+
+playerLabel="Character A";
+
+}else{
+
+playerLabel="Character B";
+
+}
+
+
+box.innerHTML+=`
+
+<div class="info">
+
+<strong>
+Turn ${escapeHtml(t.turn_number)}
+</strong>
+
+—
+${playerLabel}
+
+</div>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(t.video_path)}">
+</video>
+
+`;
+
+});
+
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Could not load scene:\n\n"+
+e.message
+);
+
+}
+
+};
+
+
+/* =========================================================
+   RECORD NEXT TURN
+   A OR B CAN USE THIS
+========================================================= */
+
+window.recordNextTurn=async sceneId=>{
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+currentResponseSceneId=
+sceneId;
+
+
+const {data:scene,error}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+currentScene=scene;
+
+
+app.innerHTML=`
+
+<h1>
+🎥 Record your next turn
+</h1>
+
+<p class="muted">
+Continue the scene naturally.
+</p>
+
+<div class="camera">
+
+<video
+id="nextTurnCamera"
+autoplay
+muted
+playsinline>
+</video>
+
+</div>
+
+<div
+id="nextTurnStatus"
+class="status">
+
+Ready
+
+</div>
+
+<button
+id="nextTurnRecordButton"
+class="btn primary full"
+onclick="toggleNextTurnRecording()">
+
+🔴 Record
+
+</button>
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="showActiveScene('${sceneId}')">
+
+Cancel
+
+</button>
+
+`;
+
+
+try{
+
+cameraStream=
+await navigator.mediaDevices.getUserMedia({
+
+video:{facingMode:"user"},
+audio:true
+
+});
+
+document.getElementById(
+"nextTurnCamera"
+).srcObject=
+cameraStream;
+
+}catch(e){
+
+alert(
+"Camera/microphone permission was denied."
+);
+
+showActiveScene(sceneId);
+
+}
+
+};
+
+
+/* =========================================================
+   NEXT TURN RECORDING
+========================================================= */
+
+window.toggleNextTurnRecording=()=>{
+
+if(
+!mediaRecorder||
+mediaRecorder.state==="inactive"
+){
+
+startNextTurnRecording();
+
+}else{
+
+stopRecording();
+
+}
+
+};
+
+
+function startNextTurnRecording(){
+
+recordedChunks=[];
+
+let options={};
+
+if(
+MediaRecorder.isTypeSupported(
+"video/webm;codecs=vp8,opus"
+)
+){
+
+options.mimeType=
+"video/webm;codecs=vp8,opus";
+
+}
+
+
+mediaRecorder=
+new MediaRecorder(
+cameraStream,
+options
+);
+
+
+mediaRecorder.ondataavailable=e=>{
+
+if(e.data.size){
+
+recordedChunks.push(e.data);
+
+}
+
+};
+
+
+mediaRecorder.onstop=
+reviewNextTurn;
+
+
+mediaRecorder.start();
+
+recordingSeconds=0;
+
+
+recordingTimer=
+setInterval(()=>{
+
+recordingSeconds++;
+
+const s=
+document.getElementById(
+"nextTurnStatus"
+);
+
+if(s){
+
+s.textContent=
+"🔴 Recording "+
+recordingSeconds+
+" seconds";
+
+}
+
+if(recordingSeconds>=30){
+
+stopRecording();
+
+}
+
+},1000);
+
+
+const button=
+document.getElementById(
+"nextTurnRecordButton"
+);
+
+if(button){
+
+button.textContent=
+"⏹ Stop";
+
+}
+
+}
+
+
+/* =========================================================
+   REVIEW NEXT TURN
+========================================================= */
+
+function reviewNextTurn(){
+
+stopCameraTracks();
+
+pendingVideoBlob=
+new Blob(
+recordedChunks,
+{type:"video/webm"}
+);
+
+const url=
+URL.createObjectURL(
+pendingVideoBlob
+);
+
+
+app.innerHTML=`
+
+<h1>
+Review your next turn
+</h1>
+
+<p class="muted">
+Make sure you are happy with your continuation.
+</p>
+
+<div class="camera">
+
+<video
+src="${url}"
+controls
+playsinline>
+</video>
+
+</div>
+
+<div class="button-row">
+
+<button
+class="btn secondary"
+onclick="recordNextTurn('${currentResponseSceneId}')">
+
+↻ Retake
+
+</button>
+
+<button
+class="btn primary"
+onclick="uploadNextTurn()">
+
+✓ Add Turn
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   UPLOAD NEXT TURN
+   THIS GOES INTO scene_turns
+========================================================= */
+
+window.uploadNextTurn=async()=>{
+
+if(!pendingVideoBlob){
+
+alert("No turn video.");
+return;
+
+}
+
+if(
+!currentUser||
+!currentResponseSceneId
+){
+
+alert(
+"Your session or scene is missing."
+);
+
+return;
+
+}
+
+
+showLoading(
+"Uploading your turn..."
+);
+
+
+let videoPath=null;
+
+
+try{
+
+const sceneId=
+currentResponseSceneId;
+
+
+/* Get scene */
+
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(sceneError)throw sceneError;
+
+
+if(scene.status!=="in_progress"){
+
+throw new Error(
+"This scene is not active."
+);
+
+}
+
+
+/* Get current turns */
+
+const turns=
+await getSceneTurns(sceneId);
+
+
+const last=
+turns[turns.length-1];
+
+
+if(!last){
+
+throw new Error(
+"No previous turn exists."
+);
+
+}
+
+
+/* Find accepted B */
+
+const {
+data:accepted,
+error:acceptedError
+}=
+await supabase
+.from("scene_responses")
+.select("responder_id")
+.eq("scene_id",sceneId)
+.eq("status","accepted")
+.maybeSingle();
+
+if(acceptedError)throw acceptedError;
+
+
+const bId=
+accepted?.responder_id;
+
+
+if(!bId){
+
+throw new Error(
+"No accepted player was found."
+);
+
+}
+
+
+/*
+CHECK WHO SHOULD RECORD
+
+If last turn was A,
+B must record.
+
+If last turn was B,
+A must record.
+*/
+
+let expectedPlayerId=null;
+
+
+if(
+last.player_id===
+scene.creator_id
+){
+
+expectedPlayerId=
+bId;
+
+}else if(
+last.player_id===
+bId
+){
+
+expectedPlayerId=
+scene.creator_id;
+
+}
+
+
+if(
+expectedPlayerId!==
+currentUser.id
+){
+
+throw new Error(
+"It is not your turn."
+);
+
+}
+
+
+/* Next number */
+
+const nextTurnNumber=
+Number(last.turn_number)+1;
+
+
+/* Unique ID */
+
+const turnId=
+crypto.randomUUID();
+
+
+/* Storage path */
+
+videoPath=
+currentUser.id+
+"/turns/"+
+turnId+
+".webm";
+
+
+/* Upload video */
+
+const {error:uploadError}=
+await supabase.storage
+.from("scene-videos")
+.upload(
+videoPath,
+pendingVideoBlob,
+{
+contentType:"video/webm",
+upsert:false
+}
+);
+
+
+if(uploadError){
+
+throw uploadError;
+
+}
+
+
+/* Public URL */
+
+const {data:urlData}=
+supabase.storage
+.from("scene-videos")
+.getPublicUrl(
+videoPath
+);
+
+
+const videoUrl=
+urlData.publicUrl;
+
+
+/* Insert turn */
+
+const {error:turnError}=
+await supabase
+.from("scene_turns")
+.insert({
+
+id:turnId,
+
+scene_id:sceneId,
+
+player_id:
+currentUser.id,
+
+turn_number:
+nextTurnNumber,
+
+video_path:
+videoUrl
+
+});
+
+
+if(turnError){
+
+/* Delete uploaded file if DB insert fails */
+
+await supabase.storage
+.from("scene-videos")
+.remove([videoPath]);
+
+throw turnError;
+
+}
+
+
+/* Success */
+
+pendingVideoBlob=null;
+
+await showActiveScene(
+sceneId
+);
+
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Turn upload failed:\n\n"+
+e.message
+);
+
+showActiveScene(
+currentResponseSceneId
+);
+
+}
+
+};
+
+
+/* =========================================================
+   END SCENE
+========================================================= */
+
+window.endScene=async sceneId=>{
+
+if(!currentUser)return;
+
+if(
+!confirm(
+"End this scene?\n\nNobody will be able to record another turn."
+)
+){
+
+return;
+
+}
+
+
+const {error}=
+await supabase
+.from("scenes")
+.update({
+status:"ended"
+})
+.eq(
+"id",
+sceneId
+)
+.eq(
+"creator_id",
+currentUser.id
+);
+
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+
+await showActiveScene(sceneId);
+
+};
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
 
 window.profile=()=>{
- if(!currentUser){openAuth();return}
- const u=currentProfile?.username||"player";
- app.innerHTML=`<div class="scene"><div class="avatar">${escapeHtml(u[0]).toUpperCase()}</div><h1>@${escapeHtml(u)}</h1><p class="muted">ScenePlay player</p><button class="btn primary full" onclick="myScenes()">🎬 My Scenes</button><br><br><button class="btn danger full" onclick="logout()">Log out</button></div>`;
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+const username=
+currentProfile?.username||
+"player";
+
+
+app.innerHTML=`
+
+<div class="scene">
+
+<div class="avatar">
+
+${escapeHtml(
+username[0]
+).toUpperCase()}
+
+</div>
+
+<h1>
+@${escapeHtml(username)}
+</h1>
+
+<p class="muted">
+ScenePlay player
+</p>
+
+<button
+class="btn primary full"
+onclick="myScenes()">
+
+🎬 My Scenes
+
+</button>
+
+<br><br>
+
+<button
+class="btn danger full"
+onclick="logout()">
+
+Log out
+
+</button>
+
+</div>
+
+`;
+
 };
 
-supabase.auth.onAuthStateChange(async(event,session)=>{currentUser=session?.user||null;await loadUser()});
-await loadUser();home();
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function showLoading(text){
+
+app.innerHTML=`
+
+<div class="scene">
+
+<h2>
+${escapeHtml(text)}
+</h2>
+
+<div class="status">
+Please wait...
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function escapeHtml(v){
+
+if(
+v===null||
+v===undefined
+){
+
+return "";
+
+}
+
+return String(v)
+
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+supabase.auth.onAuthStateChange(
+async(event,session)=>{
+
+currentUser=
+session?.user||null;
+
+await loadUser();
+
+}
+);
+
+
+await loadUser();
+
+home();
+
 </script>
+
 </body>
 </html>
