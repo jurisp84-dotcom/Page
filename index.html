@@ -1575,6 +1575,47 @@ ${action}
 
 async function getOpeningVideo(sceneId){
 
+    // First try to get the opening video from scene_turns.
+    const {data:turn,error:turnError} = await supabase
+        .from("scene_turns")
+        .select("video_path")
+        .eq("scene_id",sceneId)
+        .eq("turn_number",1)
+        .maybeSingle();
+
+    // If Turn 1 exists, use its video URL.
+    if(!turnError && turn?.video_path){
+        return turn.video_path;
+    }
+
+    // FALLBACK:
+    // Opening videos are stored as:
+    // creator_id / scene_id / opening.webm
+    const {data:scene,error:sceneError} = await supabase
+        .from("scenes")
+        .select("creator_id")
+        .eq("id",sceneId)
+        .single();
+
+    if(sceneError || !scene?.creator_id){
+        console.error("Could not find scene creator:",sceneError);
+        return null;
+    }
+
+    const openingPath =
+        scene.creator_id +
+        "/" +
+        sceneId +
+        "/opening.webm";
+
+    const {data:urlData} =
+        supabase.storage
+        .from("scene-videos")
+        .getPublicUrl(openingPath);
+
+    return urlData?.publicUrl || null;
+}
+
 const {data:turn,error}=
 await supabase
 .from("scene_turns")
