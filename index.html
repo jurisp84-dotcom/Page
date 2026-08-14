@@ -825,7 +825,7 @@ The creator chooses who continues.
    CREATE SCENE
 ========================================================= */
 
-window.createScene=()=>{
+window.createScene=async()=>{
 
 if(!currentUser){
 
@@ -834,13 +834,43 @@ return;
 
 }
 
+/*
+   CREATE SCENE has two choices:
+
+   1. Start a brand-new scene as Character A.
+   2. Continue an existing OPEN scene as Character B.
+
+   Incomplete A1 videos are intentionally NOT shown in Discover.
+   They are shown here instead, where another player can choose
+   to respond as B1.
+*/
+
+showLoading("Loading scenes...");
+
+const {data:existingScenes,error:existingError} =
+    await supabase
+    .from("scenes")
+    .select(`*,profiles(username)`)
+    .eq("status","open")
+    .neq("creator_id",currentUser.id)
+    .order("created_at",{ascending:false});
+
+if(existingError){
+    console.error(existingError);
+}
+
 app.innerHTML=`
 
-<h1>🎬 Choose a scene</h1>
+<h1>🎬 Create or join a scene</h1>
 
 <p class="muted">
-You will play Character A.
+Start your own scene as Character A, or choose an existing
+scene and continue it as Character B.
 </p>
+
+<div class="section-title">
+🎭 Start a new scene
+</div>
 
 `;
 
@@ -866,7 +896,7 @@ ${escapeHtml(s.situation)}
 class="btn primary full"
 onclick="previewScene(${i})">
 
-Play this scene
+🎥 Start as Character A
 
 </button>
 
@@ -876,7 +906,121 @@ Play this scene
 
 });
 
+
+/* Existing A1 scenes available for B1. */
+
+app.innerHTML+=`
+
+<div class="section-title" style="margin-top:30px;">
+🎭 Continue an existing scene
+</div>
+
+<p class="muted">
+These are unfinished Character A openings.
+Choose one to respond as Character B.
+</p>
+
+`;
+
+if(!existingScenes?.length){
+
+app.innerHTML+=`
+
+<div class="empty">
+
+<h2>No open scenes right now</h2>
+
+<p class="muted">
+Start your own scene above, or check back later.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+for(const scene of existingScenes){
+
+const openingVideo =
+    await getOpeningVideo(scene.id);
+
+const myResponse =
+    await getMyResponseSafe(scene.id);
+
+app.innerHTML+=`
+
+<div class="scene">
+
+<span class="tag">
+${escapeHtml(scene.category||"Scene")}
+</span>
+
+<h2>
+${escapeHtml(scene.title)}
+</h2>
+
+<p class="muted">
+${escapeHtml(scene.situation||"")}
+</p>
+
+${
+openingVideo
+?
+`
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(openingVideo)}">
+</video>
+`
+:
+`
+<div class="status">
+A1 video unavailable
+</div>
+`
+}
+
+<p class="muted">
+Started by @${escapeHtml(
+    scene.profiles?.username||"player"
+)}
+</p>
+
+${
+myResponse
+?
+`
+<div class="status">
+✓ You already responded (${escapeHtml(myResponse.status||"pending")})
+</div>
+`
+:
+`
+<button
+class="btn primary full"
+onclick="respondToScene('${scene.id}')">
+
+🎭 Continue as Character B (B1)
+
+</button>
+`
+}
+
+</div>
+
+`;
+
+}
+
 };
+
+
 
 
 /* =========================================================
@@ -1408,16 +1552,14 @@ onclick="discover()">
 
 window.discover=async()=>{
 
-showLoading("Loading scenes...");
+showLoading("Loading finished scenes...");
 
-const {data:scenes,error}=
-await supabase
-.from("scenes")
-.select(`*,profiles(username)`)
-.order(
-"created_at",
-{ascending:false}
-);
+const {data:scenes,error} =
+    await supabase
+    .from("scenes")
+    .select(`*,profiles(username)`)
+    .eq("status","ended")
+    .order("created_at",{ascending:false});
 
 if(error){
 
@@ -1432,7 +1574,7 @@ app.innerHTML=`
 <h1>🔥 Discover</h1>
 
 <p class="muted">
-Find someone to play with.
+Watch completed public scenes.
 </p>
 
 `;
@@ -1443,13 +1585,17 @@ app.innerHTML+=`
 
 <div class="empty">
 
-<h2>No scenes yet</h2>
+<h2>No finished scenes yet</h2>
+
+<p class="muted">
+Incomplete A1 scenes are available under Create Scene.
+</p>
 
 <button
 class="btn primary"
 onclick="createScene()">
 
-Create Scene
+🎬 Create Scene
 
 </button>
 
@@ -1461,64 +1607,16 @@ return;
 
 }
 
-
 for(const scene of scenes){
 
-const videoUrl=
-await getOpeningVideo(scene.id);
+/*
+   Discover is public-only.
 
-let action="";
-
-if(scene.status==="ended"){
-
-action=`
-
-<div class="status">
-Scene ended
-</div>
-
-`;
-
-}else{
-
-const myResponse=
-currentUser
-?await getMyResponseSafe(scene.id)
-:null;
-
-if(myResponse){
-
-action=`
-
-<button
-class="btn secondary full"
-onclick="showMyResponse('${scene.id}')">
-
-✓ My Response
-(${escapeHtml(myResponse.status||"pending")})
-
-</button>
-
-`;
-
-}else{
-
-action=`
-
-<button
-class="btn primary full"
-onclick="respondToScene('${scene.id}')">
-
-🎭 Play Character B
-
-</button>
-
-`;
-
-}
-
-}
-
+   IMPORTANT:
+   We do NOT call getOpeningVideo() here.
+   A1 is an incomplete opening and must not appear in Discover.
+   Completed scenes are shown here instead.
+*/
 
 app.innerHTML+=`
 
@@ -1533,36 +1631,26 @@ ${escapeHtml(scene.title)}
 </h2>
 
 <p class="muted">
-${escapeHtml(scene.situation)}
+${escapeHtml(scene.situation||"")}
 </p>
 
-${
-videoUrl
-?
-`
-<video
-class="scene-video"
-controls
-playsinline
-preload="metadata"
-src="${escapeHtml(videoUrl)}">
-</video>
-`
-:
-`
-<div class="status">
-Video unavailable
+<div class="status success">
+✓ Finished — public
 </div>
-`
-}
 
 <p class="muted">
 Created by @${escapeHtml(
-scene.profiles?.username||"player"
+    scene.profiles?.username||"player"
 )}
 </p>
 
-${action}
+<button
+class="btn secondary full"
+onclick="viewResponses('${scene.id}')">
+
+👥 View finished scene
+
+</button>
 
 </div>
 
@@ -1571,6 +1659,7 @@ ${action}
 }
 
 };
+
 
 
 async function getOpeningVideo(sceneId){
