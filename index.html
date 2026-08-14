@@ -251,14 +251,65 @@ if(!responses?.length){app.innerHTML+=`<div class="empty"><h2>No responses yet</
 responses.forEach(r=>{app.innerHTML+=`<div class="response"><div class="user-row"><div class="avatar">${escapeHtml((r.profiles?.username||"P")[0]).toUpperCase()}</div><strong>@${escapeHtml(r.profiles?.username||"player")}</strong></div><video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(r.video_path||"")}"></video>${r.status==="pending"?`<button class="btn primary full" onclick="chooseResponse('${r.id}','${sceneId}')">✓ Choose this player</button><br><br><button class="btn danger full" onclick="rejectResponse('${r.id}')">Pass</button>`:`<div class="status">${escapeHtml(r.status)}</div>`}</div>`})
 };
 
-window.chooseResponse=async(responseId,sceneId)=>{
-let {error}=await supabase.from("scene_responses").update({status:"accepted"}).eq("id",responseId);if(error){alert(error.message);return}
-await supabase.from("scene_responses").update({status:"rejected"}).eq("scene_id",sceneId).neq("id",responseId);
-await supabase.from("scenes").update({status:"in_progress"}).eq("id",sceneId);
-const {data:acceptedRow,error:ae}=await supabase.from("scene_responses").select("responder_id,video_path").eq("id",responseId).single();if(ae){alert(ae.message);return}
-const turnsNow=await getSceneTurns(sceneId);if(turnsNow.length<2){const {error:te}=await supabase.from("scene_turns").insert({id:crypto.randomUUID(),scene_id:sceneId,player_id:acceptedRow.responder_id,turn_number:2,video_path:acceptedRow.video_path});if(te){alert(te.message);return}}
-alert("Player selected!");await showActiveScene(sceneId);
+window.chooseResponse =
+async function(responseId, sceneId){
+
+    if(!currentUser){ openAuth(); return; }
+
+    try{
+        const {data:scene,error:sceneError}=await supabase
+            .from("scenes").select("*").eq("id",sceneId).single();
+        if(sceneError) throw sceneError;
+
+        if(scene.creator_id!==currentUser.id){
+            alert("Only the scene creator can choose a player.");
+            return;
+        }
+
+        const {data:response,error:responseError}=await supabase
+            .from("scene_responses").select("*")
+            .eq("id",responseId).eq("scene_id",sceneId).single();
+        if(responseError) throw responseError;
+
+        const {error:acceptError}=await supabase
+            .from("scene_responses").update({status:"accepted"})
+            .eq("id",responseId).eq("scene_id",sceneId);
+        if(acceptError) throw acceptError;
+
+        await supabase.from("scene_responses")
+            .update({status:"rejected"})
+            .eq("scene_id",sceneId).neq("id",responseId);
+
+        const {data:turn2,error:turnLookupError}=await supabase
+            .from("scene_turns").select("id")
+            .eq("scene_id",sceneId).eq("turn_number",2).maybeSingle();
+        if(turnLookupError) throw turnLookupError;
+
+        if(!turn2){
+            const {error:turnInsertError}=await supabase
+                .from("scene_turns").insert({
+                    id:crypto.randomUUID(),
+                    scene_id:sceneId,
+                    player_id:response.responder_id,
+                    turn_number:2,
+                    video_path:response.video_path
+                });
+            if(turnInsertError) throw turnInsertError;
+        }
+
+        const {error:statusError}=await supabase
+            .from("scenes").update({status:"in_progress"})
+            .eq("id",sceneId).eq("creator_id",currentUser.id);
+        if(statusError) throw statusError;
+
+        await showActiveScene(sceneId);
+
+    }catch(error){
+        console.error(error);
+        alert("Could not start the scene:\n\n"+error.message);
+    }
 };
+
 window.rejectResponse=async responseId=>{const {error}=await supabase.from("scene_responses").update({status:"rejected"}).eq("id",responseId);if(error){alert(error.message);return}alert("Response passed.");viewResponses(currentScene?.id)};
 
 
@@ -415,8 +466,8 @@ window.showActiveScene=async function(sceneId){
   const turns=await getSceneTurns(sceneId);
   const {data:accepted}=await supabase.from("scene_responses").select("responder_id").eq("scene_id",sceneId).eq("status","accepted").maybeSingle();
   const bId=accepted?.responder_id,last=turns[turns.length-1];
-  const myTurn=scene.status!=="ended"&&last&&((scene.creator_id===currentUser.id&&last.player_id===bId)||(bId===currentUser.id&&last.player_id===scene.creator_id));
-  app.innerHTML=`<div class="scene"><span class="tag">🎬 ACTIVE SCENE</span><h1>${escapeHtml(scene.title)}</h1><p class="muted">${escapeHtml(scene.situation||"")}</p><div class="status ${scene.status==="ended"?"success":""}">${scene.status==="ended"?"✓ Scene ended":myTurn?"🎭 Your turn":"⏳ Waiting for the other player"}</div><div id="activeTurns"></div>${scene.status!=="ended"&&myTurn?`<button class="btn primary full" onclick="recordNextTurn('${scene.id}')">🎥 Record your next turn</button><br><br>`:""}${scene.status!=="ended"&&scene.creator_id===currentUser.id?`<button class="btn danger full" onclick="endScene('${scene.id}')">🛑 End Scene</button>`:""}</div>`;
+  const myTurn=scene.status!=="ended"&&last&&bId&&((scene.creator_id===currentUser.id&&last.player_id===bId)||(bId===currentUser.id&&last.player_id===scene.creator_id));
+  app.innerHTML=`<div class="scene"><span class="tag">🎬 ACTIVE SCENE</span><h1>${escapeHtml(scene.title)}</h1><p class="muted">${escapeHtml(scene.situation||"")}</p><div class="status ${scene.status==="ended"?"success":""}">${scene.status==="ended"?"✓ Scene ended":myTurn?"🎭 Your turn":"⏳ Waiting for the other player"}</div><div id="activeTurns"></div>${scene.status!=="ended"&&(myTurn||(scene.status==="in_progress"&&scene.creator_id===currentUser.id))?`<button class="btn primary full" onclick="recordNextTurn('${scene.id}')">🎥 Record your next turn</button><br><br>`:""}${scene.status!=="ended"&&scene.creator_id===currentUser.id?`<button class="btn danger full" onclick="endScene('${scene.id}')">🛑 End Scene</button>`:""}</div>`;
   const box=document.getElementById("activeTurns");
   turns.forEach(t=>{box.innerHTML+=`<div class="info"><strong>Turn ${escapeHtml(t.turn_number)}</strong> — ${t.player_id===currentUser.id?"You":"Other player"}</div><video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(t.video_path)}"></video>`});
  }catch(e){console.error(e);alert("Could not load scene:\n\n"+e.message)}
