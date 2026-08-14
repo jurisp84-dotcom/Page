@@ -1573,22 +1573,30 @@ ${action}
 };
 
 
-async function getOpeningVideo(sceneId){
+async function getOpeningVideo(sceneId) {
 
+    if (!currentUser) return null;
 
-const {data:turn,error}=
-await supabase
-.from("scene_turns")
-.select("video_path")
-.eq("scene_id",sceneId)
-.eq("turn_number",1)
-.maybeSingle();
+    const { data, error } = await supabase
+        .from("scene_turns")
+        .select("video_path")
+        .eq("scene_id", sceneId)
+        .eq("turn_number", 1)
+        .is("session_id", null)
+        .eq("player_id", currentUser.id)
+        .limit(1);
 
-return
-!error&&turn?.video_path
-?turn.video_path
-:null;
+    if (error) {
+        console.error("A1 VIDEO LOAD ERROR:", error);
+        return null;
+    }
 
+    if (!data || data.length === 0) {
+        console.warn("No A1 video found for scene:", sceneId);
+        return null;
+    }
+
+    return data[0].video_path || null;
 }
 
 
