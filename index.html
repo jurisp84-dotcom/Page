@@ -53,7 +53,16 @@ import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2
 
 const SUPABASE_URL="https://rktwvhenqumebbgrtxol.supabase.co";
 const SUPABASE_KEY="sb_publishable_wBb0U4jBf3SRM0EIHtgheA_c0pOG-WK";
+
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+function videoSrc(value){
+  if(!value) return "";
+  const v=String(value).trim();
+  if(/^https?:\/\//i.test(v)) return v;
+  return supabase.storage.from("scene-videos").getPublicUrl(v).data.publicUrl;
+}
+
 
 let currentUser=null,currentProfile=null,currentScene=null,authMode="signup";
 let cameraStream=null,mediaRecorder=null,recordedChunks=[],pendingVideoBlob=null;
