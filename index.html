@@ -825,7 +825,7 @@ The creator chooses who continues.
    CREATE SCENE
 ========================================================= */
 
-window.createScene=()=>{
+window.createScene=async()=>{
 
 if(!currentUser){
 
@@ -834,13 +834,43 @@ return;
 
 }
 
+/*
+   CREATE SCENE has two choices:
+
+   1. Start a brand-new scene as Character A.
+   2. Continue an existing OPEN scene as Character B.
+
+   Incomplete A1 videos are intentionally NOT shown in Discover.
+   They are shown here instead, where another player can choose
+   to respond as B1.
+*/
+
+showLoading("Loading scenes...");
+
+const {data:existingScenes,error:existingError} =
+    await supabase
+    .from("scenes")
+    .select(`*,profiles(username)`)
+    .eq("status","open")
+    .neq("creator_id",currentUser.id)
+    .order("created_at",{ascending:false});
+
+if(existingError){
+    console.error(existingError);
+}
+
 app.innerHTML=`
 
-<h1>🎬 Choose a scene</h1>
+<h1>🎬 Create or join a scene</h1>
 
 <p class="muted">
-You will play Character A.
+Start your own scene as Character A, or choose an existing
+scene and continue it as Character B.
 </p>
+
+<div class="section-title">
+🎭 Start a new scene
+</div>
 
 `;
 
@@ -866,7 +896,7 @@ ${escapeHtml(s.situation)}
 class="btn primary full"
 onclick="previewScene(${i})">
 
-Play this scene
+🎥 Start as Character A
 
 </button>
 
@@ -876,7 +906,121 @@ Play this scene
 
 });
 
+
+/* Existing A1 scenes available for B1. */
+
+app.innerHTML+=`
+
+<div class="section-title" style="margin-top:30px;">
+🎭 Continue an existing scene
+</div>
+
+<p class="muted">
+These are unfinished Character A openings.
+Choose one to respond as Character B.
+</p>
+
+`;
+
+if(!existingScenes?.length){
+
+app.innerHTML+=`
+
+<div class="empty">
+
+<h2>No open scenes right now</h2>
+
+<p class="muted">
+Start your own scene above, or check back later.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+for(const scene of existingScenes){
+
+const openingVideo =
+    await getOpeningVideo(scene.id);
+
+const myResponse =
+    await getMyResponseSafe(scene.id);
+
+app.innerHTML+=`
+
+<div class="scene">
+
+<span class="tag">
+${escapeHtml(scene.category||"Scene")}
+</span>
+
+<h2>
+${escapeHtml(scene.title)}
+</h2>
+
+<p class="muted">
+${escapeHtml(scene.situation||"")}
+</p>
+
+${
+openingVideo
+?
+`
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(openingVideo)}">
+</video>
+`
+:
+`
+<div class="status">
+A1 video unavailable
+</div>
+`
+}
+
+<p class="muted">
+Started by @${escapeHtml(
+    scene.profiles?.username||"player"
+)}
+</p>
+
+${
+myResponse
+?
+`
+<div class="status">
+✓ You already responded (${escapeHtml(myResponse.status||"pending")})
+</div>
+`
+:
+`
+<button
+class="btn primary full"
+onclick="respondToScene('${scene.id}')">
+
+🎭 Continue as Character B (B1)
+
+</button>
+`
+}
+
+</div>
+
+`;
+
+}
+
 };
+
+
 
 
 /* =========================================================
@@ -1408,16 +1552,15 @@ onclick="discover()">
 
 window.discover=async()=>{
 
-showLoading("Loading scenes...");
+showLoading("Loading finished scenes...");
 
-const {data:scenes,error}=
-await supabase
-.from("scenes")
-.select(`*,profiles(username)`)
-.order(
-"created_at",
-{ascending:false}
-);
+const {data:scenes,error} =
+    await supabase
+    .from("scenes")
+    .select(`*,profiles(username)`)
+    .eq("status","ended")
+    .not("finished_video_url","is",null)
+    .order("created_at",{ascending:false});
 
 if(error){
 
@@ -1432,7 +1575,7 @@ app.innerHTML=`
 <h1>🔥 Discover</h1>
 
 <p class="muted">
-Find someone to play with.
+Completed public scenes — one finished video each.
 </p>
 
 `;
@@ -1443,15 +1586,11 @@ app.innerHTML+=`
 
 <div class="empty">
 
-<h2>No scenes yet</h2>
+<h2>No finished scenes yet</h2>
 
-<button
-class="btn primary"
-onclick="createScene()">
-
-Create Scene
-
-</button>
+<p class="muted">
+Incomplete scenes are available under Create Scene.
+</p>
 
 </div>
 
@@ -1461,64 +1600,7 @@ return;
 
 }
 
-
 for(const scene of scenes){
-
-const videoUrl=
-await getOpeningVideo(scene.id);
-
-let action="";
-
-if(scene.status==="ended"){
-
-action=`
-
-<div class="status">
-Scene ended
-</div>
-
-`;
-
-}else{
-
-const myResponse=
-currentUser
-?await getMyResponseSafe(scene.id)
-:null;
-
-if(myResponse){
-
-action=`
-
-<button
-class="btn secondary full"
-onclick="showMyResponse('${scene.id}')">
-
-✓ My Response
-(${escapeHtml(myResponse.status||"pending")})
-
-</button>
-
-`;
-
-}else{
-
-action=`
-
-<button
-class="btn primary full"
-onclick="respondToScene('${scene.id}')">
-
-🎭 Play Character B
-
-</button>
-
-`;
-
-}
-
-}
-
 
 app.innerHTML+=`
 
@@ -1533,36 +1615,22 @@ ${escapeHtml(scene.title)}
 </h2>
 
 <p class="muted">
-${escapeHtml(scene.situation)}
+${escapeHtml(scene.situation||"")}
 </p>
 
-${
-videoUrl
-?
-`
 <video
 class="scene-video"
 controls
 playsinline
 preload="metadata"
-src="${escapeHtml(videoUrl)}">
+src="${escapeHtml(scene.finished_video_url)}">
 </video>
-`
-:
-`
-<div class="status">
-Video unavailable
-</div>
-`
-}
 
 <p class="muted">
 Created by @${escapeHtml(
-scene.profiles?.username||"player"
+    scene.profiles?.username||"player"
 )}
 </p>
-
-${action}
 
 </div>
 
@@ -1572,53 +1640,6 @@ ${action}
 
 };
 
-
-async function getOpeningVideo(sceneId){
-
-
-const {data:turn,error}=
-await supabase
-.from("scene_turns")
-.select("video_path")
-.eq("scene_id",sceneId)
-.eq("turn_number",1)
-.maybeSingle();
-
-return
-!error&&turn?.video_path
-?turn.video_path
-:null;
-
-}
-
-
-async function getMyResponseSafe(sceneId){
-
-if(!currentUser)return null;
-
-const {data,error}=
-await supabase
-.from("scene_responses")
-.select("*")
-.eq("scene_id",sceneId)
-.eq("responder_id",currentUser.id)
-.maybeSingle();
-
-if(error){
-
-console.warn(error);
-return null;
-
-}
-
-return data;
-
-}
-
-
-/* =========================================================
-   CHARACTER B
-========================================================= */
 
 window.respondToScene=async sceneId=>{
 
@@ -2519,816 +2540,1842 @@ e.message
 
 
 /* =========================================================
-   PRIVATE SESSION SYSTEM
-========================================================= */
-
-async function getSession(sessionId){
-    const {data,error}=await supabase
-        .from("scene_sessions")
-        .select("*")
-        .eq("id",sessionId)
-        .single();
-    if(error) throw error;
-    return data;
-}
-
-async function getSessionTurns(sessionId){
-    const {data,error}=await supabase
-        .from("scene_turns")
-        .select("*")
-        .eq("session_id",sessionId)
-        .order("turn_number",{ascending:true});
-    if(error) throw error;
-    return data||[];
-}
-
-async function getAcceptedResponseForSession(session){
-    const {data,error}=await supabase
-        .from("scene_responses")
-        .select("*, profiles(username)")
-        .eq("scene_id",session.scene_id)
-        .eq("responder_id",session.responder_id)
-        .eq("status","accepted")
-        .order("created_at",{ascending:false})
-        .limit(1)
-        .maybeSingle();
-    if(error) throw error;
-    return data||null;
-}
-
-/* =========================================================
    VIEW RESPONSES
-   Multiple B players can coexist. Choosing one creates a
-   separate private session instead of rejecting everyone else.
 ========================================================= */
+
 window.viewResponses=async sceneId=>{
-    if(!currentUser){openAuth();return}
-    showLoading("Loading responses...");
 
-    try{
-        const {data:scene,error:sceneError}=await supabase
-            .from("scenes").select("*").eq("id",sceneId).single();
-        if(sceneError) throw sceneError;
-        currentScene=scene;
+if(!currentUser){
 
-        const {data:responses,error:responseError}=await supabase
-            .from("scene_responses")
-            .select(`*, profiles(username)`)
-            .eq("scene_id",sceneId)
-            .order("created_at",{ascending:false});
-        if(responseError) throw responseError;
+openAuth();
+return;
 
-        const {data:sessions,error:sessionError}=await supabase
-            .from("scene_sessions")
-            .select("*")
-            .eq("scene_id",sceneId)
-            .order("created_at",{ascending:false});
-        if(sessionError) throw sessionError;
+}
 
-        const mySessions=(sessions||[]).filter(s=>
-            s.creator_id===currentUser.id || s.responder_id===currentUser.id
-        );
+showLoading("Loading responses...");
 
-        app.innerHTML=`
-            <h1>👥 Responses</h1>
-            <p class="muted">Choose any player. Each choice creates its own private scene.</p>
-        `;
+try{
 
-        if(scene.creator_id===currentUser.id && mySessions.length){
-            app.innerHTML+=`<h2>🔒 My private sessions</h2>`;
-            for(const session of mySessions){
-                const username=session.creator_id===currentUser.id
-                    ? (responses||[]).find(r=>r.responder_id===session.responder_id)?.profiles?.username||"player"
-                    : "Creator";
-                app.innerHTML+=`<div class="response">
-                    <strong>@${escapeHtml(username)}</strong>
-                    <div class="status ${session.status==="ended"?"success":""}">
-                        ${session.status==="ended"?"✓ Finished — public":"🔒 Private — active"}
-                    </div>
-                    <button class="btn primary full" onclick="showActiveScene('${session.id}')">
-                        ${session.status==="ended"?"▶ View Finished Scene":"🎭 Open Private Scene"}
-                    </button>
-                </div>`;
-            }
-        }
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
 
-        if(!responses?.length){
-            app.innerHTML+=`<div class="empty"><h2>No responses yet</h2><p>Leave the scene open and check again later.</p></div>`;
-            return;
-        }
+if(sceneError)throw sceneError;
 
-        app.innerHTML+=`<h2>🎭 Players</h2>`;
+currentScene=scene;
 
-        for(const response of responses){
-            const username=response.profiles?.username||"player";
-            const activeSession=(sessions||[]).find(s=>
-                s.scene_id===sceneId &&
-                s.responder_id===response.responder_id &&
-                s.status==="active"
-            );
 
-            let actions="";
-            if(activeSession){
-                actions=`<div class="status">🔒 This player already has an active private session.</div>
-                <button class="btn primary full" onclick="showActiveScene('${activeSession.id}')">🎭 Open Session</button>`;
-            }else if(response.status==="pending" || response.status==="accepted"){
-                actions=`<button class="btn primary full" onclick="chooseResponse('${response.id}','${sceneId}')">✓ Choose this player</button>`;
-            }else{
-                actions=`<div class="status">${escapeHtml(response.status||"rejected")}</div>`;
-            }
+const {data:responses,error:responseError}=
+await supabase
+.from("scene_responses")
+.select(`*, profiles(username)`)
+.eq("scene_id",sceneId)
+.order(
+"created_at",
+{ascending:false}
+);
 
-            app.innerHTML+=`<div class="response">
-                <div class="user-row">
-                    <div class="avatar">${escapeHtml(username[0]).toUpperCase()}</div>
-                    <strong>@${escapeHtml(username)}</strong>
-                </div>
-                <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(response.video_path)}"></video>
-                ${actions}
-            </div>`;
-        }
-    }catch(error){
-        console.error(error);
-        alert("Could not load responses:\n\n"+error.message);
-    }
+if(responseError)throw responseError;
+
+
+const accepted=
+(responses||[])
+.find(
+r=>r.status==="accepted"
+);
+
+
+const {data:turns,error:turnError}=
+await supabase
+.from("scene_turns")
+.select("*")
+.eq("scene_id",sceneId)
+.order(
+"turn_number",
+{ascending:true}
+);
+
+if(turnError)throw turnError;
+
+
+const lastTurn=
+turns?.length
+?turns[turns.length-1]
+:null;
+
+
+let creatorCanContinue=false;
+
+if(
+scene.status==="in_progress" &&
+accepted &&
+scene.creator_id===currentUser.id &&
+lastTurn &&
+lastTurn.player_id===
+accepted.responder_id
+){
+
+creatorCanContinue=true;
+
+}
+
+
+app.innerHTML=`
+
+<h1>
+👥 Responses
+</h1>
+
+<p class="muted">
+People who want to play Character B.
+</p>
+
+${
+creatorCanContinue
+?
+`
+
+<div class="status success">
+
+✓ Player accepted —
+it is your turn.
+
+</div>
+
+<button
+class="btn primary full"
+onclick="showActiveScene('${sceneId}')">
+
+🎭 Continue Scene
+
+</button>
+
+<br><br>
+
+`
+:
+""
+}
+
+`;
+
+
+if(
+!responses||
+responses.length===0
+){
+
+app.innerHTML+=`
+
+<div class="empty">
+
+<h2>
+No responses yet
+</h2>
+
+<p>
+Leave the scene open and check again later.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+responses.forEach(response=>{
+
+const username=
+response.profiles?.username||
+"player";
+
+let actions="";
+
+
+if(response.status==="pending"){
+
+actions=`
+
+<button
+class="btn primary full"
+onclick="chooseResponse(
+'${response.id}',
+'${sceneId}'
+)">
+
+✓ Choose this player
+
+</button>
+
+<br><br>
+
+<button
+class="btn danger full"
+onclick="rejectResponse(
+'${response.id}',
+'${sceneId}'
+)">
+
+Pass
+
+</button>
+
+`;
+
+}else if(response.status==="accepted"){
+
+actions=`
+
+<div class="status success">
+✓ Accepted
+</div>
+
+${
+scene.status==="in_progress"
+?
+`
+
+<br>
+
+<button
+class="btn primary full"
+onclick="showActiveScene('${sceneId}')">
+
+🎭 Open Scene
+
+</button>
+
+`
+:
+""
+}
+
+`;
+
+}else{
+
+actions=`
+
+<div class="status">
+${escapeHtml(
+response.status||"rejected"
+)}
+</div>
+
+`;
+
+}
+
+
+app.innerHTML+=`
+
+<div class="response">
+
+<div class="user-row">
+
+<div class="avatar">
+${escapeHtml(
+username[0]
+).toUpperCase()}
+</div>
+
+<strong>
+@${escapeHtml(username)}
+</strong>
+
+</div>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(response.video_path)}">
+</video>
+
+${actions}
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Could not load responses:\n\n"+
+error.message
+);
+
+}
+
 };
+
 
 /* =========================================================
    CHOOSE PLAYER
 ========================================================= */
-window.chooseResponse=async(responseId,sceneId)=>{
-    if(!currentUser){openAuth();return}
 
-    try{
-        const {data:scene,error:sceneError}=await supabase
-            .from("scenes").select("*").eq("id",sceneId).single();
-        if(sceneError) throw sceneError;
-        if(scene.creator_id!==currentUser.id){
-            alert("Only the scene creator can choose a player.");
-            return;
-        }
+window.chooseResponse=async(
+responseId,
+sceneId
+)=>{
 
-        const {data:response,error:responseError}=await supabase
-            .from("scene_responses").select("*")
-            .eq("id",responseId).eq("scene_id",sceneId).single();
-        if(responseError) throw responseError;
+if(!currentUser){
 
-        /* If this player already has an active branch, reopen it. */
-        const {data:existing,error:existingError}=await supabase
-            .from("scene_sessions").select("*")
-            .eq("scene_id",sceneId)
-            .eq("responder_id",response.responder_id)
-            .eq("creator_id",currentUser.id)
-            .eq("status","active")
-            .maybeSingle();
-        if(existingError) throw existingError;
-        if(existing){
-            await showActiveScene(existing.id);
-            return;
-        }
+openAuth();
+return;
 
-        /* Mark this response accepted, but DO NOT reject other players. */
-        const {error:acceptError}=await supabase
-            .from("scene_responses")
-            .update({status:"accepted"})
-            .eq("id",responseId)
-            .eq("scene_id",sceneId);
-        if(acceptError) throw acceptError;
+}
 
-        /* Create an independent private branch. */
-        const sessionId=crypto.randomUUID();
-        const {data:session,error:sessionError}=await supabase
-            .from("scene_sessions")
-            .insert({
-                id:sessionId,
-                scene_id:sceneId,
-                creator_id:currentUser.id,
-                responder_id:response.responder_id,
-                status:"active"
-            })
-            .select("*")
-            .single();
-        if(sessionError) throw sessionError;
+try{
 
-        /* B1 is the response itself. We deliberately do NOT copy it into
-           scene_turns because the RLS insert rule requires player_id=auth.uid(). */
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
 
-        await showActiveScene(session.id);
-    }catch(error){
-        console.error(error);
-        alert("Could not start the private scene:\n\n"+error.message);
-    }
+if(sceneError)throw sceneError;
+
+
+if(
+scene.creator_id!==currentUser.id
+){
+
+alert(
+"Only the scene creator can choose a player."
+);
+
+return;
+
+}
+
+
+const {data:response,error:responseError}=
+await supabase
+.from("scene_responses")
+.select("*")
+.eq("id",responseId)
+.eq("scene_id",sceneId)
+.single();
+
+if(responseError)throw responseError;
+
+
+/* Accept selected player */
+
+let {error:acceptError}=
+await supabase
+.from("scene_responses")
+.update({
+status:"accepted"
+})
+.eq("id",responseId)
+.eq("scene_id",sceneId);
+
+if(acceptError)throw acceptError;
+
+
+/* Reject all other responses */
+
+const {error:rejectError}=
+await supabase
+.from("scene_responses")
+.update({
+status:"rejected"
+})
+.eq("scene_id",sceneId)
+.neq("id",responseId);
+
+if(rejectError){
+
+console.warn(
+"Could not reject other responses:",
+rejectError.message
+);
+
+}
+
+
+/* Make sure Turn 2 exists */
+
+const {data:turn2,error:turnLookupError}=
+await supabase
+.from("scene_turns")
+.select("id")
+.eq("scene_id",sceneId)
+.eq("turn_number",2)
+.maybeSingle();
+
+if(turnLookupError)throw turnLookupError;
+
+
+if(!turn2){
+
+const {error:turnInsertError}=
+await supabase
+.from("scene_turns")
+.insert({
+
+id:crypto.randomUUID(),
+
+scene_id:sceneId,
+
+player_id:
+response.responder_id,
+
+turn_number:2,
+
+video_path:
+response.video_path
+
+});
+
+
+if(turnInsertError){
+
+console.error(
+"Turn 2 insert failed:",
+turnInsertError
+);
+
+alert(
+"Player was selected, but Turn 2 could not be added:\n\n"+
+turnInsertError.message
+);
+
+return;
+
+}
+
+}
+
+
+/* Start scene */
+
+const {error:statusError}=
+await supabase
+.from("scenes")
+.update({
+status:"in_progress"
+})
+.eq(
+"id",
+sceneId
+)
+.eq(
+"creator_id",
+currentUser.id
+);
+
+if(statusError)throw statusError;
+
+
+await showActiveScene(sceneId);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Could not start the scene:\n\n"+
+error.message
+);
+
+}
+
 };
+
 
 /* =========================================================
    REJECT RESPONSE
 ========================================================= */
-window.rejectResponse=async(responseId,sceneId)=>{
-    if(!currentUser){openAuth();return}
-    const {error}=await supabase.from("scene_responses")
-        .update({status:"rejected"}).eq("id",responseId);
-    if(error){alert(error.message);return}
-    alert("Response passed.");
-    viewResponses(sceneId);
+
+window.rejectResponse=async(
+responseId,
+sceneId
+)=>{
+
+const {error}=
+await supabase
+.from("scene_responses")
+.update({
+status:"rejected"
+})
+.eq("id",responseId);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Response passed.");
+
+viewResponses(sceneId);
+
 };
+
 
 /* =========================================================
    MY RESPONSE
 ========================================================= */
+
 async function getMyResponse(sceneId){
-    if(!currentUser)return null;
-    const {data,error}=await supabase.from("scene_responses")
-        .select("*").eq("scene_id",sceneId)
-        .eq("responder_id",currentUser.id)
-        .order("created_at",{ascending:false}).limit(1).maybeSingle();
-    if(error)throw error;
-    return data;
+
+if(!currentUser)return null;
+
+const {data,error}=
+await supabase
+.from("scene_responses")
+.select("*")
+.eq("scene_id",sceneId)
+.eq("responder_id",currentUser.id)
+.maybeSingle();
+
+if(error)throw error;
+
+return data;
+
 }
+
 
 window.showMyResponse=async sceneId=>{
-    const response=await getMyResponse(sceneId);
-    if(!response){alert("You haven't responded to this scene yet.");return}
-    app.innerHTML=`<div class="scene">
-        <span class="tag">YOUR RESPONSE</span>
-        <h1>Your Character B response</h1>
-        <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(response.video_path)}"></video>
-        <div class="status">${escapeHtml(response.status)}</div>
-        ${response.status==="pending"?`<button class="btn danger full" onclick="deleteMyResponse('${response.id}','${sceneId}')">🗑 Delete my response</button>`:""}
-        <br><br><button class="btn secondary full" onclick="discover()">Back to Discover</button>
-    </div>`;
+
+const response=
+await getMyResponse(sceneId);
+
+if(!response){
+
+alert(
+"You haven't responded to this scene yet."
+);
+
+return;
+
+}
+
+
+app.innerHTML=`
+
+<div class="scene">
+
+<span class="tag">
+YOUR RESPONSE
+</span>
+
+<h1>
+Your Character B response
+</h1>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(response.video_path)}">
+</video>
+
+<div class="status">
+${escapeHtml(response.status)}
+</div>
+
+${
+response.status==="pending"
+?
+`
+
+<button
+class="btn danger full"
+onclick="deleteMyResponse(
+'${response.id}',
+'${sceneId}'
+)">
+
+🗑 Delete my response
+
+</button>
+
+`
+:
+""
+}
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="discover()">
+
+Back to Discover
+
+</button>
+
+</div>
+
+`;
+
 };
 
-window.deleteMyResponse=async(responseId,sceneId)=>{
-    if(!currentUser){openAuth();return}
-    if(!confirm("Delete your response?"))return;
-    const {data:row,error:readError}=await supabase.from("scene_responses")
-        .select("video_path,responder_id,status").eq("id",responseId).single();
-    if(readError){alert(readError.message);return}
-    if(row.responder_id!==currentUser.id){alert("You can only delete your own response.");return}
-    if(row.status!=="pending"){alert("Only a pending response can be deleted.");return}
-    const url=row.video_path||"";
-    const marker="/storage/v1/object/public/scene-videos/";
-    const idx=url.indexOf(marker);
-    if(idx>=0){
-        const storagePath=decodeURIComponent(url.slice(idx+marker.length));
-        await supabase.storage.from("scene-videos").remove([storagePath]);
-    }
-    const {error}=await supabase.from("scene_responses").delete()
-        .eq("id",responseId).eq("responder_id",currentUser.id);
-    if(error){alert(error.message);return}
-    alert("Response deleted.");
-    discover();
+
+window.deleteMyResponse=async(
+responseId,
+sceneId
+)=>{
+
+if(!currentUser){
+
+openAuth();
+return;
+
+}
+
+if(
+!confirm(
+"Delete your response?"
+)
+){
+
+return;
+
+}
+
+
+const {data:row,error:readError}=
+await supabase
+.from("scene_responses")
+.select(
+"video_path,responder_id,status"
+)
+.eq("id",responseId)
+.single();
+
+if(readError){
+
+alert(readError.message);
+return;
+
+}
+
+
+if(
+row.responder_id!==currentUser.id
+){
+
+alert(
+"You can only delete your own response."
+);
+
+return;
+
+}
+
+
+if(row.status!=="pending"){
+
+alert(
+"Only a pending response can be deleted."
+);
+
+return;
+
+}
+
+
+const url=
+row.video_path||"";
+
+const marker=
+"/storage/v1/object/public/scene-videos/";
+
+const idx=
+url.indexOf(marker);
+
+if(idx>=0){
+
+const storagePath=
+decodeURIComponent(
+url.slice(
+idx+marker.length
+)
+);
+
+await supabase.storage
+.from("scene-videos")
+.remove([storagePath]);
+
+}
+
+
+const {error}=
+await supabase
+.from("scene_responses")
+.delete()
+.eq("id",responseId)
+.eq(
+"responder_id",
+currentUser.id
+);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Response deleted.");
+
+discover();
+
 };
+
 
 /* =========================================================
-   PRIVATE SESSION HELPERS
+   GET TURNS
 ========================================================= */
+
 async function getSceneTurns(sceneId){
-    const {data,error}=await supabase.from("scene_turns")
-        .select("*").eq("scene_id",sceneId)
-        .order("turn_number",{ascending:true});
-    if(error)throw error;
-    return data||[];
+
+const {data,error}=
+await supabase
+.from("scene_turns")
+.select("*")
+.eq("scene_id",sceneId)
+.order(
+"turn_number",
+{ascending:true}
+);
+
+if(error)throw error;
+
+return data||[];
+
 }
 
-async function getOpeningTurn(sceneId){
-    const {data,error}=await supabase.from("scene_turns")
-        .select("*").eq("scene_id",sceneId)
-        .is("session_id",null).eq("turn_number",1)
-        .maybeSingle();
-    if(error)throw error;
-    return data||null;
-}
 
 /* =========================================================
-   ACTIVE PRIVATE SCENE
+   ACTIVE SCENE
+   THIS IS THE IMPORTANT FIX
 ========================================================= */
-window.showActiveScene=async sessionId=>{
-    if(!currentUser){openAuth();return}
 
-    try{
-        const session=await getSession(sessionId);
-        if(session.creator_id!==currentUser.id && session.responder_id!==currentUser.id){
-            alert("You are not part of this private scene.");
-            return;
-        }
+window.showActiveScene=async sceneId=>{
 
-        const {data:scene,error:sceneError}=await supabase
-            .from("scenes").select("*").eq("id",session.scene_id).single();
-        if(sceneError)throw sceneError;
+if(!currentUser){
 
-        const opening=await getOpeningTurn(session.scene_id);
-        const response=await getAcceptedResponseForSession(session);
-        const turns=await getSessionTurns(sessionId);
-        const last=turns.length?turns[turns.length-1]:null;
+openAuth();
+return;
 
-        /* B1 is the selected response. If there are no later turns, A goes next. */
-        let expectedPlayerId=null;
-        if(session.status==="active"){
-            if(!last){
-                expectedPlayerId=session.creator_id;
-            }else if(last.player_id===session.creator_id){
-                expectedPlayerId=session.responder_id;
-            }else{
-                expectedPlayerId=session.creator_id;
-            }
-        }
+}
 
-        const myTurn=session.status==="active" && expectedPlayerId===currentUser.id;
-        const isCreator=currentUser.id===session.creator_id;
+try{
 
-        let statusText="";
-        if(session.status==="ended") statusText="✓ Scene finished — public";
-        else if(myTurn) statusText="🎭 Your turn";
-        else statusText="⏳ Waiting for the other player";
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
 
-        app.innerHTML=`<div class="scene">
-            <span class="tag">${session.status==="ended"?"🎬 FINISHED SCENE":"🔒 PRIVATE SCENE"}</span>
-            <h1>${escapeHtml(scene.title)}</h1>
-            <p class="muted">${escapeHtml(scene.situation||"")}</p>
-            <div class="status ${session.status==="ended"||myTurn?"success":""}">${statusText}</div>
-            <div id="activeTurns"></div>
-            ${session.status==="active" && myTurn?`<button class="btn primary full" onclick="recordNextTurn('${session.id}')">🎥 Record your next turn</button><br><br>`:""}
-            ${session.status==="active" && isCreator?`<button class="btn danger full" onclick="endSession('${session.id}')">🛑 Finish This Scene</button><br><br>`:""}
-            <button class="btn secondary full" onclick="viewResponses('${scene.id}')">← Back to Responses</button>
-        </div>`;
+if(sceneError)throw sceneError;
 
-        const box=document.getElementById("activeTurns");
 
-        if(opening?.video_path){
-            box.innerHTML+=`<div class="info"><strong>Turn 1 — Character A</strong></div>
-            <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(opening.video_path)}"></video>`;
-        }
+const turns=
+await getSceneTurns(sceneId);
 
-        if(response?.video_path){
-            box.innerHTML+=`<div class="info"><strong>Turn 2 — Character B</strong></div>
-            <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(response.video_path)}"></video>`;
-        }
 
-        turns.forEach(t=>{
-            const label=t.player_id===session.creator_id?"Character A":"Character B";
-            box.innerHTML+=`<div class="info"><strong>Turn ${escapeHtml(t.turn_number)} — ${label}</strong></div>
-            <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(t.video_path)}"></video>`;
-        });
+const {
+data:accepted,
+error:acceptedError
+}=
+await supabase
+.from("scene_responses")
+.select(
+"responder_id,status"
+)
+.eq(
+"scene_id",
+sceneId
+)
+.eq(
+"status",
+"accepted"
+)
+.maybeSingle();
 
-        if(session.status==="ended" && session.finished_video_url){
-            box.innerHTML=`<div class="status success">
-                ✓ Final combined video — public
-            </div>
-            <video
-                class="scene-video"
-                controls
-                playsinline
-                preload="metadata"
-                src="${escapeHtml(session.finished_video_url)}">
-            </video>`+box.innerHTML;
-        }
-    }catch(e){
-        console.error(e);
-        alert("Could not load private scene:\n\n"+e.message);
-    }
+if(acceptedError)throw acceptedError;
+
+
+const bId=
+accepted?.responder_id||null;
+
+const last=
+turns.length
+?turns[turns.length-1]
+:null;
+
+
+/*
+NEXT PLAYER LOGIC
+
+Turn 1 = A
+Turn 2 = B
+Turn 3 = A
+Turn 4 = B
+Turn 5 = A
+
+If the last turn was A,
+B goes next.
+
+If the last turn was B,
+A goes next.
+*/
+
+let expectedPlayerId=null;
+
+
+if(
+scene.status==="in_progress" &&
+bId &&
+last
+){
+
+if(
+last.player_id===
+scene.creator_id
+){
+
+expectedPlayerId=
+bId;
+
+}else if(
+last.player_id===
+bId
+){
+
+expectedPlayerId=
+scene.creator_id;
+
+}
+
+}
+
+
+const myTurn=
+scene.status!=="ended" &&
+expectedPlayerId===
+currentUser.id;
+
+
+let turnMessage="";
+
+
+if(scene.status==="ended"){
+
+turnMessage=
+"✓ Scene ended";
+
+}else if(myTurn){
+
+turnMessage=
+"🎭 Your turn";
+
+}else if(expectedPlayerId){
+
+turnMessage=
+"⏳ Waiting for the other player";
+
+}else{
+
+turnMessage=
+"⏳ Waiting for the scene to start";
+
+}
+
+
+app.innerHTML=`
+
+<div class="scene">
+
+<span class="tag">
+🎬 ACTIVE SCENE
+</span>
+
+<h1>
+${escapeHtml(scene.title)}
+</h1>
+
+<p class="muted">
+${escapeHtml(scene.situation||"")}
+</p>
+
+<div
+class="status
+${scene.status==="ended"
+?"success"
+:myTurn
+?"success"
+:""}">
+
+${turnMessage}
+
+</div>
+
+<div id="activeTurns"></div>
+
+
+${
+scene.status!=="ended" &&
+myTurn
+?
+`
+
+<button
+class="btn primary full"
+onclick="recordNextTurn('${scene.id}')">
+
+🎥 Record your next turn
+
+</button>
+
+<br><br>
+
+`
+:
+""
+}
+
+
+${
+scene.status!=="ended" &&
+scene.creator_id===currentUser.id
+?
+`
+
+<button
+class="btn danger full"
+onclick="endScene('${scene.id}')">
+
+🛑 End Scene
+
+</button>
+
+`
+:
+""
+}
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="viewResponses('${scene.id}')">
+
+← Back to Responses
+
+</button>
+
+</div>
+
+`;
+
+
+const box=
+document.getElementById(
+"activeTurns"
+);
+
+
+turns.forEach(t=>{
+
+let playerLabel="Other player";
+
+if(
+t.player_id===
+currentUser.id
+){
+
+playerLabel="You";
+
+}else if(
+t.player_id===
+scene.creator_id
+){
+
+playerLabel="Character A";
+
+}else{
+
+playerLabel="Character B";
+
+}
+
+
+box.innerHTML+=`
+
+<div class="info">
+
+<strong>
+Turn ${escapeHtml(t.turn_number)}
+</strong>
+
+—
+${playerLabel}
+
+</div>
+
+<video
+class="scene-video"
+controls
+playsinline
+preload="metadata"
+src="${escapeHtml(t.video_path)}">
+</video>
+
+`;
+
+});
+
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Could not load scene:\n\n"+
+e.message
+);
+
+}
+
 };
+
 
 /* =========================================================
    RECORD NEXT TURN
+   A OR B CAN USE THIS
 ========================================================= */
-window.recordNextTurn=async sessionId=>{
-    if(!currentUser){openAuth();return}
-    currentResponseSceneId=sessionId;
 
-    const session=await getSession(sessionId);
-    if(session.status!=="active"){alert("This scene has already finished.");return}
-    if(session.creator_id!==currentUser.id && session.responder_id!==currentUser.id){alert("You are not part of this scene.");return}
+window.recordNextTurn=async sceneId=>{
 
-    app.innerHTML=`<h1>🎥 Record your next turn</h1>
-        <p class="muted">Continue the scene naturally.</p>
-        <div class="camera"><video id="nextTurnCamera" autoplay muted playsinline></video></div>
-        <div id="nextTurnStatus" class="status">Ready</div>
-        <button id="nextTurnRecordButton" class="btn primary full" onclick="toggleNextTurnRecording()">🔴 Record</button><br><br>
-        <button class="btn secondary full" onclick="showActiveScene('${sessionId}')">Cancel</button>`;
+if(!currentUser){
 
-    try{
-        cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});
-        document.getElementById("nextTurnCamera").srcObject=cameraStream;
-    }catch(e){
-        alert("Camera/microphone permission was denied.");
-        showActiveScene(sessionId);
-    }
+openAuth();
+return;
+
+}
+
+currentResponseSceneId=
+sceneId;
+
+
+const {data:scene,error}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+currentScene=scene;
+
+
+app.innerHTML=`
+
+<h1>
+🎥 Record your next turn
+</h1>
+
+<p class="muted">
+Continue the scene naturally.
+</p>
+
+<div class="camera">
+
+<video
+id="nextTurnCamera"
+autoplay
+muted
+playsinline>
+</video>
+
+</div>
+
+<div
+id="nextTurnStatus"
+class="status">
+
+Ready
+
+</div>
+
+<button
+id="nextTurnRecordButton"
+class="btn primary full"
+onclick="toggleNextTurnRecording()">
+
+🔴 Record
+
+</button>
+
+<br><br>
+
+<button
+class="btn secondary full"
+onclick="showActiveScene('${sceneId}')">
+
+Cancel
+
+</button>
+
+`;
+
+
+try{
+
+cameraStream=
+await navigator.mediaDevices.getUserMedia({
+
+video:{facingMode:"user"},
+audio:true
+
+});
+
+document.getElementById(
+"nextTurnCamera"
+).srcObject=
+cameraStream;
+
+}catch(e){
+
+alert(
+"Camera/microphone permission was denied."
+);
+
+showActiveScene(sceneId);
+
+}
+
 };
+
+
+/* =========================================================
+   NEXT TURN RECORDING
+========================================================= */
 
 window.toggleNextTurnRecording=()=>{
-    if(!mediaRecorder||mediaRecorder.state==="inactive") startNextTurnRecording();
-    else stopRecording();
+
+if(
+!mediaRecorder||
+mediaRecorder.state==="inactive"
+){
+
+startNextTurnRecording();
+
+}else{
+
+stopRecording();
+
+}
+
 };
 
+
 function startNextTurnRecording(){
-    recordedChunks=[];
-    let options={};
-    if(MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus"))options.mimeType="video/webm;codecs=vp8,opus";
-    mediaRecorder=new MediaRecorder(cameraStream,options);
-    mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data)};
-    mediaRecorder.onstop=reviewNextTurn;
-    mediaRecorder.start();
-    recordingSeconds=0;
-    recordingTimer=setInterval(()=>{
-        recordingSeconds++;
-        const s=document.getElementById("nextTurnStatus");
-        if(s)s.textContent="🔴 Recording "+recordingSeconds+" seconds";
-        if(recordingSeconds>=30)stopRecording();
-    },1000);
-    const button=document.getElementById("nextTurnRecordButton");
-    if(button)button.textContent="⏹ Stop";
+
+recordedChunks=[];
+
+let options={};
+
+if(
+MediaRecorder.isTypeSupported(
+"video/webm;codecs=vp8,opus"
+)
+){
+
+options.mimeType=
+"video/webm;codecs=vp8,opus";
+
 }
 
-function reviewNextTurn(){
-    stopCameraTracks();
-    pendingVideoBlob=new Blob(recordedChunks,{type:"video/webm"});
-    const url=URL.createObjectURL(pendingVideoBlob);
-    app.innerHTML=`<h1>Review your next turn</h1>
-        <p class="muted">Make sure you are happy with your continuation.</p>
-        <div class="camera"><video src="${url}" controls playsinline></video></div>
-        <div class="button-row">
-            <button class="btn secondary" onclick="recordNextTurn('${currentResponseSceneId}')">↻ Retake</button>
-            <button class="btn primary" onclick="uploadNextTurn()">✓ Add Turn</button>
-        </div>`;
+
+mediaRecorder=
+new MediaRecorder(
+cameraStream,
+options
+);
+
+
+mediaRecorder.ondataavailable=e=>{
+
+if(e.data.size){
+
+recordedChunks.push(e.data);
+
 }
+
+};
+
+
+mediaRecorder.onstop=
+reviewNextTurn;
+
+
+mediaRecorder.start();
+
+recordingSeconds=0;
+
+
+recordingTimer=
+setInterval(()=>{
+
+recordingSeconds++;
+
+const s=
+document.getElementById(
+"nextTurnStatus"
+);
+
+if(s){
+
+s.textContent=
+"🔴 Recording "+
+recordingSeconds+
+" seconds";
+
+}
+
+if(recordingSeconds>=30){
+
+stopRecording();
+
+}
+
+},1000);
+
+
+const button=
+document.getElementById(
+"nextTurnRecordButton"
+);
+
+if(button){
+
+button.textContent=
+"⏹ Stop";
+
+}
+
+}
+
+
+/* =========================================================
+   REVIEW NEXT TURN
+========================================================= */
+
+function reviewNextTurn(){
+
+stopCameraTracks();
+
+pendingVideoBlob=
+new Blob(
+recordedChunks,
+{type:"video/webm"}
+);
+
+const url=
+URL.createObjectURL(
+pendingVideoBlob
+);
+
+
+app.innerHTML=`
+
+<h1>
+Review your next turn
+</h1>
+
+<p class="muted">
+Make sure you are happy with your continuation.
+</p>
+
+<div class="camera">
+
+<video
+src="${url}"
+controls
+playsinline>
+</video>
+
+</div>
+
+<div class="button-row">
+
+<button
+class="btn secondary"
+onclick="recordNextTurn('${currentResponseSceneId}')">
+
+↻ Retake
+
+</button>
+
+<button
+class="btn primary"
+onclick="uploadNextTurn()">
+
+✓ Add Turn
+
+</button>
+
+</div>
+
+`;
+
+}
+
 
 /* =========================================================
    UPLOAD NEXT TURN
-   session_id is the critical difference from the old system.
+   THIS GOES INTO scene_turns
 ========================================================= */
+
 window.uploadNextTurn=async()=>{
-    if(!pendingVideoBlob){alert("No turn video.");return}
-    if(!currentUser||!currentResponseSceneId){alert("Your session is missing.");return}
-    showLoading("Uploading your turn...");
 
-    let videoPath=null;
-    try{
-        const session=await getSession(currentResponseSceneId);
-        if(session.status!=="active")throw new Error("This private scene has already ended.");
-        if(session.creator_id!==currentUser.id && session.responder_id!==currentUser.id)throw new Error("You are not part of this scene.");
+if(!pendingVideoBlob){
 
-        const {data:scene,error:sceneError}=await supabase.from("scenes").select("*").eq("id",session.scene_id).single();
-        if(sceneError)throw sceneError;
+alert("No turn video.");
+return;
 
-        const turns=await getSessionTurns(session.id);
-        const last=turns.length?turns[turns.length-1]:null;
+}
 
-        /* No session turn yet means B1 was the last visible turn, so A goes next. */
-        const expectedPlayerId=!last
-            ? session.creator_id
-            : last.player_id===session.creator_id
-                ? session.responder_id
-                : session.creator_id;
+if(
+!currentUser||
+!currentResponseSceneId
+){
 
-        if(expectedPlayerId!==currentUser.id)throw new Error("It is not your turn.");
+alert(
+"Your session or scene is missing."
+);
 
-        const nextTurnNumber=last?Number(last.turn_number)+1:3;
-        const turnId=crypto.randomUUID();
-        videoPath=currentUser.id+"/sessions/"+session.id+"/turns/"+turnId+".webm";
+return;
 
-        const {error:uploadError}=await supabase.storage.from("scene-videos").upload(
-            videoPath,pendingVideoBlob,{contentType:"video/webm",upsert:false}
-        );
-        if(uploadError)throw uploadError;
+}
 
-        const {data:urlData}=supabase.storage.from("scene-videos").getPublicUrl(videoPath);
-        const videoUrl=urlData.publicUrl;
 
-        const {error:turnError}=await supabase.from("scene_turns").insert({
-            id:turnId,
-            scene_id:session.scene_id,
-            session_id:session.id,
-            player_id:currentUser.id,
-            turn_number:nextTurnNumber,
-            video_path:videoUrl
-        });
+showLoading(
+"Uploading your turn..."
+);
 
-        if(turnError){
-            await supabase.storage.from("scene-videos").remove([videoPath]);
-            throw turnError;
-        }
 
-        pendingVideoBlob=null;
-        await showActiveScene(session.id);
-    }catch(e){
-        console.error(e);
-        alert("Turn upload failed:\n\n"+e.message);
-        showActiveScene(currentResponseSceneId);
-    }
+let videoPath=null;
+
+
+try{
+
+const sceneId=
+currentResponseSceneId;
+
+
+/* Get scene */
+
+const {data:scene,error:sceneError}=
+await supabase
+.from("scenes")
+.select("*")
+.eq("id",sceneId)
+.single();
+
+if(sceneError)throw sceneError;
+
+
+if(scene.status!=="in_progress"){
+
+throw new Error(
+"This scene is not active."
+);
+
+}
+
+
+/* Get current turns */
+
+const turns=
+await getSceneTurns(sceneId);
+
+
+const last=
+turns[turns.length-1];
+
+
+if(!last){
+
+throw new Error(
+"No previous turn exists."
+);
+
+}
+
+
+/* Find accepted B */
+
+const {
+data:accepted,
+error:acceptedError
+}=
+await supabase
+.from("scene_responses")
+.select("responder_id")
+.eq("scene_id",sceneId)
+.eq("status","accepted")
+.maybeSingle();
+
+if(acceptedError)throw acceptedError;
+
+
+const bId=
+accepted?.responder_id;
+
+
+if(!bId){
+
+throw new Error(
+"No accepted player was found."
+);
+
+}
+
+
+/*
+CHECK WHO SHOULD RECORD
+
+If last turn was A,
+B must record.
+
+If last turn was B,
+A must record.
+*/
+
+let expectedPlayerId=null;
+
+
+if(
+last.player_id===
+scene.creator_id
+){
+
+expectedPlayerId=
+bId;
+
+}else if(
+last.player_id===
+bId
+){
+
+expectedPlayerId=
+scene.creator_id;
+
+}
+
+
+if(
+expectedPlayerId!==
+currentUser.id
+){
+
+throw new Error(
+"It is not your turn."
+);
+
+}
+
+
+/* Next number */
+
+const nextTurnNumber=
+Number(last.turn_number)+1;
+
+
+/* Unique ID */
+
+const turnId=
+crypto.randomUUID();
+
+
+/* Storage path */
+
+videoPath=
+currentUser.id+
+"/turns/"+
+turnId+
+".webm";
+
+
+/* Upload video */
+
+const {error:uploadError}=
+await supabase.storage
+.from("scene-videos")
+.upload(
+videoPath,
+pendingVideoBlob,
+{
+contentType:"video/webm",
+upsert:false
+}
+);
+
+
+if(uploadError){
+
+throw uploadError;
+
+}
+
+
+/* Public URL */
+
+const {data:urlData}=
+supabase.storage
+.from("scene-videos")
+.getPublicUrl(
+videoPath
+);
+
+
+const videoUrl=
+urlData.publicUrl;
+
+
+/* Insert turn */
+
+const {error:turnError}=
+await supabase
+.from("scene_turns")
+.insert({
+
+id:turnId,
+
+scene_id:sceneId,
+
+player_id:
+currentUser.id,
+
+turn_number:
+nextTurnNumber,
+
+video_path:
+videoUrl
+
+});
+
+
+if(turnError){
+
+/* Delete uploaded file if DB insert fails */
+
+await supabase.storage
+.from("scene-videos")
+.remove([videoPath]);
+
+throw turnError;
+
+}
+
+
+/* Success */
+
+pendingVideoBlob=null;
+
+await showActiveScene(
+sceneId
+);
+
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Turn upload failed:\n\n"+
+e.message
+);
+
+showActiveScene(
+currentResponseSceneId
+);
+
+}
+
 };
 
+
 /* =========================================================
-   FINISH PRIVATE SESSION
+   END SCENE
 ========================================================= */
+
 /* =========================================================
-   CREATE ONE FINAL VIDEO FROM THE WHOLE SESSION
-   Order:
-   A1 -> B1 -> A2 -> B2 -> A3 -> ...
-
-   The original individual files are kept. The combined WebM
-   is uploaded to Storage and saved as finished_video_url.
+   BUILD ONE PUBLIC FINISHED VIDEO
+   A1 -> B1 -> A2 -> B2 -> ...
 ========================================================= */
-async function createFinishedSessionVideo(sessionId){
 
-    const session = await getSession(sessionId);
+async function buildFinishedVideo(sceneId){
 
-    const opening = await getOpeningTurn(session.scene_id);
-    const turns = await getSessionTurns(sessionId);
+    const {data:scene,error:sceneError} =
+        await supabase
+        .from("scenes")
+        .select("id,creator_id")
+        .eq("id",sceneId)
+        .single();
+
+    if(sceneError) throw sceneError;
+
+    const {data:turns,error:turnError} =
+        await supabase
+        .from("scene_turns")
+        .select("turn_number,video_path,session_id")
+        .eq("scene_id",sceneId)
+        .order("turn_number",{ascending:true});
+
+    if(turnError) throw turnError;
+
+    const {data:responses,error:responseError} =
+        await supabase
+        .from("scene_responses")
+        .select("video_path,status,created_at")
+        .eq("scene_id",sceneId)
+        .eq("status","accepted")
+        .order("created_at",{ascending:true});
+
+    if(responseError) throw responseError;
+
+    const opening =
+        (turns||[]).find(t=>Number(t.turn_number)===1);
+
+    if(!opening?.video_path){
+        throw new Error("A1 video is missing.");
+    }
 
     /*
-      IMPORTANT DATA MODEL:
-      A1 is the opening turn.
-      B1 is turn 2 in scene_turns.
-      A2 is turn 3.
-      B2 is turn 4.
-      Therefore we build the final video from A1 + session turns.
+       Exact public sequence:
+       A1
+       B1 (accepted response)
+       A2/B2/A3/B3... (session turns)
     */
-    const ordered = [];
+    const sequence = [opening.video_path];
 
-    if(opening?.video_path){
-        ordered.push({
-            turn: 1,
-            url: opening.video_path
-        });
+    if(responses?.[0]?.video_path){
+        sequence.push(responses[0].video_path);
     }
 
-    (turns || [])
-      .filter(t => t.video_path)
-      .sort((a,b) => Number(a.turn_number) - Number(b.turn_number))
-      .forEach(t => {
-          ordered.push({
-              turn: Number(t.turn_number),
-              url: t.video_path
-          });
-      });
+    (turns||[])
+        .filter(t=>Number(t.turn_number)>1 && t.video_path)
+        .forEach(t=>sequence.push(t.video_path));
 
-    // Remove accidental duplicate turn numbers/URLs.
-    const seenTurns = new Set();
-    const seenUrls = new Set();
-
-    const sources = ordered
-      .filter(item => {
-          if(!item.url) return false;
-          if(seenTurns.has(item.turn)) return false;
-          if(seenUrls.has(item.url)) return false;
-          seenTurns.add(item.turn);
-          seenUrls.add(item.url);
-          return true;
-      })
-      .sort((a,b) => a.turn - b.turn);
-
-    if(sources.length < 2){
+    if(sequence.length<2){
         throw new Error(
-            "The scene needs at least A1 and B1 before it can be finished."
-        );
-    }
-
-    if(sources[0].turn !== 1 || sources[1].turn !== 2){
-        throw new Error(
-            "The scene sequence is incomplete. Expected A1 followed by B1."
+            "The scene has only A1. Record B1 before finishing."
         );
     }
 
     showLoading(
-        "Creating ONE finished video...<br><br>" +
-        sources.map(x => "Turn " + x.turn).join(" → ") +
-        "<br><br>Please keep this page open."
+        "Creating ONE finished video...<br><br>"+
+        "A1 → B1 → A2 → B2 → ...<br><br>"+
+        "Please keep this page open."
     );
 
-    const loadVideo = url => new Promise((resolve,reject) => {
+    const loadVideo = url => new Promise((resolve,reject)=>{
 
-        const video = document.createElement("video");
-        video.crossOrigin = "anonymous";
-        video.preload = "auto";
-        video.playsInline = true;
+        const v=document.createElement("video");
+        v.crossOrigin="anonymous";
+        v.preload="auto";
+        v.playsInline=true;
 
-        let settled = false;
+        v.onloadedmetadata=()=>resolve(v);
+        v.onerror=()=>reject(
+            new Error("Could not load one of the videos.")
+        );
 
-        const fail = message => {
-            if(settled) return;
-            settled = true;
-            reject(new Error(message));
-        };
-
-        const timer = setTimeout(() => {
-            fail("Timed out loading one of the scene videos.");
-        }, 30000);
-
-        video.onloadedmetadata = () => {
-            clearTimeout(timer);
-
-            if(!video.videoWidth || !video.videoHeight){
-                fail("One of the scene videos has invalid dimensions.");
-                return;
-            }
-
-            if(!settled){
-                settled = true;
-                resolve(video);
-            }
-        };
-
-        video.onerror = () => {
-            clearTimeout(timer);
-            fail("Could not load one of the scene videos.");
-        };
-
-        video.src = url;
-        video.load();
+        v.src=url;
+        v.load();
     });
 
-    const first = await loadVideo(sources[0].url);
+    const first=await loadVideo(sequence[0]);
 
-    const width = first.videoWidth || 1280;
-    const height = first.videoHeight || 720;
+    const width=first.videoWidth||1280;
+    const height=first.videoHeight||720;
 
     first.pause();
     first.removeAttribute("src");
     first.load();
 
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
+    const canvas=document.createElement("canvas");
+    canvas.width=width;
+    canvas.height=height;
 
-    const ctx = canvas.getContext("2d");
+    const ctx=canvas.getContext("2d");
 
     if(!ctx){
-        throw new Error("Could not create the final video canvas.");
+        throw new Error("Could not create video canvas.");
     }
 
-    if(!canvas.captureStream){
-        throw new Error("This browser cannot create the final video.");
-    }
-
-    const videoStream = canvas.captureStream(30);
+    const videoStream=canvas.captureStream(30);
 
     const AudioContextClass =
-        window.AudioContext || window.webkitAudioContext;
+        window.AudioContext||window.webkitAudioContext;
 
     if(!AudioContextClass){
-        throw new Error(
-            "This browser does not support the audio system needed to combine videos."
-        );
+        throw new Error("This browser does not support audio.");
     }
 
-    const audioContext = new AudioContextClass();
+    const audioContext=new AudioContextClass();
     await audioContext.resume();
 
     const audioDestination =
         audioContext.createMediaStreamDestination();
 
-    const mimeCandidates = [
+    const mimeTypes=[
         "video/webm;codecs=vp9,opus",
         "video/webm;codecs=vp8,opus",
         "video/webm"
     ];
 
-    const mimeType = mimeCandidates.find(
-        type => MediaRecorder.isTypeSupported(type)
+    const mimeType=mimeTypes.find(
+        m=>MediaRecorder.isTypeSupported(m)
     );
 
     if(!mimeType){
         await audioContext.close();
         throw new Error(
-            "This browser cannot create the final WebM video."
+            "Your browser cannot create the finished WebM."
         );
     }
 
-    const combinedStream = new MediaStream([
+    const stream=new MediaStream([
         ...videoStream.getVideoTracks(),
         ...audioDestination.stream.getAudioTracks()
     ]);
 
-    const recorder = new MediaRecorder(
-        combinedStream,
+    const recorder=new MediaRecorder(
+        stream,
         {mimeType}
     );
 
-    const chunks = [];
+    const chunks=[];
 
-    const recordingDone = new Promise((resolve,reject) => {
+    const recordingDone=new Promise((resolve,reject)=>{
 
-        recorder.ondataavailable = e => {
+        recorder.ondataavailable=e=>{
             if(e.data?.size) chunks.push(e.data);
         };
 
-        recorder.onerror = e => {
+        recorder.onerror=e=>{
             reject(
-                e.error || new Error("Final video recording failed.")
+                e.error||new Error("Final recording failed.")
             );
         };
 
-        recorder.onstop = () => {
+        recorder.onstop=()=>{
+
             if(!chunks.length){
-                reject(new Error("The final video contains no data."));
+                reject(new Error("Final video is empty."));
                 return;
             }
 
-            resolve(new Blob(chunks,{type:mimeType}));
+            resolve(
+                new Blob(chunks,{type:mimeType})
+            );
         };
     });
 
     recorder.start(250);
 
-    try {
+    try{
 
-        for(let i=0; i<sources.length; i++){
+        for(const url of sequence){
 
-            const item = sources[i];
+            const video=await loadVideo(url);
 
-            showLoading(
-                "Creating ONE finished video...<br><br>" +
-                "Turn " + item.turn +
-                " (" + (i+1) + " of " + sources.length + ")" +
-                "<br><br>Please keep this page open."
-            );
+            video.muted=true;
 
-            const video = await loadVideo(item.url);
-
-            /*
-              Route the audio into the recording stream.
-              It is NOT routed to the speakers.
-            */
-            const sourceNode =
+            const source =
                 audioContext.createMediaElementSource(video);
 
             const gain =
                 audioContext.createGain();
 
-            gain.gain.value = 1;
+            gain.gain.value=1;
 
-            sourceNode.connect(gain);
+            source.connect(gain);
             gain.connect(audioDestination);
 
-            await new Promise((resolve,reject) => {
+            await new Promise((resolve,reject)=>{
 
-                let frame = null;
-                let done = false;
+                let frame;
 
-                const cleanup = () => {
-                    if(frame) cancelAnimationFrame(frame);
-                    video.onended = null;
-                    video.onerror = null;
-                };
+                const draw=()=>{
 
-                const finish = () => {
-                    if(done) return;
-                    done = true;
-                    cleanup();
-                    resolve();
-                };
+                    if(video.ended){
+                        if(frame) cancelAnimationFrame(frame);
+                        resolve();
+                        return;
+                    }
 
-                const draw = () => {
-
-                    if(done) return;
-
-                    ctx.fillStyle = "#000";
+                    ctx.fillStyle="#000";
                     ctx.fillRect(
-                        0,0,canvas.width,canvas.height
+                        0,0,
+                        canvas.width,
+                        canvas.height
                     );
 
-                    const scale = Math.min(
-                        canvas.width / video.videoWidth,
-                        canvas.height / video.videoHeight
+                    const scale=Math.min(
+                        canvas.width/video.videoWidth,
+                        canvas.height/video.videoHeight
                     );
 
-                    const w = video.videoWidth * scale;
-                    const h = video.videoHeight * scale;
+                    const w=video.videoWidth*scale;
+                    const h=video.videoHeight*scale;
 
                     ctx.drawImage(
                         video,
                         (canvas.width-w)/2,
                         (canvas.height-h)/2,
-                        w,
-                        h
+                        w,h
                     );
 
-                    frame = requestAnimationFrame(draw);
+                    frame=requestAnimationFrame(draw);
                 };
 
-                video.onended = finish;
+                video.onended=resolve;
 
-                video.onerror = () => {
-                    if(done) return;
-                    done = true;
-                    cleanup();
+                video.onerror=()=>{
                     reject(
                         new Error(
-                            "Turn " + item.turn +
-                            " failed while creating the final video."
+                            "A video failed while combining the scene."
                         )
                     );
                 };
 
-                draw();
+                video.play().catch(reject);
 
-                video.play().catch(error => {
-                    if(done) return;
-                    done = true;
-                    cleanup();
-                    reject(error);
-                });
-
+                frame=requestAnimationFrame(draw);
             });
 
             video.pause();
@@ -3336,36 +4383,31 @@ async function createFinishedSessionVideo(sessionId){
             video.load();
         }
 
-    } catch(error) {
+    }catch(e){
 
-        try {
-            if(recorder.state !== "inactive") recorder.stop();
-        } catch(ignore){}
+        try{ recorder.stop(); }catch(ignore){}
+        try{ await audioContext.close(); }catch(ignore){}
 
-        try {
-            await audioContext.close();
-        } catch(ignore){}
-
-        throw error;
+        throw e;
     }
 
     recorder.stop();
 
-    const finishedBlob = await recordingDone;
+    const finishedBlob=await recordingDone;
 
     await audioContext.close();
 
-    const finishedPath =
-        session.creator_id +
-        "/sessions/" +
-        session.id +
-        "/finished.webm";
+    const path =
+        scene.creator_id+
+        "/finished/"+
+        scene.id+
+        ".webm";
 
     const {error:uploadError} =
         await supabase.storage
         .from("scene-videos")
         .upload(
-            finishedPath,
+            path,
             finishedBlob,
             {
                 contentType:"video/webm",
@@ -3373,96 +4415,67 @@ async function createFinishedSessionVideo(sessionId){
             }
         );
 
-    if(uploadError){
-        throw new Error(
-            "Final video upload failed: " +
-            uploadError.message
-        );
-    }
+    if(uploadError) throw uploadError;
 
     const {data:urlData} =
         supabase.storage
         .from("scene-videos")
-        .getPublicUrl(finishedPath);
+        .getPublicUrl(path);
 
     return urlData.publicUrl;
 }
 
 
 /* =========================================================
-   FINISH PRIVATE SESSION
+   END SCENE
 ========================================================= */
-window.endSession=async sessionId=>{
+
+window.endScene=async sceneId=>{
 
     if(!currentUser)return;
 
+    if(!confirm(
+        "Finish this scene?\n\n"+
+        "A1, B1, A2, B2 and all later turns will be "+
+        "combined into ONE public video."
+    )){
+        return;
+    }
+
     try{
 
-        const session =
-            await getSession(sessionId);
-
-        if(session.creator_id!==currentUser.id){
-            alert(
-                "Only the scene creator can finish this scene."
-            );
-            return;
-        }
-
-        if(session.status!=="active"){
-            await showActiveScene(sessionId);
-            return;
-        }
-
-        if(!confirm(
-            "Finish this private scene?\n\n"+
-            "A1, B1, A2, B2 and all later turns will be "+
-            "combined into ONE public video."
-        )){
-            return;
-        }
-
-        /*
-           Do NOT mark the session ended until the combined
-           video has successfully been created and uploaded.
-        */
-        const finishedUrl =
-            await createFinishedSessionVideo(sessionId);
+        const finalUrl =
+            await buildFinishedVideo(sceneId);
 
         const {error} =
             await supabase
-                .from("scene_sessions")
-                .update({
-                    status:"ended",
-                    ended_at:new Date().toISOString(),
-                    finished_video_url:finishedUrl
-                })
-                .eq("id",sessionId)
-                .eq("creator_id",currentUser.id);
+            .from("scenes")
+            .update({
+                status:"ended",
+                finished_video_url:finalUrl
+            })
+            .eq("id",sceneId)
+            .eq("creator_id",currentUser.id);
 
-        if(error){
-            throw error;
-        }
+        if(error) throw error;
 
-        await showActiveScene(sessionId);
+        alert("✓ One finished video created successfully!");
+
+        await showActiveScene(sceneId);
 
     }catch(e){
 
         console.error(e);
 
         alert(
-            "Could not finish the scene:\n\n"+
+            "Could not create the finished video:\n\n"+
             e.message
         );
 
-        try{
-            await showActiveScene(sessionId);
-        }catch(ignore){}
     }
+
 };
 
-
-/* Backwards-compatible alias for any old button still calling endScene. */
-window.endScene=window.endSession;
 
 /* =========================================================
    PROFILE
