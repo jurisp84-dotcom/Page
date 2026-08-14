@@ -743,441 +743,647 @@ Back to Discover
 /* ACTIVE SCENE CONTINUATION */
 
 async function getSceneTurns(sceneId){
+    const {data,error}=await supabase
+        .from("scene_turns")
+        .select("*")
+        .eq("scene_id",sceneId)
+        .order("turn_number",{ascending:true});
 
-const {data,error}=await supabase
-.from("scene_turns")
-.select("*")
-.eq("scene_id",sceneId)
-.order("turn_number",{ascending:true});
+    if(error) throw error;
+    return data || [];
+}
 
-if(error)throw error;
+async function getAcceptedPlayer(sceneId){
+    const {data,error}=await supabase
+        .from("scene_responses")
+        .select("responder_id,video_path,status")
+        .eq("scene_id",sceneId)
+        .eq("status","accepted")
+        .maybeSingle();
 
-return data||[];
+    if(error) throw error;
+    return data;
+}
+
+/*
+    TURN SYSTEM
+
+    Turn 1 = A / creator
+    Turn 2 = B / accepted responder
+    Turn 3 = A
+    Turn 4 = B
+    Turn 5 = A
+    etc.
+
+    The database is the source of truth.
+*/
+
+function isCreator(scene){
+    return currentUser && scene.creator_id === currentUser.id;
+}
+
+function getExpectedPlayer(scene,accepted,turnNumber){
+    if(!accepted) return null;
+
+    // Odd turns = A
+    if(turnNumber % 2 === 1){
+        return scene.creator_id;
+    }
+
+    // Even turns = B
+    return accepted.responder_id;
 }
 
 window.showActiveScene=async function(sceneId){
 
-if(!currentUser){
-openAuth();
-return;
-}
+    if(!currentUser){
+        openAuth();
+        return;
+    }
 
-try{
+    try{
 
-const {data:scene,error}=await supabase
-.from("scenes")
-.select("*")
-.eq("id",sceneId)
-.single();
+        const {data:scene,error:sceneError}=await supabase
+            .from("scenes")
+            .select("*")
+            .eq("id",sceneId)
+            .single();
 
-if(error)throw error;
+        if(sceneError) throw sceneError;
 
-const turns=await getSceneTurns(sceneId);
+        const accepted=await getAcceptedPlayer(sceneId);
 
-const {data:accepted,error:acceptedError}=await supabase
-.from("scene_responses")
-.select("responder_id")
-.eq("scene_id",sceneId)
-.eq("status","accepted")
-.maybeSingle();
+        if(!accepted){
+            alert("No player has been accepted for this scene yet.");
+            viewResponses(sceneId);
+            return;
+        }
 
-if(acceptedError)throw acceptedError;
+        const turns=await getSceneTurns(sceneId);
 
-const bId=accepted?.responder_id;
-const last=turns[turns.length-1];
+        const lastTurn=turns.length
+            ? turns[turns.length-1]
+            : null;
 
-/*
- * The creator's turn is available when:
- * - the scene is active
- * - B is accepted
- * - the last turn belongs to B
- */
-const myTurn=
-scene.status!=="ended" &&
-scene.creator_id===currentUser.id &&
-bId &&
-last &&
-last.player_id===bId;
+        /*
+            The next turn is simply the next number.
+        */
+        const nextTurnNumber=turns.length+1;
 
-app.innerHTML=`
-<div class="scene">
+        const expectedPlayer=getExpectedPlayer(
+            scene,
+            accepted,
+            nextTurnNumber
+        );
 
-<span class="tag">🎬 ACTIVE SCENE</span>
+        const myTurn=
+            scene.status !== "ended" &&
+            expectedPlayer === currentUser.id;
 
-<h1>${escapeHtml(scene.title)}</h1>
+        let turnMessage;
 
-<p class="muted">
-${escapeHtml(scene.situation||"")}
-</p>
+        if(scene.status==="ended"){
+            turnMessage="✓ Scene ended";
+        }
+        else if(myTurn){
+            turnMessage="🎭 Your turn";
+        }
+        else{
+            turnMessage="⏳ Waiting for the other player";
+        }
 
-<div class="status ${scene.status==="ended"?"success":""}">
-${
-scene.status==="ended"
-?"✓ Scene ended"
-:myTurn
-?"🎭 Your turn"
-:"⏳ Waiting for the other player"
-}
-</div>
+        app.innerHTML=`
+            <div class="scene">
 
-<div id="activeTurns"></div>
+                <span class="tag">🎬 ACTIVE SCENE</span>
 
-${
-scene.status!=="ended"&&myTurn
-?`
-<button class="btn primary full"
-onclick="recordNextTurn('${scene.id}')">
-🎥 Record your next turn
-</button>
-<br><br>
-`
-:""
-}
+                <h1>${escapeHtml(scene.title)}</h1>
 
-${
-scene.status!=="ended"&&scene.creator_id===currentUser.id
-?`
-<button class="btn danger full"
-onclick="endScene('${scene.id}')">
-🛑 End Scene
-</button>
-`
-:""
-}
+                <p class="muted">
+                    ${escapeHtml(scene.situation || "")}
+                </p>
 
-<br><br>
+                <div class="status ${
+                    scene.status==="ended" ? "success" : ""
+                }">
+                    ${turnMessage}
+                </div>
 
-<button class="btn secondary full"
-onclick="viewResponses('${scene.id}')">
-← Back to Responses
-</button>
+                <div id="activeTurns"></div>
 
-</div>`;
+                ${
+                    scene.status!=="ended" && myTurn
+                    ?
+                    `
+                    <button
+                        class="btn primary full"
+                        onclick="recordNextTurn('${scene.id}')">
+                        🎥 Record Turn ${nextTurnNumber}
+                    </button>
+                    <br><br>
+                    `
+                    :
+                    ""
+                }
 
-const box=document.getElementById("activeTurns");
+                ${
+                    scene.status!=="ended" &&
+                    isCreator(scene)
+                    ?
+                    `
+                    <button
+                        class="btn danger full"
+                        onclick="endScene('${scene.id}')">
+                        🛑 End Scene
+                    </button>
+                    `
+                    :
+                    ""
+                }
 
-turns.forEach(t=>{
+                <br>
 
-box.innerHTML+=`
-<div class="info">
-<strong>Turn ${escapeHtml(t.turn_number)}</strong>
-—
-${t.player_id===currentUser.id?"You":"Other player"}
-</div>
+                <button
+                    class="btn secondary full"
+                    onclick="viewResponses('${scene.id}')">
+                    ← Back to Responses
+                </button>
 
-<video class="scene-video"
-controls playsinline preload="metadata"
-src="${escapeHtml(t.video_path)}">
-</video>`;
-});
+            </div>
+        `;
 
-}catch(e){
+        const box=document.getElementById("activeTurns");
 
-console.error(e);
+        turns.forEach(t=>{
 
-alert(
-"Could not load scene:\n\n"+
-e.message
-);
-}
+            const who=
+                t.player_id===scene.creator_id
+                ? "Character A"
+                : "Character B";
+
+            box.innerHTML+=`
+                <div class="info">
+                    <strong>Turn ${escapeHtml(t.turn_number)}</strong>
+                    — ${who}
+                    ${
+                        t.player_id===currentUser.id
+                        ? " — You"
+                        : ""
+                    }
+                </div>
+
+                <video
+                    class="scene-video"
+                    controls
+                    playsinline
+                    preload="metadata"
+                    src="${escapeHtml(t.video_path)}">
+                </video>
+            `;
+        });
+
+    }catch(e){
+
+        console.error(e);
+
+        alert(
+            "Could not load active scene:\n\n"+
+            e.message
+        );
+    }
 };
+
 
 window.recordNextTurn=async function(sceneId){
 
-currentResponseSceneId=sceneId;
+    if(!currentUser){
+        openAuth();
+        return;
+    }
 
-const {data:scene,error}=await supabase
-.from("scenes")
-.select("*")
-.eq("id",sceneId)
-.single();
+    try{
 
-if(error){
-alert(error.message);
-return;
-}
+        const {data:scene,error:sceneError}=await supabase
+            .from("scenes")
+            .select("*")
+            .eq("id",sceneId)
+            .single();
 
-currentScene=scene;
+        if(sceneError) throw sceneError;
 
-app.innerHTML=`
-<h1>🎥 Record your next turn</h1>
+        const accepted=await getAcceptedPlayer(sceneId);
 
-<p class="muted">
-Continue the scene naturally.
-</p>
+        if(!accepted){
+            alert("No player has been accepted.");
+            return;
+        }
 
-<div class="camera">
-<video id="responseCamera"
-autoplay muted playsinline>
-</video>
-</div>
+        const turns=await getSceneTurns(sceneId);
 
-<div id="responseStatus"
-class="status">
-Ready
-</div>
+        const nextTurnNumber=turns.length+1;
 
-<button id="responseRecordButton"
-class="btn primary full"
-onclick="toggleResponseRecording()">
-🔴 Record
-</button>
+        const expectedPlayer=getExpectedPlayer(
+            scene,
+            accepted,
+            nextTurnNumber
+        );
 
-<br><br>
+        /*
+            IMPORTANT:
+            Don't allow the wrong player to record.
+        */
+        if(expectedPlayer!==currentUser.id){
 
-<button class="btn secondary full"
-onclick="showActiveScene('${sceneId}')">
-Cancel
-</button>`;
+            alert(
+                "It is not your turn yet.\n\n"+
+                "The other player must record their turn first."
+            );
 
-try{
+            await showActiveScene(sceneId);
+            return;
+        }
 
-cameraStream=await navigator.mediaDevices
-.getUserMedia({
-video:{facingMode:"user"},
-audio:true
-});
+        currentResponseSceneId=sceneId;
+        currentScene=scene;
 
-document.getElementById("responseCamera").srcObject=cameraStream;
+        app.innerHTML=`
+            <h1>🎥 Record Turn ${nextTurnNumber}</h1>
 
-}catch(e){
+            <p class="muted">
+                Continue the scene naturally.
+            </p>
 
-alert(
-"Camera/microphone permission was denied."
-);
+            <div class="camera">
+                <video
+                    id="responseCamera"
+                    autoplay
+                    muted
+                    playsinline>
+                </video>
+            </div>
 
-showActiveScene(sceneId);
-}
+            <div
+                id="responseStatus"
+                class="status">
+                Ready
+            </div>
+
+            <button
+                id="responseRecordButton"
+                class="btn primary full"
+                onclick="toggleResponseRecording()">
+                🔴 Record
+            </button>
+
+            <br><br>
+
+            <button
+                class="btn secondary full"
+                onclick="showActiveScene('${sceneId}')">
+                Cancel
+            </button>
+        `;
+
+        cameraStream=
+            await navigator.mediaDevices.getUserMedia({
+                video:{facingMode:"user"},
+                audio:true
+            });
+
+        document.getElementById(
+            "responseCamera"
+        ).srcObject=cameraStream;
+
+    }catch(e){
+
+        console.error(e);
+
+        alert(
+            "Could not start recording:\n\n"+
+            e.message
+        );
+
+        showActiveScene(sceneId);
+    }
 };
 
-async function uploadNextTurn(){
 
-if(!pendingVideoBlob)return;
+window.toggleResponseRecording=()=>{
+    if(
+        !mediaRecorder ||
+        mediaRecorder.state==="inactive"
+    ){
+        startNextTurnRecording();
+    }
+    else{
+        stopRecording();
+    }
+};
 
-showLoading("Uploading your turn...");
 
-try{
+function startNextTurnRecording(){
 
-const turns=await getSceneTurns(currentResponseSceneId);
+    recordedChunks=[];
 
-const id=crypto.randomUUID();
+    let options={};
 
-const path=
-currentUser.id+
-"/turns/"+
-id+
-".webm";
+    if(
+        MediaRecorder.isTypeSupported(
+            "video/webm;codecs=vp8,opus"
+        )
+    ){
+        options.mimeType="video/webm;codecs=vp8,opus";
+    }
 
-const {error:ue}=await supabase.storage
-.from("scene-videos")
-.upload(
-path,
-pendingVideoBlob,
-{
-contentType:"video/webm",
-upsert:false
+    mediaRecorder=
+        new MediaRecorder(cameraStream,options);
+
+    mediaRecorder.ondataavailable=e=>{
+        if(e.data.size){
+            recordedChunks.push(e.data);
+        }
+    };
+
+    mediaRecorder.onstop=reviewNextTurn;
+
+    mediaRecorder.start();
+
+    recordingSeconds=0;
+
+    recordingTimer=setInterval(()=>{
+
+        recordingSeconds++;
+
+        const status=
+            document.getElementById(
+                "responseStatus"
+            );
+
+        if(status){
+            status.textContent=
+                "🔴 Recording "+
+                recordingSeconds+
+                " seconds";
+        }
+
+        if(recordingSeconds>=30){
+            stopRecording();
+        }
+
+    },1000);
+
+    const button=
+        document.getElementById(
+            "responseRecordButton"
+        );
+
+    if(button){
+        button.textContent="⏹ Stop";
+    }
 }
-);
 
-if(ue)throw ue;
 
-const {data:u}=supabase.storage
-.from("scene-videos")
-.getPublicUrl(path);
-
-const {error:te}=await supabase
-.from("scene_turns")
-.insert({
-id,
-scene_id:currentResponseSceneId,
-player_id:currentUser.id,
-turn_number:turns.length+1,
-video_path:u.publicUrl
-});
-
-if(te){
-
-await supabase.storage
-.from("scene-videos")
-.remove([path]);
-
-throw te;
-}
-
-pendingVideoBlob=null;
-
-await showActiveScene(
-currentResponseSceneId
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Turn upload failed:\n\n"+
-e.message
-);
-
-showActiveScene(
-currentResponseSceneId
-);
-}
-}
-
-/*
- * IMPORTANT:
- * The normal response recorder uses uploadResponse().
- * For later continuation turns we need to send the video
- * to uploadNextTurn().
- */
 function reviewNextTurn(){
 
-stopCameraTracks();
+    stopCameraTracks();
 
-pendingVideoBlob=new Blob(
-recordedChunks,
-{type:"video/webm"}
-);
+    pendingVideoBlob=
+        new Blob(
+            recordedChunks,
+            {type:"video/webm"}
+        );
 
-const url=URL.createObjectURL(
-pendingVideoBlob
-);
+    const url=
+        URL.createObjectURL(
+            pendingVideoBlob
+        );
 
-app.innerHTML=`
-<h1>Review your next turn</h1>
+    app.innerHTML=`
 
-<div class="camera">
-<video
-src="${url}"
-controls
-playsinline>
-</video>
-</div>
+        <h1>Review Turn</h1>
 
-<div class="button-row">
+        <p class="muted">
+            Make sure you are happy with your performance.
+        </p>
 
-<button class="btn secondary"
-onclick="recordNextTurn('${currentResponseSceneId}')">
-↻ Retake
-</button>
+        <div class="camera">
+            <video
+                src="${url}"
+                controls
+                playsinline>
+            </video>
+        </div>
 
-<button class="btn primary"
-onclick="uploadNextTurn()">
-✓ Add Turn
-</button>
+        <div class="button-row">
 
-</div>`;
+            <button
+                class="btn secondary"
+                onclick="recordNextTurn('${currentResponseSceneId}')">
+                ↻ Retake
+            </button>
+
+            <button
+                class="btn primary"
+                onclick="uploadNextTurn()">
+                ✓ Add Turn
+            </button>
+
+        </div>
+    `;
 }
 
-/*
- * Override the continuation recorder's stop handler.
- * The original response recorder still uses reviewResponse().
- */
-const originalStartResponseRecording=startResponseRecording;
-startResponseRecording=function(){
 
-if(currentResponseSceneId){
+window.uploadNextTurn=async function(){
 
-recordedChunks=[];
+    if(!pendingVideoBlob){
+        alert("No video recorded.");
+        return;
+    }
 
-let options={};
+    if(!currentUser || !currentResponseSceneId){
+        alert("Your session or scene is missing.");
+        return;
+    }
 
-if(
-MediaRecorder.isTypeSupported(
-"video/webm;codecs=vp8,opus"
-)
-){
-options.mimeType=
-"video/webm;codecs=vp8,opus";
-}
+    const sceneId=currentResponseSceneId;
 
-mediaRecorder=new MediaRecorder(
-cameraStream,
-options
-);
+    showLoading("Uploading your turn...");
 
-mediaRecorder.ondataavailable=e=>{
-if(e.data.size)
-recordedChunks.push(e.data);
+    let storagePath=null;
+
+    try{
+
+        /*
+            Reload the scene and turns immediately before
+            inserting the new turn.
+        */
+
+        const {data:scene,error:sceneError}=
+            await supabase
+                .from("scenes")
+                .select("*")
+                .eq("id",sceneId)
+                .single();
+
+        if(sceneError) throw sceneError;
+
+        const accepted=
+            await getAcceptedPlayer(sceneId);
+
+        if(!accepted){
+            throw new Error(
+                "There is no accepted player."
+            );
+        }
+
+        const turns=
+            await getSceneTurns(sceneId);
+
+        const nextTurnNumber=
+            turns.length+1;
+
+        const expectedPlayer=
+            getExpectedPlayer(
+                scene,
+                accepted,
+                nextTurnNumber
+            );
+
+        /*
+            This is the important protection.
+        */
+
+        if(expectedPlayer!==currentUser.id){
+
+            await showActiveScene(sceneId);
+
+            alert(
+                "It is not your turn. "+
+                "The other player must record first."
+            );
+
+            return;
+        }
+
+        /*
+            Create storage file.
+        */
+
+        const turnId=crypto.randomUUID();
+
+        storagePath=
+            currentUser.id+
+            "/turns/"+
+            turnId+
+            ".webm";
+
+        const {error:uploadError}=
+            await supabase.storage
+                .from("scene-videos")
+                .upload(
+                    storagePath,
+                    pendingVideoBlob,
+                    {
+                        contentType:"video/webm",
+                        upsert:false
+                    }
+                );
+
+        if(uploadError){
+            throw uploadError;
+        }
+
+        const {data:urlData}=
+            supabase.storage
+                .from("scene-videos")
+                .getPublicUrl(
+                    storagePath
+                );
+
+        const videoUrl=
+            urlData.publicUrl;
+
+        /*
+            Insert the actual turn.
+        */
+
+        const {error:turnError}=
+            await supabase
+                .from("scene_turns")
+                .insert({
+                    id:turnId,
+                    scene_id:sceneId,
+                    player_id:currentUser.id,
+                    turn_number:nextTurnNumber,
+                    video_path:videoUrl
+                });
+
+        if(turnError){
+
+            /*
+                If database insertion fails,
+                remove the orphaned video.
+            */
+
+            await supabase.storage
+                .from("scene-videos")
+                .remove([storagePath]);
+
+            throw turnError;
+        }
+
+        pendingVideoBlob=null;
+
+        /*
+            Refresh from database.
+        */
+
+        await showActiveScene(sceneId);
+
+    }catch(e){
+
+        console.error(e);
+
+        alert(
+            "Turn upload failed:\n\n"+
+            e.message
+        );
+
+        await showActiveScene(sceneId);
+    }
 };
 
-mediaRecorder.onstop=()=>{
-/*
- * If the scene has already started and the user is
- * recording a continuation, review as a next turn.
- * Otherwise this is Character B's first response.
- */
-const isContinuation=
-currentScene &&
-currentScene.id===currentResponseSceneId &&
-currentScene.status==="in_progress";
-
-if(isContinuation){
-reviewNextTurn();
-}else{
-reviewResponse();
-}
-};
-
-mediaRecorder.start();
-
-recordingSeconds=0;
-
-recordingTimer=setInterval(()=>{
-
-recordingSeconds++;
-
-const s=
-document.getElementById(
-"responseStatus"
-);
-
-if(s)
-s.textContent=
-"🔴 Recording "+
-recordingSeconds+
-" seconds";
-
-if(recordingSeconds>=30)
-stopRecording();
-
-},1000);
-
-const button=
-document.getElementById(
-"responseRecordButton"
-);
-
-if(button)
-button.textContent="⏹ Stop";
-
-}else{
-
-originalStartResponseRecording();
-}
-};
 
 window.endScene=async function(sceneId){
 
-if(!confirm(
-"End this scene? Nobody will be able to record another turn."
-))return;
+    if(!currentUser){
+        openAuth();
+        return;
+    }
 
-const {error}=await supabase
-.from("scenes")
-.update({status:"ended"})
-.eq("id",sceneId)
-.eq("creator_id",currentUser.id);
+    if(!confirm(
+        "End this scene?\n\n"+
+        "Nobody will be able to record another turn."
+    )){
+        return;
+    }
 
-if(error){
-alert(error.message);
-return;
-}
+    const {error}=
+        await supabase
+            .from("scenes")
+            .update({
+                status:"ended"
+            })
+            .eq("id",sceneId)
+            .eq("creator_id",currentUser.id);
 
-await showActiveScene(sceneId);
+    if(error){
+        alert(error.message);
+        return;
+    }
+
+    await showActiveScene(sceneId);
 };
-
 window.profile=()=>{
 
 if(!currentUser){
