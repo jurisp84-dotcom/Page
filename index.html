@@ -1408,48 +1408,21 @@ onclick="discover()">
 
 window.discover=async()=>{
 
-showLoading("Loading finished scenes...");
+showLoading("Loading scenes...");
 
-const {data:sessions,error}=
+const {data:scenes,error}=
 await supabase
-.from("scene_sessions")
-.select(`
-    id,
-    scene_id,
-    creator_id,
-    responder_id,
-    status,
-    ended_at,
-    finished_video_url,
-    scenes(
-        title,
-        category,
-        situation,
-        profiles(username)
-    )
-`)
-.eq("status","ended")
-.not("finished_video_url","is",null)
-.order("ended_at",{ascending:false});
+.from("scenes")
+.select(`*,profiles(username)`)
+.order(
+"created_at",
+{ascending:false}
+);
 
 if(error){
 
-console.error(error);
-
-app.innerHTML=`
-
-<div class="empty">
-
-<h2>Could not load finished scenes</h2>
-
-<p class="muted">
-${escapeHtml(error.message)}
-</p>
-
-</div>
-
-`;
-
+alert(error.message);
+home();
 return;
 
 }
@@ -1459,26 +1432,26 @@ app.innerHTML=`
 <h1>🔥 Discover</h1>
 
 <p class="muted">
-Finished scenes — scroll and watch.
+Find someone to play with.
 </p>
 
 `;
 
-const finished=(sessions||[]).filter(
-s=>s.finished_video_url && s.scenes
-);
-
-if(!finished.length){
+if(!scenes?.length){
 
 app.innerHTML+=`
 
 <div class="empty">
 
-<h2>No finished scenes yet</h2>
+<h2>No scenes yet</h2>
 
-<p class="muted">
-Finished scenes will appear here after the creator finishes them.
-</p>
+<button
+class="btn primary"
+onclick="createScene()">
+
+Create Scene
+
+</button>
 
 </div>
 
@@ -1488,9 +1461,64 @@ return;
 
 }
 
-for(const session of finished){
 
-const scene=session.scenes;
+for(const scene of scenes){
+
+const videoUrl=
+await getOpeningVideo(scene.id);
+
+let action="";
+
+if(scene.status==="ended"){
+
+action=`
+
+<div class="status">
+Scene ended
+</div>
+
+`;
+
+}else{
+
+const myResponse=
+currentUser
+?await getMyResponseSafe(scene.id)
+:null;
+
+if(myResponse){
+
+action=`
+
+<button
+class="btn secondary full"
+onclick="showMyResponse('${scene.id}')">
+
+✓ My Response
+(${escapeHtml(myResponse.status||"pending")})
+
+</button>
+
+`;
+
+}else{
+
+action=`
+
+<button
+class="btn primary full"
+onclick="respondToScene('${scene.id}')">
+
+🎭 Play Character B
+
+</button>
+
+`;
+
+}
+
+}
+
 
 app.innerHTML+=`
 
@@ -1501,20 +1529,32 @@ ${escapeHtml(scene.category||"Scene")}
 </span>
 
 <h2>
-${escapeHtml(scene.title||"Scene")}
+${escapeHtml(scene.title)}
 </h2>
 
 <p class="muted">
-${escapeHtml(scene.situation||"")}
+${escapeHtml(scene.situation)}
 </p>
 
+${
+videoUrl
+?
+`
 <video
 class="scene-video"
 controls
 playsinline
 preload="metadata"
-src="${escapeHtml(session.finished_video_url)}">
+src="${escapeHtml(videoUrl)}">
 </video>
+`
+:
+`
+<div class="status">
+Video unavailable
+</div>
+`
+}
 
 <p class="muted">
 Created by @${escapeHtml(
@@ -1522,9 +1562,7 @@ scene.profiles?.username||"player"
 )}
 </p>
 
-<div class="status success">
-✓ Finished scene
-</div>
+${action}
 
 </div>
 
@@ -2821,27 +2859,13 @@ window.showActiveScene=async sessionId=>{
             <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(opening.video_path)}"></video>`;
         }
 
-        /*
-           B1 is already copied into scene_turns as turn 2 when the
-           creator chooses the responder. Therefore do not render
-           response.video_path separately when turn 2 exists.
-        */
-        const hasTurn2 =
-            turns.some(t=>Number(t.turn_number)===2);
-
-        if(!hasTurn2 && response?.video_path){
+        if(response?.video_path){
             box.innerHTML+=`<div class="info"><strong>Turn 2 — Character B</strong></div>
             <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(response.video_path)}"></video>`;
         }
 
-        turns
-        .sort((a,b)=>Number(a.turn_number)-Number(b.turn_number))
-        .forEach(t=>{
-            const label=
-                t.player_id===session.creator_id
-                ?"Character A"
-                :"Character B";
-
+        turns.forEach(t=>{
+            const label=t.player_id===session.creator_id?"Character A":"Character B";
             box.innerHTML+=`<div class="info"><strong>Turn ${escapeHtml(t.turn_number)} — ${label}</strong></div>
             <video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(t.video_path)}"></video>`;
         });
@@ -3009,423 +3033,300 @@ async function createFinishedSessionVideo(sessionId){
     const session = await getSession(sessionId);
 
     const opening = await getOpeningTurn(session.scene_id);
-    const response = await getAcceptedResponseForSession(session);
     const turns = await getSessionTurns(sessionId);
 
     /*
-       IMPORTANT:
-       turn 1 (A1) lives outside the private session.
-       turn 2 (B1) and every later turn live inside scene_turns
-       with this session_id.
-
-       Therefore the correct sequence is:
-       A1 + session turns
-
-       Do NOT add response.video_path separately when turn 2
-       already exists, otherwise B1 is duplicated.
+      IMPORTANT DATA MODEL:
+      A1 is the opening turn.
+      B1 is turn 2 in scene_turns.
+      A2 is turn 3.
+      B2 is turn 4.
+      Therefore we build the final video from A1 + session turns.
     */
-    const orderedTurns = [...(turns||[])]
-        .filter(t=>t.video_path)
-        .sort((a,b)=>Number(a.turn_number)-Number(b.turn_number));
-
-    const sources = [];
+    const ordered = [];
 
     if(opening?.video_path){
-        sources.push({
-            turn:1,
-            url:opening.video_path
+        ordered.push({
+            turn: 1,
+            url: opening.video_path
         });
     }
 
-    const hasTurn2 =
-        orderedTurns.some(t=>Number(t.turn_number)===2);
+    (turns || [])
+      .filter(t => t.video_path)
+      .sort((a,b) => Number(a.turn_number) - Number(b.turn_number))
+      .forEach(t => {
+          ordered.push({
+              turn: Number(t.turn_number),
+              url: t.video_path
+          });
+      });
 
-    if(!hasTurn2 && response?.video_path){
-        sources.push({
-            turn:2,
-            url:response.video_path
-        });
-    }
-
-    orderedTurns.forEach(t=>{
-        sources.push({
-            turn:Number(t.turn_number),
-            url:t.video_path
-        });
-    });
-
-    /*
-       Safety: remove duplicate turn numbers / URLs.
-    */
-    const unique = [];
+    // Remove accidental duplicate turn numbers/URLs.
     const seenTurns = new Set();
     const seenUrls = new Set();
 
-    for(const item of sources){
+    const sources = ordered
+      .filter(item => {
+          if(!item.url) return false;
+          if(seenTurns.has(item.turn)) return false;
+          if(seenUrls.has(item.url)) return false;
+          seenTurns.add(item.turn);
+          seenUrls.add(item.url);
+          return true;
+      })
+      .sort((a,b) => a.turn - b.turn);
 
-        if(!item.url)continue;
-
-        if(seenTurns.has(item.turn) || seenUrls.has(item.url)){
-            continue;
-        }
-
-        seenTurns.add(item.turn);
-        seenUrls.add(item.url);
-
-        unique.push(item);
-
-    }
-
-    unique.sort((a,b)=>a.turn-b.turn);
-
-    if(unique.length<2){
+    if(sources.length < 2){
         throw new Error(
-            "There are not enough videos. The scene needs A1 and B1 before it can be finished."
+            "The scene needs at least A1 and B1 before it can be finished."
         );
     }
 
-    /*
-       Verify that the sequence really starts at A1 and contains B1.
-    */
-    if(unique[0].turn!==1){
-        throw new Error("A1 is missing from the scene.");
-    }
-
-    if(unique[1].turn!==2){
-        throw new Error("B1 is missing from the scene.");
+    if(sources[0].turn !== 1 || sources[1].turn !== 2){
+        throw new Error(
+            "The scene sequence is incomplete. Expected A1 followed by B1."
+        );
     }
 
     showLoading(
-        "Creating ONE finished video...<br><br>"+
-        unique.map(x=>"Turn "+x.turn).join(" → ")+
+        "Creating ONE finished video...<br><br>" +
+        sources.map(x => "Turn " + x.turn).join(" → ") +
         "<br><br>Please keep this page open."
     );
 
-    const loadVideo = src => new Promise((resolve,reject)=>{
+    const loadVideo = url => new Promise((resolve,reject) => {
 
-        const video=document.createElement("video");
+        const video = document.createElement("video");
+        video.crossOrigin = "anonymous";
+        video.preload = "auto";
+        video.playsInline = true;
 
-        video.crossOrigin="anonymous";
-        video.playsInline=true;
-        video.preload="auto";
+        let settled = false;
 
-        let settled=false;
-
-        const cleanup=()=>{
-            video.onloadedmetadata=null;
-            video.onerror=null;
-        };
-
-        const fail=message=>{
-            if(settled)return;
-            settled=true;
-            cleanup();
+        const fail = message => {
+            if(settled) return;
+            settled = true;
             reject(new Error(message));
         };
 
-        const timer=setTimeout(()=>{
+        const timer = setTimeout(() => {
             fail("Timed out loading one of the scene videos.");
-        },30000);
+        }, 30000);
 
-        video.onloadedmetadata=()=>{
-
-            if(settled)return;
-
+        video.onloadedmetadata = () => {
             clearTimeout(timer);
-            cleanup();
 
             if(!video.videoWidth || !video.videoHeight){
                 fail("One of the scene videos has invalid dimensions.");
                 return;
             }
 
-            settled=true;
-            resolve(video);
-
+            if(!settled){
+                settled = true;
+                resolve(video);
+            }
         };
 
-        video.onerror=()=>{
-
+        video.onerror = () => {
             clearTimeout(timer);
-
-            const code=video.error?.code||"unknown";
-
-            fail(
-                "Could not load one of the scene videos. "+
-                "Browser media error: "+code
-            );
-
+            fail("Could not load one of the scene videos.");
         };
 
-        video.src=src;
+        video.src = url;
         video.load();
-
     });
 
-    const first=await loadVideo(unique[0].url);
+    const first = await loadVideo(sources[0].url);
 
-    const width=first.videoWidth||1280;
-    const height=first.videoHeight||720;
+    const width = first.videoWidth || 1280;
+    const height = first.videoHeight || 720;
 
     first.pause();
     first.removeAttribute("src");
     first.load();
 
-    const canvas=document.createElement("canvas");
-    canvas.width=width;
-    canvas.height=height;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
 
-    const ctx=canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
     if(!ctx){
         throw new Error("Could not create the final video canvas.");
     }
 
     if(!canvas.captureStream){
-        throw new Error(
-            "This browser cannot create a video from the canvas."
-        );
+        throw new Error("This browser cannot create the final video.");
     }
 
-    const canvasStream=canvas.captureStream(30);
+    const videoStream = canvas.captureStream(30);
 
-    const AudioContextClass=
-        window.AudioContext||window.webkitAudioContext;
+    const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
 
     if(!AudioContextClass){
         throw new Error(
-            "This browser does not support the audio system needed to combine the videos."
+            "This browser does not support the audio system needed to combine videos."
         );
     }
 
-    const audioContext=new AudioContextClass();
+    const audioContext = new AudioContextClass();
     await audioContext.resume();
 
-    const audioDestination=
+    const audioDestination =
         audioContext.createMediaStreamDestination();
 
-    const mimeCandidates=[
+    const mimeCandidates = [
         "video/webm;codecs=vp9,opus",
         "video/webm;codecs=vp8,opus",
         "video/webm"
     ];
 
-    const mimeType=mimeCandidates.find(
-        type=>MediaRecorder.isTypeSupported(type)
+    const mimeType = mimeCandidates.find(
+        type => MediaRecorder.isTypeSupported(type)
     );
 
     if(!mimeType){
-
         await audioContext.close();
-
         throw new Error(
             "This browser cannot create the final WebM video."
         );
-
     }
 
-    const combinedStream=new MediaStream([
-
-        ...canvasStream.getVideoTracks(),
-
+    const combinedStream = new MediaStream([
+        ...videoStream.getVideoTracks(),
         ...audioDestination.stream.getAudioTracks()
-
     ]);
 
-    const recorder=new MediaRecorder(
+    const recorder = new MediaRecorder(
         combinedStream,
         {mimeType}
     );
 
-    const chunks=[];
+    const chunks = [];
 
-    const finishedRecording=new Promise((resolve,reject)=>{
+    const recordingDone = new Promise((resolve,reject) => {
 
-        recorder.ondataavailable=e=>{
-
-            if(e.data?.size){
-                chunks.push(e.data);
-            }
-
+        recorder.ondataavailable = e => {
+            if(e.data?.size) chunks.push(e.data);
         };
 
-        recorder.onerror=e=>{
-
+        recorder.onerror = e => {
             reject(
-                e.error||
-                new Error("Final video recording failed.")
+                e.error || new Error("Final video recording failed.")
             );
-
         };
 
-        recorder.onstop=()=>{
-
+        recorder.onstop = () => {
             if(!chunks.length){
-
-                reject(
-                    new Error(
-                        "The final video contains no data."
-                    )
-                );
-
+                reject(new Error("The final video contains no data."));
                 return;
-
             }
 
-            resolve(
-                new Blob(
-                    chunks,
-                    {type:mimeType}
-                )
-            );
-
+            resolve(new Blob(chunks,{type:mimeType}));
         };
-
     });
 
     recorder.start(250);
 
-    try{
+    try {
 
-        for(let i=0;i<unique.length;i++){
+        for(let i=0; i<sources.length; i++){
 
-            const item=unique[i];
+            const item = sources[i];
 
             showLoading(
-                "Creating ONE finished video...<br><br>"+
-                "Turn "+item.turn+
-                " ("+(i+1)+" of "+unique.length+")"+
+                "Creating ONE finished video...<br><br>" +
+                "Turn " + item.turn +
+                " (" + (i+1) + " of " + sources.length + ")" +
                 "<br><br>Please keep this page open."
             );
 
-            const video=
-                await loadVideo(item.url);
+            const video = await loadVideo(item.url);
 
             /*
-               The video is NOT muted.
-               Its audio goes only to audioDestination, which is
-               recorded into the final file and is not connected
-               to the computer speakers.
+              Route the audio into the recording stream.
+              It is NOT routed to the speakers.
             */
-            video.muted=false;
-            video.volume=1;
-
-            const sourceNode=
+            const sourceNode =
                 audioContext.createMediaElementSource(video);
 
-            const gain=
+            const gain =
                 audioContext.createGain();
 
-            gain.gain.value=1;
+            gain.gain.value = 1;
 
             sourceNode.connect(gain);
             gain.connect(audioDestination);
 
-            await new Promise((resolve,reject)=>{
+            await new Promise((resolve,reject) => {
 
-                let animationFrame=null;
-                let done=false;
+                let frame = null;
+                let done = false;
 
-                const cleanup=()=>{
-
-                    if(animationFrame){
-                        cancelAnimationFrame(animationFrame);
-                        animationFrame=null;
-                    }
-
-                    video.onended=null;
-                    video.onerror=null;
-
+                const cleanup = () => {
+                    if(frame) cancelAnimationFrame(frame);
+                    video.onended = null;
+                    video.onerror = null;
                 };
 
-                const finish=()=>{
-
-                    if(done)return;
-
-                    done=true;
+                const finish = () => {
+                    if(done) return;
+                    done = true;
                     cleanup();
                     resolve();
-
                 };
 
-                const draw=()=>{
+                const draw = () => {
 
-                    if(done)return;
+                    if(done) return;
 
-                    ctx.fillStyle="#000";
-
+                    ctx.fillStyle = "#000";
                     ctx.fillRect(
-                        0,
-                        0,
-                        canvas.width,
-                        canvas.height
+                        0,0,canvas.width,canvas.height
                     );
 
-                    const scale=Math.min(
-                        canvas.width/video.videoWidth,
-                        canvas.height/video.videoHeight
+                    const scale = Math.min(
+                        canvas.width / video.videoWidth,
+                        canvas.height / video.videoHeight
                     );
 
-                    const drawWidth=
-                        video.videoWidth*scale;
-
-                    const drawHeight=
-                        video.videoHeight*scale;
-
-                    const x=
-                        (canvas.width-drawWidth)/2;
-
-                    const y=
-                        (canvas.height-drawHeight)/2;
+                    const w = video.videoWidth * scale;
+                    const h = video.videoHeight * scale;
 
                     ctx.drawImage(
                         video,
-                        x,
-                        y,
-                        drawWidth,
-                        drawHeight
+                        (canvas.width-w)/2,
+                        (canvas.height-h)/2,
+                        w,
+                        h
                     );
 
-                    animationFrame=
-                        requestAnimationFrame(draw);
-
+                    frame = requestAnimationFrame(draw);
                 };
 
-                video.onended=finish;
+                video.onended = finish;
 
-                video.onerror=()=>{
-
-                    if(done)return;
-
-                    done=true;
+                video.onerror = () => {
+                    if(done) return;
+                    done = true;
                     cleanup();
-
                     reject(
                         new Error(
-                            "Turn "+item.turn+
-                            " could not be played while creating the final video."
+                            "Turn " + item.turn +
+                            " failed while creating the final video."
                         )
                     );
-
                 };
 
                 draw();
 
-                video.play().catch(error=>{
-
-                    if(done)return;
-
-                    done=true;
+                video.play().catch(error => {
+                    if(done) return;
+                    done = true;
                     cleanup();
-
-                    reject(
-                        new Error(
-                            "The browser blocked playback of Turn "+
-                            item.turn+
-                            " while creating the final video."
-                        )
-                    );
-
+                    reject(error);
                 });
 
             });
@@ -3433,46 +3334,34 @@ async function createFinishedSessionVideo(sessionId){
             video.pause();
             video.removeAttribute("src");
             video.load();
-
         }
 
-    }catch(error){
+    } catch(error) {
 
-        try{
-            if(recorder.state!=="inactive"){
-                recorder.stop();
-            }
-        }catch(ignore){}
+        try {
+            if(recorder.state !== "inactive") recorder.stop();
+        } catch(ignore){}
 
-        try{
+        try {
             await audioContext.close();
-        }catch(ignore){}
+        } catch(ignore){}
 
         throw error;
-
     }
-
-    /*
-       Give MediaRecorder one final data request before stopping.
-    */
-    try{
-        recorder.requestData();
-    }catch(ignore){}
 
     recorder.stop();
 
-    const finishedBlob=
-        await finishedRecording;
+    const finishedBlob = await recordingDone;
 
     await audioContext.close();
 
-    const finishedPath=
-        session.creator_id+
-        "/sessions/"+
-        session.id+
+    const finishedPath =
+        session.creator_id +
+        "/sessions/" +
+        session.id +
         "/finished.webm";
 
-    const {error:uploadError}=
+    const {error:uploadError} =
         await supabase.storage
         .from("scene-videos")
         .upload(
@@ -3486,24 +3375,19 @@ async function createFinishedSessionVideo(sessionId){
 
     if(uploadError){
         throw new Error(
-            "Final video upload failed: "+
+            "Final video upload failed: " +
             uploadError.message
         );
     }
 
-    const {data:urlData}=
+    const {data:urlData} =
         supabase.storage
         .from("scene-videos")
         .getPublicUrl(finishedPath);
 
     return urlData.publicUrl;
-
 }
 
-
-/* =========================================================
-   FINISH PRIVATE SESSION
-========================================================= */
 
 /* =========================================================
    FINISH PRIVATE SESSION
