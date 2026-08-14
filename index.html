@@ -255,9 +255,193 @@ window.chooseResponse=async(responseId,sceneId)=>{
 let {error}=await supabase.from("scene_responses").update({status:"accepted"}).eq("id",responseId);if(error){alert(error.message);return}
 await supabase.from("scene_responses").update({status:"rejected"}).eq("scene_id",sceneId).neq("id",responseId);
 await supabase.from("scenes").update({status:"in_progress"}).eq("id",sceneId);
-alert("Player selected!");myScenes();
+const {data:acceptedRow,error:ae}=await supabase.from("scene_responses").select("responder_id,video_path").eq("id",responseId).single();if(ae){alert(ae.message);return}
+const turnsNow=await getSceneTurns(sceneId);if(turnsNow.length<2){const {error:te}=await supabase.from("scene_turns").insert({id:crypto.randomUUID(),scene_id:sceneId,player_id:acceptedRow.responder_id,turn_number:2,video_path:acceptedRow.video_path});if(te){alert(te.message);return}}
+alert("Player selected!");await showActiveScene(sceneId);
 };
 window.rejectResponse=async responseId=>{const {error}=await supabase.from("scene_responses").update({status:"rejected"}).eq("id",responseId);if(error){alert(error.message);return}alert("Response passed.");viewResponses(currentScene?.id)};
+
+
+
+/* RESPONSE STATUS / DELETE HELPERS */
+
+async function getMyResponse(sceneId){
+    if(!currentUser) return null;
+    const {data,error}=await supabase
+        .from("scene_responses")
+        .select("*")
+        .eq("scene_id",sceneId)
+        .eq("responder_id",currentUser.id)
+        .maybeSingle();
+    if(error) throw error;
+    return data;
+}
+
+window.deleteMyResponse = async function(responseId, sceneId){
+    if(!confirm("Delete your response?")) return;
+
+    const {data:row,error:readError}=await supabase
+        .from("scene_responses")
+        .select("video_path,responder_id")
+        .eq("id",responseId)
+        .single();
+
+    if(readError){ alert(readError.message); return; }
+    if(row.responder_id !== currentUser.id){ alert("You can only delete your own response."); return; }
+
+    const url=row.video_path || "";
+    const marker="/storage/v1/object/public/scene-videos/";
+    const idx=url.indexOf(marker);
+    if(idx>=0){
+        const storagePath=decodeURIComponent(url.slice(idx+marker.length));
+        await supabase.storage.from("scene-videos").remove([storagePath]);
+    }
+
+    const {error}=await supabase
+        .from("scene_responses")
+        .delete()
+        .eq("id",responseId)
+        .eq("responder_id",currentUser.id);
+
+    if(error){ alert(error.message); return; }
+
+    alert("Response deleted.");
+    discover();
+};
+
+async function addMyResponseStatus(sceneId){
+    if(!currentUser) return;
+    try{
+        const response=await getMyResponse(sceneId);
+        const btn=document.getElementById("respondBtn-"+sceneId);
+        if(!btn) return;
+
+        if(response){
+            btn.textContent="✓ You already responded";
+            btn.classList.remove("primary");
+            btn.classList.add("secondary");
+            btn.onclick=()=>showMyResponse(sceneId);
+        }
+    }catch(e){
+        console.error("Could not check response status",e);
+    }
+}
+
+window.showMyResponse=async function(sceneId){
+    const response=await getMyResponse(sceneId);
+    if(!response){ alert("You haven't responded to this scene yet."); return; }
+
+    app.innerHTML=`
+        <div class="scene">
+            <span class="tag">YOUR RESPONSE</span>
+            <h1>Your Character B response</h1>
+            <video class="scene-video" controls playsinline preload="metadata"
+                src="${escapeHtml(response.video_path)}"></video>
+            <div class="status">${escapeHtml(response.status)}</div>
+            ${response.status==="pending"
+                ? `<button class="btn danger full" onclick="deleteMyResponse('${response.id}','${sceneId}')">🗑 Delete my response</button>`
+                : ""}
+            <br><br>
+            <button class="btn secondary full" onclick="discover()">Back to Discover</button>
+        </div>`;
+};
+
+async function addMySceneDeleteButton(scene){
+    const id="deleteScene-"+scene.id;
+    const el=document.getElementById(id);
+    if(el) return;
+}
+
+window.deleteScene=async function(sceneId){
+    if(!currentUser) return;
+    if(!confirm("Delete this scene and its responses? This cannot be undone.")) return;
+
+    try{
+        const {data:scene,error:sceneReadError}=await supabase
+            .from("scenes")
+            .select("creator_id")
+            .eq("id",sceneId)
+            .single();
+
+        if(sceneReadError) throw sceneReadError;
+        if(scene.creator_id!==currentUser.id){
+            alert("You can only delete your own scenes.");
+            return;
+        }
+
+        // Remove storage files referenced by turns/responses before deleting DB rows.
+        const {data:turns}=await supabase
+            .from("scene_turns").select("video_path").eq("scene_id",sceneId);
+        const {data:responses}=await supabase
+            .from("scene_responses").select("video_path").eq("scene_id",sceneId);
+
+        const paths=[];
+        [...(turns||[]),...(responses||[])].forEach(row=>{
+            const url=row.video_path||"";
+            const marker="/storage/v1/object/public/scene-videos/";
+            const idx=url.indexOf(marker);
+            if(idx>=0) paths.push(decodeURIComponent(url.slice(idx+marker.length)));
+        });
+        if(paths.length) await supabase.storage.from("scene-videos").remove([...new Set(paths)]);
+
+        // Remove child records first.
+        let r=await supabase.from("scene_responses").delete().eq("scene_id",sceneId);
+        if(r.error) throw r.error;
+
+        r=await supabase.from("scene_turns").delete().eq("scene_id",sceneId);
+        if(r.error) throw r.error;
+
+        r=await supabase.from("scenes").delete().eq("id",sceneId).eq("creator_id",currentUser.id);
+        if(r.error) throw r.error;
+
+        alert("Scene deleted.");
+        myScenes();
+    }catch(e){
+        console.error(e);
+        alert("Could not delete scene:\n\n"+e.message);
+    }
+};
+
+
+/* ACTIVE SCENE CONTINUATION */
+async function getSceneTurns(sceneId){
+ const {data,error}=await supabase.from("scene_turns").select("*").eq("scene_id",sceneId).order("turn_number",{ascending:true});
+ if(error)throw error; return data||[];
+}
+window.showActiveScene=async function(sceneId){
+ if(!currentUser){openAuth();return}
+ try{
+  const {data:scene,error}=await supabase.from("scenes").select("*").eq("id",sceneId).single();if(error)throw error;
+  const turns=await getSceneTurns(sceneId);
+  const {data:accepted}=await supabase.from("scene_responses").select("responder_id").eq("scene_id",sceneId).eq("status","accepted").maybeSingle();
+  const bId=accepted?.responder_id,last=turns[turns.length-1];
+  const myTurn=scene.status!=="ended"&&last&&((scene.creator_id===currentUser.id&&last.player_id===bId)||(bId===currentUser.id&&last.player_id===scene.creator_id));
+  app.innerHTML=`<div class="scene"><span class="tag">🎬 ACTIVE SCENE</span><h1>${escapeHtml(scene.title)}</h1><p class="muted">${escapeHtml(scene.situation||"")}</p><div class="status ${scene.status==="ended"?"success":""}">${scene.status==="ended"?"✓ Scene ended":myTurn?"🎭 Your turn":"⏳ Waiting for the other player"}</div><div id="activeTurns"></div>${scene.status!=="ended"&&myTurn?`<button class="btn primary full" onclick="recordNextTurn('${scene.id}')">🎥 Record your next turn</button><br><br>`:""}${scene.status!=="ended"&&scene.creator_id===currentUser.id?`<button class="btn danger full" onclick="endScene('${scene.id}')">🛑 End Scene</button>`:""}</div>`;
+  const box=document.getElementById("activeTurns");
+  turns.forEach(t=>{box.innerHTML+=`<div class="info"><strong>Turn ${escapeHtml(t.turn_number)}</strong> — ${t.player_id===currentUser.id?"You":"Other player"}</div><video class="scene-video" controls playsinline preload="metadata" src="${escapeHtml(t.video_path)}"></video>`});
+ }catch(e){console.error(e);alert("Could not load scene:\n\n"+e.message)}
+};
+window.recordNextTurn=async function(sceneId){
+ currentResponseSceneId=sceneId;
+ const {data:scene}=await supabase.from("scenes").select("*").eq("id",sceneId).single();currentScene=scene;
+ app.innerHTML=`<h1>🎥 Record your next turn</h1><p class="muted">Continue the scene naturally.</p><div class="camera"><video id="responseCamera" autoplay muted playsinline></video></div><div id="responseStatus" class="status">Ready</div><button id="responseRecordButton" class="btn primary full" onclick="toggleResponseRecording()">🔴 Record</button><br><br><button class="btn secondary full" onclick="showActiveScene('${sceneId}')">Cancel</button>`;
+ try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById("responseCamera").srcObject=cameraStream}catch(e){alert("Camera/microphone permission was denied.");showActiveScene(sceneId)}
+};
+async function uploadNextTurn(){
+ if(!pendingVideoBlob)return;showLoading("Uploading your turn...");
+ try{
+  const turns=await getSceneTurns(currentResponseSceneId),id=crypto.randomUUID(),path=currentUser.id+"/turns/"+id+".webm";
+  const {error:ue}=await supabase.storage.from("scene-videos").upload(path,pendingVideoBlob,{contentType:"video/webm",upsert:false});if(ue)throw ue;
+  const {data:u}=supabase.storage.from("scene-videos").getPublicUrl(path);
+  const {error:te}=await supabase.from("scene_turns").insert({id,scene_id:currentResponseSceneId,player_id:currentUser.id,turn_number:turns.length+1,video_path:u.publicUrl});if(te)throw te;
+  pendingVideoBlob=null;await showActiveScene(currentResponseSceneId)
+ }catch(e){console.error(e);alert("Turn upload failed:\n\n"+e.message);showActiveScene(currentResponseSceneId)}
+}
+window.endScene=async function(sceneId){
+ if(!confirm("End this scene? Nobody will be able to record another turn."))return;
+ const {error}=await supabase.from("scenes").update({status:"ended"}).eq("id",sceneId).eq("creator_id",currentUser.id);
+ if(error){alert(error.message);return}await showActiveScene(sceneId)
+};
 
 window.profile=()=>{
 if(!currentUser){openAuth();return}
